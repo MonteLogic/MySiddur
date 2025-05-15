@@ -1,0 +1,24 @@
+{
+  "routeNiceName": "Sample Route 101",
+  "routeIDFromPostOffice": "312XX",
+  "dateRouteAcquired": "2024-09-22T00:00:00.000Z",
+  "dateAddedToCB": "2024-09-22T00:00:00.000Z",
+  "img": "",
+  "shifts": [
+    {
+      "name": "Morning",
+      "startTime": "06:00",
+      "endTime": "14:00"
+    },
+    {
+      "name": "Afternoon",
+      "startTime": "14:00",
+      "endTime": "22:00"
+    },
+    {
+      "name": "Evening",
+      "startTime": "22:00",
+      "endTime": "06:00"
+    }
+  ]
+}

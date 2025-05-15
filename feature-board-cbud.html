@@ -1,0 +1,48 @@
+<html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.14.0/mermaid.min.js"></script>
+<h2>FlowChart</h2>
+
+
+<h2>CBud Feature Board</h2>
+<div class="mermaid">
+classDiagram
+    class FeatureBoard {
+        +schedulingViaSlider(45)
+        +userProfiles(32)
+        +clerkAuth(17)
+    }
+
+    class SchedulingNode {
+        +schedule()
+    }
+
+    class UserProfileNode {
+        +profile()
+        +settings()
+    }
+
+    class ClerkAuthNode {
+        +login()
+        +signup()
+        +logout()
+    }
+
+    FeatureBoard --|> SchedulingNode :  45
+    FeatureBoard --|> UserProfileNode :  32
+    FeatureBoard --|> ClerkAuthNode :  17
+
+
+
+</div>
+
+<script>
+  mermaid.initialize({
+    securityLevel: 'loose', // strict, loose, antiscript, sandbox // // https://github.com/mermaid-js/mermaid/blob/b141f24068e9c5f6979706383a29db6380ffdf31/docs/usage.md?plain=1#L114-L117
+  });
+
+  function myFunc(arg) {
+    console.log(arg)
+  }
+</script>
+</html>

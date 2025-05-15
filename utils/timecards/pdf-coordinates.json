@@ -1,0 +1,61 @@
+{
+  "dayOfWeekLocation": {
+    "Monday": [90, 663],
+    "Tuesday": [90, 600],
+    "Wednesday": [85, 537],
+    "Thursday": [90, 479],
+    "Friday": [90, 414],
+    "Saturday": [90, 351],
+    "Sunday": [90, 290]
+  },
+  "dayMonthYearCoordinates": {
+    "Monday": [85, 620],
+    "Tuesday": [85, 570],
+    "Wednesday": [85, 510],
+    "Thursday": [85, 455],
+    "Friday": [85, 390],
+    "Saturday": [85, 330],
+    "Sunday": [85, 265]
+  },
+  "dateFormatPositioning": {
+    "x": 48,
+    "y": 3
+  },
+  "workedShiftsPositioning": {
+    "x": 115,
+    "y": 36
+  },
+  "routeNiceNamePositioning": {
+    "x": 310,
+    "y": 34
+  },
+  "tripNumberPositioning": {
+    "x": 130,
+    "y": 33
+  },
+  "timeTextPositioningStart": {
+    "x": 190,
+    "y": 33
+  },
+  "timeTextPositioningEnd": {
+    "x": 235,
+    "y": 33
+  },
+  "totalTimePositioning": {
+    "x": 280,
+    "y": 33
+  },
+  "lineHeight": 11.45,
+  "vertValueBetweenWorkShifts": 36,
+  "valueBetweenColumns": 36,
+  "workTimeSpacingX": 45,
+  "workTimeSpacingY": 33,
+  "workTimeSpacingY2": 15.1,
+  "driverNamePosition": [175, 727.1],
+  "startDatePosition": [170, 709.9],
+  "dateDashPosition": [222, 709.9],
+  "endDatePosition": [240, 709.9],
+  "bottomHourTimes": [440, 200],
+  "bottomBottomHourTimes": [440, 65],
+  "updated": "20.10.2024"
+}

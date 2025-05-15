@@ -1,0 +1,17 @@
+
+{
+  "categories": {
+    "work-notes": [
+      {
+        "description": "Work Notes of various projects",
+        "url": "blog/categories/work-notes"
+      }
+    ],
+    "project-notes": [
+      {
+        "description": "A larger scope view of the Project and the direction as well as where the Project has been.",
+        "url": "blog/categories/project-notes"
+      }
+    ]
+  }
+}

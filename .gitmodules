@@ -1,0 +1,3 @@
+[submodule "MoL-blog-content"]
+	path = MoL-blog-content
+	url = https://github.com/MonteLogic/MoL-blog-content.git

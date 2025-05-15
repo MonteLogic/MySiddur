@@ -1,0 +1,271 @@
+Inserted route: {
+  "id": 7,
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeNiceName": "Orangeville",
+  "routeIDFromPostOffice": "623XX",
+  "dateRouteAcquired": "2024-09-21T22:22:35.128Z",
+  "dateAddedToCB": "2024-09-21T22:22:35.128Z",
+  "img": ""
+}
+Parsed allocatedShifts: [
+  {
+    "name": "Morning",
+    "startTime": "05:07",
+    "endTime": "08:01"
+  },
+  {
+    "name": "Afternoon",
+    "startTime": "15:17",
+    "endTime": "19:16"
+  }
+]
+Attempting to insert 2 shifts
+Inserting shift info: {
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeId": 7,
+  "shiftName": "Morning",
+  "startTime": "05:07",
+  "endTime": "08:01",
+  "dateAddedToCB": "2024-09-21T22:22:35.218Z"
+}
+Inserted shift result: [
+  {
+    "id": 5,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "7.0",
+    "shiftName": "Morning",
+    "startTime": "05:07",
+    "endTime": "08:01",
+    "dateAddedToCB": "2024-09-21T22:22:35.218Z"
+  }
+]
+Inserting shift info: {
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeId": 7,
+  "shiftName": "Afternoon",
+  "startTime": "15:17",
+  "endTime": "19:16",
+  "dateAddedToCB": "2024-09-21T22:22:35.279Z"
+}
+Inserted shift result: [
+  {
+    "id": 6,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "7.0",
+    "shiftName": "Afternoon",
+    "startTime": "15:17",
+    "endTime": "19:16",
+    "dateAddedToCB": "2024-09-21T22:22:35.279Z"
+  }
+]
+Inserted shifts: [
+  {
+    "id": 5,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "7.0",
+    "shiftName": "Morning",
+    "startTime": "05:07",
+    "endTime": "08:01",
+    "dateAddedToCB": "2024-09-21T22:22:35.218Z"
+  },
+  {
+    "id": 6,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "7.0",
+    "shiftName": "Afternoon",
+    "startTime": "15:17",
+    "endTime": "19:16",
+    "dateAddedToCB": "2024-09-21T22:22:35.279Z"
+  }
+]
+ ✓ Compiled in 1497ms (1887 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Compiled in 1346ms (1883 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Compiled in 1382ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 902ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 652ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 696ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 2.3s (1883 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Compiled in 1227ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 818ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 1039ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 952ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 1122ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ✓ Compiled in 615ms (769 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+^N ✓ Compiled in 1800ms (1887 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+ ⨯ ui/add-routes-component.tsx (123:47) @ fillWithSampleData
+ ⨯ ReferenceError: fillWithSampleData is not defined
+    at AddRouteComponent (./ui/add-routes-component.tsx:122:33)
+  121 |     <>
+  122 |       <div className="mb-4 flex justify-end">
+> 123 |         <ChevronAddSampleRouteData onFillData={fillWithSampleData} />
+      |                                               ^
+  124 |       </div>
+  125 |       <div className="space-y-7">
+  126 |         <div>
+ ✓ Compiled in 1123ms (1887 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Compiled /api/add-new-route in 470ms (1120 modules)
+Received body: {
+  "routeNiceName": "Sample Route 102",
+  "routeIDFromPostOffice": "312XX",
+  "dateRouteAcquired": "2024-09-22T00:00:00.000Z",
+  "dateAddedToCB": 1727103354727,
+  "img": "",
+  "allocatedShifts": "[{\"name\":\"Morning\",\"startTime\":\"06:00\",\"endTime\":\"14:00\"},{\"name\":\"Afternoon\",\"startTime\":\"14:00\",\"endTime\":\"22:00\"},{\"name\":\"Evening\",\"startTime\":\"22:00\",\"endTime\":\"06:00\"}]"
+}
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+New route object: {
+  "img": "",
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "dateRouteAcquired": "2024-09-23T14:55:55.581Z",
+  "dateAddedToCB": "2024-09-23T14:55:55.581Z",
+  "routeNiceName": "Sample Route 102",
+  "routeIDFromPostOffice": "312XX"
+}
+Inserted route: {
+  "id": 8,
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeNiceName": "Sample Route 102",
+  "routeIDFromPostOffice": "312XX",
+  "dateRouteAcquired": "2024-09-23T14:55:55.581Z",
+  "dateAddedToCB": "2024-09-23T14:55:55.581Z",
+  "img": ""
+}
+Route ID: 8 Type: number
+Parsed allocatedShifts: [
+  {
+    "name": "Morning",
+    "startTime": "06:00",
+    "endTime": "14:00"
+  },
+  {
+    "name": "Afternoon",
+    "startTime": "14:00",
+    "endTime": "22:00"
+  },
+  {
+    "name": "Evening",
+    "startTime": "22:00",
+    "endTime": "06:00"
+  }
+]
+Attempting to insert 3 shifts
+Inserting shift info: {
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeId": 8,
+  "shiftName": "Morning",
+  "startTime": "06:00",
+  "endTime": "14:00",
+  "dateAddedToCB": "2024-09-23T14:55:55.651Z"
+}
+Inserted shift result: [
+  {
+    "id": 7,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "8.0",
+    "shiftName": "Morning",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "dateAddedToCB": "2024-09-23T14:55:55.651Z"
+  }
+]
+Inserting shift info: {
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeId": 8,
+  "shiftName": "Afternoon",
+  "startTime": "14:00",
+  "endTime": "22:00",
+  "dateAddedToCB": "2024-09-23T14:55:55.737Z"
+}
+Inserted shift result: [
+  {
+    "id": 8,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "8.0",
+    "shiftName": "Afternoon",
+    "startTime": "14:00",
+    "endTime": "22:00",
+    "dateAddedToCB": "2024-09-23T14:55:55.737Z"
+  }
+]
+Inserting shift info: {
+  "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+  "routeId": 8,
+  "shiftName": "Evening",
+  "startTime": "22:00",
+  "endTime": "06:00",
+  "dateAddedToCB": "2024-09-23T14:55:55.798Z"
+}
+Inserted shift result: [
+  {
+    "id": 9,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "8.0",
+    "shiftName": "Evening",
+    "startTime": "22:00",
+    "endTime": "06:00",
+    "dateAddedToCB": "2024-09-23T14:55:55.798Z"
+  }
+]
+Inserted shifts: [
+  {
+    "id": 7,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "8.0",
+    "shiftName": "Morning",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "dateAddedToCB": "2024-09-23T14:55:55.651Z"
+  },
+  {
+    "id": 8,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "8.0",
+    "shiftName": "Afternoon",
+    "startTime": "14:00",
+    "endTime": "22:00",
+    "dateAddedToCB": "2024-09-23T14:55:55.737Z"
+  },
+  {
+    "id": 9,
+    "organizationID": "org_2fKIXFsK3Xmp0UGghHxafJHXyYX",
+    "routeId": "8.0",
+    "shiftName": "Evening",
+    "startTime": "22:00",
+    "endTime": "06:00",
+    "dateAddedToCB": "2024-09-23T14:55:55.798Z"
+  }
+]
+ ✓ Compiled in 844ms (1887 modules)
+10 user_2eeGhzLxDLApONQemmF4SjN4BC4
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+

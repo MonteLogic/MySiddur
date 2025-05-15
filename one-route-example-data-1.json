@@ -1,0 +1,11 @@
+{
+  "user_2eeGhzLxDLApONQemmF4SjN4BC4": {
+    "selectedEmployeeID": "user_2eeGhzLxDLApONQemmF4SjN4BC4",
+    "selectedEmployeeName": "Dennis",
+    "shiftsWorking": {
+      "Morning": [true, [500, 800]],
+      "Afternoon": [true, [1500, 1900]]
+    },
+    "workDate": "2024-09-06T22:44:52.027Z"
+  }
+}

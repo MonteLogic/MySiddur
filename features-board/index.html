@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contractor Buddy Project</title>
+  </head>
+  <body>
+    <h1>Contractor Buddy Project</h1>
+    <div id="content"></div>
+
+    <script src="content.js"></script>
+    <script>
+      const contentDiv = document.getElementById('content');
+
+      // Project Info
+      contentDiv.innerHTML += `
+            <h2>${data.project.name}</h2>
+            <p>Focus: ${data.project.focus}</p>
+        `;
+
+      // Features
+      contentDiv.innerHTML += '<h3>Features:</h3>';
+      contentDiv.innerHTML += '<ul>';
+      data.features.forEach((feature) => {
+        contentDiv.innerHTML += `
+                <li>
+                    <strong>${feature.name}</strong> (${feature.status})
+                    <p>${feature.description}</p>
+                </li>
+            `;
+      });
+      contentDiv.innerHTML += '</ul>';
+
+      // Todo List
+      contentDiv.innerHTML += '<h3>Todo:</h3>';
+      contentDiv.innerHTML += '<ul>';
+      data.todo.forEach((item) => {
+        contentDiv.innerHTML += `<li>${item}</li>`;
+      });
+      contentDiv.innerHTML += '</ul>';
+
+      // Notes
+      contentDiv.innerHTML += '<h3>Notes:</h3>';
+      contentDiv.innerHTML += '<ul>';
+      data.notes.forEach((note) => {
+        contentDiv.innerHTML += `<li>${note}</li>`;
+      });
+      contentDiv.innerHTML += '</ul>';
+    </script>
+  </body>
+</html>

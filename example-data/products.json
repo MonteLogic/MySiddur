@@ -1,0 +1,20 @@
+{
+  "production": {
+    "base": {
+      "id": "prod_RRnuXj7k8P5bFE",
+      "env": "test",
+      "name": "Base Plan",
+      "interval": "month",
+      "description": "Base subscription plan for CBud"
+    }
+  },
+  "development": {
+    "base": {
+      "id": "prod_RRpMROFi5ZgEEF",
+      "env": "prod",
+      "name": "Base Plan (Test)",
+      "interval": "month",
+      "description": "Test subscription plan for CBud"
+    }
+  }
+}
