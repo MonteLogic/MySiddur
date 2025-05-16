@@ -1,3 +1,6 @@
 [submodule "MoL-blog-content"]
 	path = MoL-blog-content
 	url = https://github.com/MonteLogic/MoL-blog-content.git
+[submodule "MySiddur-blog-content"]
+	path = MySiddur-blog-content
+	url = https://github.com/MonteLogic/MySiddur-blog-content.git
