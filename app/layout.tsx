@@ -7,7 +7,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { cache } from 'react';
 import { Analytics } from '@vercel/analytics/next';
-import titles from '#/titles.json';
+import titles from '#/strings.json';
 
 export const metadata: Metadata = {
   title: {
