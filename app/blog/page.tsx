@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path'; // Ensure path is imported
 import matter from 'gray-matter';
 import { auth, currentUser } from '@clerk/nextjs';
+import strings from '#/strings.json'
 
 interface BlogPost {
   slug: string; // This will be the final, unique slug
@@ -27,7 +28,7 @@ interface BlogPost {
  * For other .md files, uses the filename without extension.
  */
 function generateBaseSlug(filePathFromJson: string): string {
-    const postsBaseDirString = 'MoL-blog-content/posts/';
+    const postsBaseDirString = strings['content-submodule'] + '/posts/';
     let normalizedFilePath = filePathFromJson.replace(/\\/g, '/').trim();
 
     let relativePathToPostsDir: string;
@@ -100,7 +101,7 @@ async function getBlogPosts(): Promise<BlogPost[]> {
         const baseSlug = generateBaseSlug(currentFilePath);
 
         // Determine titleSource from original path structure
-        const postsBaseDirString = 'MoL-blog-content/posts/';
+        const postsBaseDirString =  strings['content-submodule'] + '/posts/';
         let originalNormalizedPath = currentFilePath.replace(/\\/g, '/');
         let originalRelativePath = originalNormalizedPath.startsWith(postsBaseDirString)
             ? originalNormalizedPath.substring(postsBaseDirString.length)

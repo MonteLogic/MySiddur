@@ -1,6 +1,6 @@
 # About Contractor Bud
 
-Contractor Bud is an online system  for managing contractors concerns. These concerns include
+Contractor Bud is an online system for managing contractors concerns. These concerns include
 scheduling, timecards, route management and time management.
 
 This easy to use app will make truck drivers and route managers working lives much easier.
@@ -44,3 +44,13 @@ node-version: 20.0.x
 
 TypeScript and JavaScript should be JSDoc compliant.
 
+## Setup Blog Content:
+
+node-version: 20.0.x
+
+```bash
+
+git submodule init
+git submodule update
+
+```
