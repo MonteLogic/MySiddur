@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { auth, currentUser } from '@clerk/nextjs';
+import strings from '#/strings.json'
 
 interface BlogPost {
   slug: string;
@@ -23,7 +24,7 @@ interface BlogPost {
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     // Path to your submodule posts directory
-    const postsDirectory = path.join(process.cwd(), 'MoL-blog-content/posts');
+    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
     
     // Read all directories in the posts folder (each directory is a blog post)
     const postFolders = fs.readdirSync(postsDirectory, { withFileTypes: true })

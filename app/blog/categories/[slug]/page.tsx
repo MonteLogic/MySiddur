@@ -5,6 +5,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { auth, currentUser } from '@clerk/nextjs';
 import { notFound } from 'next/navigation';
+import strings from '#/strings.json'
 
 interface BlogPost {
   slug: string;
@@ -52,7 +53,7 @@ async function getCategoryDetails(slug: string): Promise<{ name: string } | unde
 // Function to safely get blog posts
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const postsDirectory = path.join(process.cwd(), 'MoL-blog-content/posts');
+    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
     const postFolders = fs.readdirSync(postsDirectory, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name);

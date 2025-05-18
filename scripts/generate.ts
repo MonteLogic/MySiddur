@@ -1,6 +1,6 @@
 // scripts/generate.ts
 // Use CommonJS require for the utility file and built-in modules
-const strings = require('./strings.json'); // Import strings.json at the top
+const strings = require('../strings.json'); // Import strings.json at the top
 const { generateMarkdownPaths } = require('../utils/paths/markdownPaths');
 const path = require('path');
 // const process = require('process'); // REMOVE THIS LINE - Use the global 'process' directly

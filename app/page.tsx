@@ -1,12 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+import strings from '#/strings.json'
 
 export default function LandingPage() {
   return (
     // Use Tailwind classes for a basic layout and dark theme consistent with original code
     <div className="flex min-h-screen flex-col items-center justify-center bg-black p-6 text-white">
       <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">MoL Tech Blog</h1>
+        <h1 className="mb-4 text-4xl font-bold">{strings['title']}</h1>
         <p className="mb-8 text-lg text-gray-300">
           Insights, guides, and notes on web development, workflows, and the
           tech journey.

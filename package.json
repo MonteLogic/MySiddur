@@ -2,8 +2,8 @@
   "private": true,
   "packageManager": "pnpm@9.x",
   "scripts": {
-    "setup": "git submodule update --init --recursive && cd MoL-blog-content && pnpm i",
-    "postinstall": "cd MoL-blog-content && pnpm install",
+    "setup": "git submodule update --init --recursive && cd MySiddur-blog-content && pnpm i",
+    "postinstall": "cd MySiddur-blog-content && pnpm install",
     "build": "pnpm run generate-markdown-paths && next build",
     "dev": "next dev",
     "lint": "next lint",
