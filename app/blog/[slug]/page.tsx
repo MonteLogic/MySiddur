@@ -9,7 +9,9 @@ import remarkGfm from 'remark-gfm';
 import { auth, currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-// import { notFound } from 'next/navigation'; // Optional: for a custom 404 trigger
+import strings from '#/strings.json'
+
+
 
 // --- Type Definitions ---
 interface BlogPostParams {
@@ -36,7 +38,7 @@ interface Frontmatter {
  * Collision handling (e.g., appending -1, -2) is done by the calling functions.
  */
 function generateBaseSlug(filePathFromJson: string): string {
-  const postsBaseDirString = 'MoL-blog-content/posts/';
+  const postsBaseDirString = strings['content-submodule'] + '/posts/';
   let normalizedFilePath = filePathFromJson.replace(/\\/g, '/').trim();
 
   let relativePathToPostsDir: string;
@@ -204,7 +206,7 @@ async function getPostDataBySlug(urlSlug: string): Promise<{
 
     // Default title if not present, using original filename/dirname
     if (!frontmatter.title) {
-      const postsBaseDirString = 'MoL-blog-content/posts/';
+      const postsBaseDirString = strings['content-submodule'] + '/posts/';
       let originalNormalizedPath = filePath.replace(/\\/g, '/');
       let originalRelativePath = originalNormalizedPath.startsWith(
         postsBaseDirString,

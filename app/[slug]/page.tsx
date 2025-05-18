@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm';
 import { auth, currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import strings from '#/strings.json'
 
 // Define types
 interface BlogPostParams {
@@ -82,7 +83,10 @@ export default async function BlogPost({ params }: Readonly<{ params: BlogPostPa
 
   try {
     // Get the markdown content for this blog post
-    const postsDirectory = path.join(process.cwd(), 'MoL-blog-content/posts');
+    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
+
+
+
     const postDirectory = path.join(postsDirectory, slug);
 
     // Look for MDX file first, then fall back to MD
