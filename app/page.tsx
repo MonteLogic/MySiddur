@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import strings from '#/strings.json'
+import strings from '#/strings.json';
 
 export default function LandingPage() {
   return (
@@ -18,7 +18,7 @@ export default function LandingPage() {
           // Basic button-like styling for the link
           className="inline-block rounded-lg border border-blue-700 bg-blue-800/30 px-6 py-3 text-xl font-semibold text-blue-400 transition-colors hover:border-blue-600 hover:bg-blue-700/40"
         >
-          Explore the Blog <span aria-hidden="true">→</span>
+          Generate Siddur<span aria-hidden="true">→</span>
         </Link>
       </div>
     </div>
