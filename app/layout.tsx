@@ -19,8 +19,7 @@ export const metadata: Metadata = {
     ' is an online system for managing contractors concerns. These concerns include scheduling, timecards, route management and time management. This easy to use app will make truck drivers and route managers working lives much easier.',
   openGraph: {
     title: titles.title,
-    description:
-      'Contractor Bud is an online system for managing contractors concerns. These concerns include scheduling, timecards, route management and time management. This easy to use app will make truck drivers and route managers working lives much easier.',
+    description: titles.description,
     images: [`/api/og?title=Next.js App Router`],
   },
   twitter: {
@@ -50,7 +49,7 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider>
-      <html lang="en" className="[color-scheme:dark] dark">
+      <html lang="en" className="dark [color-scheme:dark]">
         <body className="bg-gray-1100 overflow-y-scroll bg-[url('/grid.svg')] pb-36">
           <GlobalNav userData={userData} />
           <div className="lg:pl-72">

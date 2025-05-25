@@ -1,5 +1,7 @@
 'use server';
 import { UserButton } from '@clerk/nextjs';
+import titles from '#/strings.json';
+
 export default async function Page() {
   return (
     <div className="relative z-0 space-y-10 text-white">
@@ -10,7 +12,7 @@ export default async function Page() {
       </div>
       <UserButton afterSignOutUrl="/" />
       <div className="space-y-5">
-        <p>This is contractor buddy, sign-in </p>
+        <p>This is {titles.title}, sign-in </p>
         <p>Here you will see a summary of your work.</p>
       </div>
     </div>

@@ -1,4 +1,5 @@
 {
   "title": "MySiddur",
-  "content-submodule":"MySiddur-blog-content"
+  "content-submodule":"MySiddur-blog-content",
+  "description": "Online siddur generation."
 }

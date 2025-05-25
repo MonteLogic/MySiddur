@@ -8,6 +8,7 @@ import { useState } from 'react';
 import Byline from './byline';
 import { UserData } from '#/app/utils/getUserID';
 import { CBudLogo } from './cbud-logo';
+import titles from '#/strings.json';
 
 export function GlobalNav({ userData }: { userData?: UserData }): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,8 @@ export function GlobalNav({ userData }: { userData?: UserData }): JSX.Element {
             <CBudLogo />
           </div>
           <h3 className="font-semibold tracking-wide text-gray-400 group-hover:text-gray-50">
-            Contractor Bud
+            {titles.title}
+
           </h3>
         </Link>
       </div>

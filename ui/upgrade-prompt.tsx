@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Zap } from 'lucide-react';
+import titles from '#/strings.json';
 
 interface ModalProps {
   isOpen: boolean;
@@ -114,7 +115,7 @@ const UpgradePrompt: React.FC<UpgradePromptProps> = ({ subscriptionData }) => {
         </div>
 
         <h2 id="modal-title" className="text-xl font-semibold text-white">
-          Upgrade Contractor Bud
+          Upgrade {titles.title}
         </h2>
 
         <p className="text-center text-gray-400">
