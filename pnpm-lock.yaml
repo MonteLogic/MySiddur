@@ -29,6 +29,9 @@ importers:
       '@headlessui/react':
         specifier: 1.7.17
         version: 1.7.17(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@hebcal/core':
+        specifier: 5.9.7
+        version: 5.9.7
       '@heroicons/react':
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -1910,6 +1913,16 @@ packages:
     peerDependencies:
       react: ^16 || ^17 || ^18
       react-dom: ^16 || ^17 || ^18
+
+  '@hebcal/core@5.9.7':
+    resolution: {integrity: sha512-ZD+X/7V3u3kvg9jSSeQ0ABlr5hgtGf4G/8lSxW8JS2NIyOLk9mhrBP+hCEtcuMvq/DoIFsmt+vDZp5EoaywF/Q==}
+    engines: {node: '>= 16.0.0'}
+
+  '@hebcal/hdate@0.14.0':
+    resolution: {integrity: sha512-NHQLB3SFPmepSFLb/XjNh0oUJnrEQ3k3WWbFFTQzNWKl4Qets1DOdhWYg9J9n3OuOxvvObiCvStYkzZyIXk+YQ==}
+
+  '@hebcal/noaa@0.9.2':
+    resolution: {integrity: sha512-pw6hixqxdgkhaxj/5aQgaBYevLUaerUvEIPNUSKYn2B77NOH4xZQF1A3YZlXel8MzGHyVbtB434uS4QAOMjZWQ==}
 
   '@heroicons/react@1.0.6':
     resolution: {integrity: sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==}
@@ -6214,6 +6227,10 @@ packages:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
 
+  quick-lru@6.1.2:
+    resolution: {integrity: sha512-AAFUA5O1d83pIHEhJwWCq/RQcRukCkn/NSm2QsTEMle5f2hP0ChI2+3Xb051PZCkLryI/Ir1MVKviT2FIloaTQ==}
+    engines: {node: '>=12'}
+
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
@@ -6911,6 +6928,12 @@ packages:
   tar@6.2.0:
     resolution: {integrity: sha512-/Wo7DcT0u5HUV486xg675HtjNd3BXZ6xDbzsCUZPt5iw8bTQ63bP0Raut3mvro9u+CUyq7YQd8Cx55fsZXxqLQ==}
     engines: {node: '>=10'}
+
+  temporal-polyfill@0.3.0:
+    resolution: {integrity: sha512-qNsTkX9K8hi+FHDfHmf22e/OGuXmfBm9RqNismxBrnSmZVJKegQ+HYYXT+R7Ha8F/YSm2Y34vmzD4cxMu2u95g==}
+
+  temporal-spec@0.3.0:
+    resolution: {integrity: sha512-n+noVpIqz4hYgFSMOSiINNOUOMFtV5cZQNCmmszA6GiVFVRt3G7AqVyhXjhCSmowvQn+NsGn+jMDMKJYHd3bSQ==}
 
   terser-webpack-plugin@5.3.10:
     resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}
@@ -9748,6 +9771,20 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
+  '@hebcal/core@5.9.7':
+    dependencies:
+      '@hebcal/hdate': 0.14.0
+      '@hebcal/noaa': 0.9.2
+      quick-lru: 6.1.2
+      temporal-polyfill: 0.3.0
+      tslib: 2.8.1
+
+  '@hebcal/hdate@0.14.0': {}
+
+  '@hebcal/noaa@0.9.2':
+    dependencies:
+      temporal-polyfill: 0.3.0
+
   '@heroicons/react@1.0.6(react@18.2.0)':
     dependencies:
       react: 18.2.0
@@ -10031,11 +10068,11 @@ snapshots:
     dependencies:
       asn1js: 3.0.5
       pvtsutils: 1.3.5
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@peculiar/json-schema@1.1.12':
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.8.1
 
   '@peculiar/webcrypto@1.4.1':
     dependencies:
@@ -11103,7 +11140,7 @@ snapshots:
     dependencies:
       pvtsutils: 1.3.5
       pvutils: 1.1.3
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   assertion-error@2.0.1: {}
 
@@ -11726,7 +11763,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.8.1
 
   dotenv@16.4.5: {}
 
@@ -13649,7 +13686,7 @@ snapshots:
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.8.1
 
   lowercase-keys@2.0.0: {}
 
@@ -14622,7 +14659,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.4.1
+      tslib: 2.8.1
 
   node-abi@3.71.0:
     dependencies:
@@ -14864,7 +14901,7 @@ snapshots:
   pascal-case@3.1.2:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   path-browserify@1.0.1: {}
 
@@ -15145,7 +15182,7 @@ snapshots:
 
   pvtsutils@1.3.5:
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   pvutils@1.1.3: {}
 
@@ -15164,6 +15201,8 @@ snapshots:
   quick-lru@4.0.1: {}
 
   quick-lru@5.1.1: {}
+
+  quick-lru@6.1.2: {}
 
   randombytes@2.1.0:
     dependencies:
@@ -15558,7 +15597,7 @@ snapshots:
 
   rxjs@7.8.1:
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   sade@1.8.1:
     dependencies:
@@ -15739,7 +15778,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.8.1
 
   snakecase-keys@3.2.1:
     dependencies:
@@ -16081,6 +16120,12 @@ snapshots:
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
+
+  temporal-polyfill@0.3.0:
+    dependencies:
+      temporal-spec: 0.3.0
+
+  temporal-spec@0.3.0: {}
 
   terser-webpack-plugin@5.3.10(esbuild@0.17.6)(webpack@5.94.0(esbuild@0.17.6)):
     dependencies:
@@ -16693,7 +16738,7 @@ snapshots:
       '@peculiar/json-schema': 1.1.12
       asn1js: 3.0.5
       pvtsutils: 1.3.5
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   webidl-conversions@3.0.1: {}
 
