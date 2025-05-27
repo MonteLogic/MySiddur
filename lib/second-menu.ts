@@ -23,6 +23,11 @@ export const getSecondMenu = (
         description: 'My Profile page.',
       },
       {
+        name: 'Customize Siddur',
+        slug: 'customize-siddur',
+        description: 'Print Custom Siddur',
+      },
+      {
         name: 'Team Schedule',
         slug: 'main/schedule',
         description: 'Schedule page.',
