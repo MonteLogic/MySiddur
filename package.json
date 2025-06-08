@@ -16,7 +16,7 @@
     "test:db": "tsx tests/sqlite-test/setup-test-db.ts",
     "test:playwright": " exec playwright test",
     "local-db-create": "node tests/db-create/index.ts",
-      "generate-markdown-paths": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate.ts"
+    "generate-markdown-paths": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate.ts"
   },
   "git": {
     "pre-commit": "lint-staged"
@@ -32,6 +32,7 @@
     "@clerk/themes": "1.7.11",
     "@clerk/types": "4.17.0",
     "@headlessui/react": "1.7.17",
+    "@hebcal/core": "5.9.7",
     "@heroicons/react": "1.0.6",
     "@libsql/client": "0.9.0",
     "@next/third-parties": "15.1.6",

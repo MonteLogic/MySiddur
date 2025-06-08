@@ -1,4 +1,4 @@
-// src/utils/siddurUtils.ts
+// utils/siddurUtils.ts
 
 // Import pdf-lib essentials
 import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib';
