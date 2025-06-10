@@ -41,6 +41,9 @@ importers:
       '@next/third-parties':
         specifier: 15.1.6
         version: 15.1.6(next@14.0.3-canary.7(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      '@pdf-lib/fontkit':
+        specifier: 1.1.1
+        version: 1.1.1
       '@playwright/test':
         specifier: 1.44.1
         version: 1.44.1
@@ -71,9 +74,6 @@ importers:
       '@types/ms':
         specifier: 0.7.31
         version: 0.7.31
-      '@types/node':
-        specifier: 18.11.17
-        version: 18.11.17
       '@types/react':
         specifier: 18.0.26
         version: 18.0.26
@@ -258,6 +258,9 @@ importers:
       '@types/glob':
         specifier: 8.1.0
         version: 8.1.0
+      '@types/node':
+        specifier: 18.11.17
+        version: 18.11.17
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@18.11.17)(typescript@4.9.4)
@@ -2180,6 +2183,9 @@ packages:
   '@npmcli/package-json@2.0.0':
     resolution: {integrity: sha512-42jnZ6yl16GzjWSH7vtrmWyJDGVa/LXPdpN2rcUWolFjc9ON2N3uz0qdBbQACfmhuJZ2lbKYtmK5qx68ZPLHMA==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+
+  '@pdf-lib/fontkit@1.1.1':
+    resolution: {integrity: sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==}
 
   '@pdf-lib/standard-fonts@1.0.0':
     resolution: {integrity: sha512-hU30BK9IUN/su0Mn9VdlVKsWBS6GyhVfqjwl1FjZN4TxP6cCw0jP2w7V3Hf5uX7M0AZJ16vey9yE0ny7Sa59ZA==}
@@ -10055,6 +10061,10 @@ snapshots:
   '@npmcli/package-json@2.0.0':
     dependencies:
       json-parse-even-better-errors: 2.3.1
+
+  '@pdf-lib/fontkit@1.1.1':
+    dependencies:
+      pako: 1.0.11
 
   '@pdf-lib/standard-fonts@1.0.0':
     dependencies:

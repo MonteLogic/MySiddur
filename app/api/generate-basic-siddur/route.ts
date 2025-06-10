@@ -1,6 +1,6 @@
 // app/api/generate-basic-siddur/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { generateSiddurPDF, SiddurFormat } from '#/utils/pdf-utils/siddurUtils'; // Adjust path as needed
+import { generateSiddurPDF, SiddurFormat } from '#/utils/siddur-pdf-utils/siddurMainFile'; // Adjust path as needed
 
 export async function GET(request: NextRequest) {
   // For GET requests, parameters are typically in the search params (URL query)
