@@ -6,7 +6,8 @@ import {
     Prayer,
     Nusach,
     CalendarInfo, // Defined in siddurTypes.ts
-    PrayerLine
+    PrayerLine,
+    PrayerType
   } from '../types/siddurTypes';
   import { getCalendarInfo } from '../../calendar/hebrewCalendar'; // You'll need to implement this
   
