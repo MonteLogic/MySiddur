@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install && cd MoL-blog-content && pnpm install && cd ..",
+  "installCommand": "pnpm install && cd MySiddur-blog-content && pnpm install && cd ..",
   "git": {
     "deploymentEnabled": {
       "main": true
