@@ -1,0 +1,34 @@
+{
+  "pdfMargins": {
+    "top": 50,
+    "bottom": 50,
+    "left": 50,
+    "right": 50
+  },
+  "lineSpacing": {
+    "siddurTitle": 30,
+    "service": 20,
+    "userName": 18,
+    "sectionTitle": 22,
+    "sectionDescription": 14,
+    "prayerTitle": 18,
+    "blessingEnglish": 15,
+    "blessingHebrew": 18,
+    "prayerPartSource": 12,
+    "prayerPartEnglish": 15,
+    "prayerPartHebrew": 18,
+    "defaultEnglishPrayer": 15,
+    "defaultHebrewPrayer": 18
+  },
+  "verticalSpacing": {
+    "afterSiddurTitle": 10,
+    "afterUserName": 20,
+    "beforePrayerTitle": 5,
+    "afterBlessingGroup": 20,
+    "afterPartGroup": 20,
+    "afterSimplePrayer": 25,
+    "afterSectionDescription": 10,
+    "sectionMinRemainingHeight": 60,
+    "prayerMinRemainingHeight": 60
+  }
+}

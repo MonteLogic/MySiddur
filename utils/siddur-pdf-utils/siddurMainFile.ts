@@ -1,16 +1,31 @@
 // utils/siddur-pdf-utils/siddurMainFile.ts
 
 import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib';
-import fontkit from '@pdf-lib/fontkit'; // <-- 1. IMPORT FONTKIT
+import fontkit from '@pdf-lib/fontkit';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import ashPrayerInfo from 'prayer-content/ashkenazi-prayer-info.json';
+import siddurConfig from './siddur-formatting-config.json'; // <-- IMPORT CONFIG FILE
 
+/**
+ * Enum representing the available Siddur formats.
+ */
 export enum SiddurFormat {
+  /**
+   * Represents the Nusach Ashkenaz format.
+   */
   NusachAshkenaz = 1,
+  /**
+   * Represents the Nusach Sefard format.
+   */
   NusachSefard = 2,
 }
 
+/**
+ * Formats a given Date object into a 'MM/DD/YYYY' string.
+ * @param date - The date to format.
+ * @returns A string representing the formatted date.
+ */
 export const formatDate = (date: Date): string => {
   return date.toLocaleDateString('en-US', {
     month: '2-digit',
@@ -19,14 +34,36 @@ export const formatDate = (date: Date): string => {
   });
 };
 
+/**
+ * Interface defining the parameters for generating a Siddur PDF.
+ */
 interface GenerateSiddurPDFParams {
+  /**
+   * The selected date for the Siddur, as a string.
+   */
   selectedDate: string;
+  /**
+   * The desired Siddur format (e.g., Nusach Ashkenaz).
+   */
   siddurFormat: SiddurFormat;
+  /**
+   * Optional name of the user to be included in the Siddur.
+   */
   userName?: string;
 }
 
+/**
+ * Type alias for a single prayer object, inferred from the structure of `ashPrayerInfo`.
+ */
 type Prayer = (typeof ashPrayerInfo.sections)[0]['prayers'][0];
 
+/**
+ * Generates a PDF document for a Siddur based on the provided parameters.
+ * The PDF will include prayers and blessings according to the specified `siddurFormat`.
+ * Currently, only `NusachAshkenaz` is fully supported.
+ * @param params - An object containing the parameters for PDF generation, including `selectedDate`, `siddurFormat`, and an optional `userName`.
+ * @returns A Promise that resolves to a Uint8Array representing the generated PDF document.
+ */
 export const generateSiddurPDF = async ({
   selectedDate,
   siddurFormat,
@@ -36,7 +73,7 @@ export const generateSiddurPDF = async ({
   const pdfDoc = await PDFDocument.create();
 
   // --- Register fontkit ---
-  pdfDoc.registerFontkit(fontkit); // <-- 2. REGISTER FONTKIT
+  pdfDoc.registerFontkit(fontkit);
 
   // --- Font Loading ---
   const hebrewFontPath = path.join(process.cwd(), 'fonts', 'NotoSansHebrew-Regular.ttf');
@@ -52,11 +89,10 @@ export const generateSiddurPDF = async ({
   const englishFont = await pdfDoc.embedFont(englishFontBytes);
   const englishBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-
   let page = pdfDoc.addPage();
   const { width, height } = page.getSize();
-  const margin = 50;
-  let y = height - margin;
+  const margin = siddurConfig.pdfMargins.left; // Use left margin for all sides initially
+  let y = height - siddurConfig.pdfMargins.top;
 
   // --- Helper function for text wrapping and Y-position management ---
   const drawAndWrapText = (
@@ -74,9 +110,9 @@ export const generateSiddurPDF = async ({
     let line = '';
 
     for (const word of words) {
-        if (currentY < margin) {
+        if (currentY < siddurConfig.pdfMargins.bottom + 20) { // Keep 20 as a minimum buffer
             page = pdfDoc.addPage();
-            currentY = height - margin;
+            currentY = height - siddurConfig.pdfMargins.top;
         }
         const testLine = line + word + ' ';
         const textWidth = font.widthOfTextAtSize(testLine, size);
@@ -94,46 +130,69 @@ export const generateSiddurPDF = async ({
   };
 
   // --- PDF Header ---
-  y = drawAndWrapText(ashPrayerInfo.siddurTitle, englishBoldFont, 24, margin, width - margin * 2, 30, y, rgb(0, 0.53, 0.71));
-  y -= 10;
+  y = drawAndWrapText(ashPrayerInfo.siddurTitle, englishBoldFont, 24, margin, width - margin * 2, siddurConfig.lineSpacing.siddurTitle, y, rgb(0, 0.53, 0.71));
+  y -= siddurConfig.verticalSpacing.afterSiddurTitle;
   
-  y = drawAndWrapText(`Service: ${ashPrayerInfo.service}`, englishFont, 14, margin, width - margin * 2, 20, y);
+  y = drawAndWrapText(`Service: ${ashPrayerInfo.service}`, englishFont, 14, margin, width - margin * 2, siddurConfig.lineSpacing.service, y);
 
   if (userName) {
-    y = drawAndWrapText(`For: ${userName}`, englishFont, 12, margin, width - margin * 2, 18, y);
+    y = drawAndWrapText(`For: ${userName}`, englishFont, 12, margin, width - margin * 2, siddurConfig.lineSpacing.userName, y);
   }
-  y -= 20;
+  y -= siddurConfig.verticalSpacing.afterUserName;
 
   // --- Content Generation ---
   if (siddurFormat === SiddurFormat.NusachAshkenaz) {
     for (const section of ashPrayerInfo.sections) {
-      if (y < margin + 60) {
+      // Calculate approximate height needed for section title and description
+      const sectionTitleTextHeight = englishBoldFont.heightAtSize(18) * (section.sectionTitle.length > 50 ? 2 : 1); // Simple estimation
+      const sectionDescTextHeight = englishFont.heightAtSize(10) * (section.description.length > 100 ? 3 : 1); // Simple estimation
+      const estimatedSectionHeaderHeight = sectionTitleTextHeight + siddurConfig.lineSpacing.sectionDescription + sectionDescTextHeight + siddurConfig.verticalSpacing.afterSectionDescription;
+
+      if (y < siddurConfig.pdfMargins.bottom + estimatedSectionHeaderHeight) {
         page = pdfDoc.addPage();
-        y = height - margin;
+        y = height - siddurConfig.pdfMargins.top;
       }
-      y = drawAndWrapText(section.sectionTitle, englishBoldFont, 18, margin, width - margin * 2, 22, y, rgb(0.1, 0.1, 0.1));
-      y = drawAndWrapText(section.description, englishFont, 10, margin, width - margin * 2, 14, y, rgb(0.3, 0.3, 0.3));
-      y -= 10;
+
+      y = drawAndWrapText(section.sectionTitle, englishBoldFont, 18, margin, width - margin * 2, siddurConfig.lineSpacing.sectionTitle, y, rgb(0.1, 0.1, 0.1));
+      y = drawAndWrapText(section.description, englishFont, 10, margin, width - margin * 2, siddurConfig.lineSpacing.sectionDescription, y, rgb(0.3, 0.3, 0.3));
+      y -= siddurConfig.verticalSpacing.afterSectionDescription;
 
       for (const prayer of section.prayers as Prayer[]) {
-        if (y < margin + 60) {
-          page = pdfDoc.addPage();
-          y = height - margin;
+        // Estimate height for the prayer title and content
+        const prayerTitleTextHeight = englishBoldFont.heightAtSize(14) + siddurConfig.verticalSpacing.beforePrayerTitle;
+        let estimatedPrayerContentHeight = 0;
+
+        const columnWidth = width / 2 - margin - 10;
+
+        if ('blessings' in prayer && Array.isArray(prayer.blessings)) {
+            // A more accurate estimation would involve iterating through blessings here
+            // For now, a simplified estimate
+            estimatedPrayerContentHeight = prayer.blessings.length * Math.max(siddurConfig.lineSpacing.blessingEnglish, siddurConfig.lineSpacing.blessingHebrew) + (prayer.blessings.length * siddurConfig.verticalSpacing.afterBlessingGroup);
+        } else if ('parts' in prayer && Array.isArray(prayer.parts)) {
+            estimatedPrayerContentHeight = prayer.parts.length * Math.max(siddurConfig.lineSpacing.prayerPartEnglish, siddurConfig.lineSpacing.prayerPartHebrew) + (prayer.parts.length * siddurConfig.verticalSpacing.afterPartGroup);
+        } else if ('hebrew' in prayer && prayer.hebrew && 'english' in prayer && prayer.english) {
+            // A more accurate estimation would involve actual text wrapping calculation
+            const englishLines = Math.ceil(englishFont.widthOfTextAtSize(prayer.english, 12) / columnWidth);
+            const hebrewLines = Math.ceil(hebrewFont.widthOfTextAtSize(prayer.hebrew, 14) / columnWidth);
+            estimatedPrayerContentHeight = Math.max(englishLines * siddurConfig.lineSpacing.defaultEnglishPrayer, hebrewLines * siddurConfig.lineSpacing.defaultHebrewPrayer) + siddurConfig.verticalSpacing.afterSimplePrayer;
         }
-        y = drawAndWrapText(prayer.title, englishBoldFont, 14, margin, width - margin * 2, 18, y);
-        y -= 5;
+
+        if (y < siddurConfig.pdfMargins.bottom + prayerTitleTextHeight + estimatedPrayerContentHeight) {
+          page = pdfDoc.addPage();
+          y = height - siddurConfig.pdfMargins.top;
+        }
+
+        y = drawAndWrapText(prayer.title, englishBoldFont, 14, margin, width - margin * 2, siddurConfig.lineSpacing.prayerTitle, y);
+        y -= siddurConfig.verticalSpacing.beforePrayerTitle;
 
         const columnStartY = y;
-        let englishEndY = y;
-        let hebrewEndY = y;
-        const columnWidth = width / 2 - margin - 10;
         
         if ('blessings' in prayer && Array.isArray(prayer.blessings)) {
             let blessingY = columnStartY;
             for(const blessing of prayer.blessings) {
-                const englishY = drawAndWrapText(blessing.english, englishFont, 12, margin, columnWidth, 15, blessingY);
-                const hebrewY = drawAndWrapText(blessing.hebrew, hebrewFont, 14, width / 2 + 10, columnWidth, 18, blessingY);
-                blessingY = Math.min(englishY, hebrewY) - 20;
+                const englishY = drawAndWrapText(blessing.english, englishFont, 12, margin, columnWidth, siddurConfig.lineSpacing.blessingEnglish, blessingY);
+                const hebrewY = drawAndWrapText(blessing.hebrew, hebrewFont, 14, width / 2 + 10, columnWidth, siddurConfig.lineSpacing.blessingHebrew, blessingY);
+                blessingY = Math.min(englishY, hebrewY) - siddurConfig.verticalSpacing.afterBlessingGroup;
             }
             y = blessingY;
 
@@ -141,18 +200,18 @@ export const generateSiddurPDF = async ({
             let partY = columnStartY;
             for(const part of prayer.parts) {
                 if (part.source) {
-                    partY = drawAndWrapText(`Source: ${part.source}`, englishFont, 9, margin, columnWidth, 12, partY, rgb(0.5, 0.5, 0.5));
+                    partY = drawAndWrapText(`Source: ${part.source}`, englishFont, 9, margin, columnWidth, siddurConfig.lineSpacing.prayerPartSource, partY, rgb(0.5, 0.5, 0.5));
                 }
-                const englishY = drawAndWrapText(part.english, englishFont, 12, margin, columnWidth, 15, partY);
-                const hebrewY = drawAndWrapText(part.hebrew, hebrewFont, 14, width / 2 + 10, columnWidth, 18, partY);
-                partY = Math.min(englishY, hebrewY) - 20;
+                const englishY = drawAndWrapText(part.english, englishFont, 12, margin, columnWidth, siddurConfig.lineSpacing.prayerPartEnglish, partY);
+                const hebrewY = drawAndWrapText(part.hebrew, hebrewFont, 14, width / 2 + 10, columnWidth, siddurConfig.lineSpacing.prayerPartHebrew, partY);
+                partY = Math.min(englishY, hebrewY) - siddurConfig.verticalSpacing.afterPartGroup;
             }
             y = partY;
 
         } else if ('hebrew' in prayer && prayer.hebrew && 'english' in prayer && prayer.english) {
-            englishEndY = drawAndWrapText(prayer.english, englishFont, 12, margin, columnWidth, 15, columnStartY);
-            hebrewEndY = drawAndWrapText(prayer.hebrew, hebrewFont, 14, width / 2 + 10, columnWidth, 18, columnStartY);
-            y = Math.min(englishEndY, hebrewEndY) - 25;
+            const englishEndY = drawAndWrapText(prayer.english, englishFont, 12, margin, columnWidth, siddurConfig.lineSpacing.defaultEnglishPrayer, columnStartY);
+            const hebrewEndY = drawAndWrapText(prayer.hebrew, hebrewFont, 14, width / 2 + 10, columnWidth, siddurConfig.lineSpacing.defaultHebrewPrayer, columnStartY);
+            y = Math.min(englishEndY, hebrewEndY) - siddurConfig.verticalSpacing.afterSimplePrayer;
         }
       }
     }
