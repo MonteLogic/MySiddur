@@ -1,32 +1,60 @@
 {
   "pdfMargins": {
-    "top": 50,
-    "bottom": 50,
-    "left": 50,
-    "right": 50
+    "top": 72,
+    "bottom": 72,
+    "left": 72,
+    "right": 72
   },
   "lineSpacing": {
     "siddurTitle": 30,
-    "service": 20,
-    "userName": 18,
+    "service": 18,
+    "userName": 14,
     "sectionTitle": 22,
-    "sectionDescription": 14,
-    "prayerTitle": 18,
+    "sectionDescription": 12,
+    "prayerTitle": 16,
     "blessingEnglish": 15,
-    "blessingHebrew": 18,
-    "prayerPartSource": 12,
+    "blessingHebrew": 17,
     "prayerPartEnglish": 15,
-    "prayerPartHebrew": 18,
+    "prayerPartHebrew": 17,
+    "prayerPartSource": 11,
     "defaultEnglishPrayer": 15,
-    "defaultHebrewPrayer": 18
+    "defaultHebrewPrayer": 17
   },
   "verticalSpacing": {
     "afterSiddurTitle": 40,
     "afterUserName": 30,
+    "afterSectionTitleText": 10,
     "afterSectionDescription": 25,
     "beforePrayerTitle": 20,
     "afterBlessingGroup": 10,
     "afterPartGroup": 10,
-    "afterSimplePrayer": 10
+    "afterSimplePrayer": 10,
+    "pageBuffer": 20
+  },
+  "fontSizes": {
+    "siddurTitle": 24,
+    "service": 14,
+    "userName": 12,
+    "sectionTitle": 18,
+    "sectionDescription": 10,
+    "prayerTitle": 14,
+    "blessingEnglish": 12,
+    "blessingHebrew": 14,
+    "prayerPartEnglish": 12,
+    "prayerPartHebrew": 14,
+    "prayerPartSource": 9,
+    "otherNusachContent": 12
+  },
+  "colors": {
+    "siddurTitle": [0, 0.53, 0.71],
+    "sectionTitle": [0.1, 0.1, 0.1],
+    "sectionDescription": [0.3, 0.3, 0.3],
+    "sourceText": [0.5, 0.5, 0.5],
+    "defaultText": [0, 0, 0]
+  },
+  "layout": {
+    "sectionTitleLengthThreshold": 50,
+    "sectionDescriptionLengthThreshold": 100,
+    "hebrewColumnXOffset": 10
   }
 }
