@@ -21,14 +21,12 @@
     "defaultHebrewPrayer": 18
   },
   "verticalSpacing": {
-    "afterSiddurTitle": 10,
-    "afterUserName": 20,
-    "beforePrayerTitle": 5,
-    "afterBlessingGroup": 20,
-    "afterPartGroup": 20,
-    "afterSimplePrayer": 25,
-    "afterSectionDescription": 10,
-    "sectionMinRemainingHeight": 60,
-    "prayerMinRemainingHeight": 60
+    "afterSiddurTitle": 40,
+    "afterUserName": 30,
+    "afterSectionDescription": 25,
+    "beforePrayerTitle": 20,
+    "afterBlessingGroup": 10,
+    "afterPartGroup": 10,
+    "afterSimplePrayer": 10
   }
 }
