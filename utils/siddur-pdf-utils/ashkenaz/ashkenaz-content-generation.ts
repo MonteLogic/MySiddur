@@ -116,7 +116,7 @@ export const generateAshkenazContent = (params: AshkenazContentGenerationParams)
                 const hebrewText = prayer.hebrew ?? '';
                 const englishLines = Math.ceil(englishFont.widthOfTextAtSize(englishText, siddurConfig.fontSizes.blessingEnglish) / columnWidth);
                 const hebrewLines = Math.ceil(hebrewFont.widthOfTextAtSize(hebrewText, siddurConfig.fontSizes.blessingHebrew) / columnWidth);
-                estimatedPrayerContentHeight = Math.max(englishLines * siddurConfig.lineSpacing.defaultEnglishPrayer, hebrewLines * siddurConfig.lineSpacing.defaultHebrewPrayer) + siddurConfig.verticalSpacing.afterSimplePrayer;
+                estimatedPrayerContentHeight = Math.max(englishLines * siddurConfig.lineSpacing.defaultEnglishPrayer, hebrewLines * siddurConfig.lineSpacing.defaultHebrewPrayer) + siddurConfig.verticalSpacing.afterPrayerText;
                 console.log(`  [DEBUG] Prayer is 'simple'. Estimated content height: ${estimatedPrayerContentHeight.toFixed(2)}`);
             }
 
@@ -278,7 +278,7 @@ export const generateAshkenazContent = (params: AshkenazContentGenerationParams)
                 y = partY;
                 commonPdfParams = { ...commonPdfParams, page, y };
             } else if ('hebrew' in prayer && prayer.hebrew && 'english' in prayer && prayer.english) {
-                console.log(`    --- [DEBUG] Processing simple prayer at y: ${columnStartY.toFixed(2)}`);
+                console.log(`    --- [DEBUG] line 281: Processing Prayer Text at y: ${columnStartY.toFixed(2)}`);
                 const englishLineInfos = calculateTextLines(prayer.english, englishFont, siddurConfig.fontSizes.blessingEnglish, columnWidth, siddurConfig.lineSpacing.defaultEnglishPrayer);
                 const hebrewLineInfos = calculateTextLines(prayer.hebrew, hebrewFont, siddurConfig.fontSizes.blessingHebrew, columnWidth, siddurConfig.lineSpacing.defaultHebrewPrayer);
 
@@ -307,11 +307,12 @@ export const generateAshkenazContent = (params: AshkenazContentGenerationParams)
                         lineHeight: siddurConfig.lineSpacing.defaultHebrewPrayer
                     });
                 }
+                // I wonder if this is the good one
                 y = Math.min(
                     tempEnglishY + (englishLineInfos.length > 0 ? englishLineInfos[englishLineInfos.length - 1].yOffset : 0),
                     tempHebrewY + (hebrewLineInfos.length > 0 ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset : 0)
-                ) - siddurConfig.verticalSpacing.afterSimplePrayer;
-                console.log(`  [DEBUG] Y after simple prayer is now: ${y.toFixed(2)}`);
+                ) - siddurConfig.verticalSpacing.afterPrayerText;
+                console.log(`  [DEBUG] line 315: Y after Prayer Text is now: ${y.toFixed(2)}`);
                 commonPdfParams = { ...commonPdfParams, page, y };
             }
         }

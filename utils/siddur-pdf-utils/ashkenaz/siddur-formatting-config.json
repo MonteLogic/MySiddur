@@ -29,7 +29,7 @@
     "beforePrayerTitle": 20,
     "afterBlessingGroup": 15,
     "afterPartGroup": 10,
-    "afterSimplePrayer": 10,
+    "afterPrayerText": 12,
     "pageBuffer": 20
   },
   "fontSizes": {
