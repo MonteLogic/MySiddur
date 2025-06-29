@@ -23,12 +23,12 @@
   "verticalSpacing": {
     "afterSiddurTitle": 40,
     "afterUserName": 30,
-    "beforeSectionTitle": 25,
+    "beforeSectionTitle": 30,
     "afterSectionTitleText": 18,
     "afterSectionDescription": 25,
     "beforePrayerTitle": 20,
     "afterBlessingGroup": 15,
-    "afterPartGroup": 10,
+    "afterPartGroup": 25,
     "afterPrayerText": 21,
     "pageBuffer": 20
   },
