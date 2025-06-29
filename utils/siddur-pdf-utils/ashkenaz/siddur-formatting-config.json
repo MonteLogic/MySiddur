@@ -23,10 +23,11 @@
   "verticalSpacing": {
     "afterSiddurTitle": 40,
     "afterUserName": 30,
+    "beforeSectionTitle": 25,
     "afterSectionTitleText": 10,
     "afterSectionDescription": 25,
     "beforePrayerTitle": 20,
-    "afterBlessingGroup": 10,
+    "afterBlessingGroup": 15,
     "afterPartGroup": 10,
     "afterSimplePrayer": 10,
     "pageBuffer": 20
@@ -43,14 +44,16 @@
     "prayerPartEnglish": 12,
     "prayerPartHebrew": 14,
     "prayerPartSource": 9,
-    "otherNusachContent": 12
+    "otherNusachContent": 12,
+    "defaultEnglishPrayer": 12
   },
   "colors": {
     "siddurTitle": [0, 0.53, 0.71],
     "sectionTitle": [0.1, 0.1, 0.1],
     "sectionDescription": [0.3, 0.3, 0.3],
     "sourceText": [0.5, 0.5, 0.5],
-    "defaultText": [0, 0, 0]
+    "defaultText": [0, 0, 0],
+    "instructions": [0.4, 0.4, 0.4]
   },
   "layout": {
     "sectionTitleLengthThreshold": 50,
