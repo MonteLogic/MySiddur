@@ -1,6 +1,4 @@
-// utils/siddur-pdf-utils/siddurMainFile.ts
-
-import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, PDFFont, PDFPage, Color } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -102,7 +100,7 @@ const calculateTextLines = (
 const ensureSpaceAndDraw = (
   currentParams: {
     pdfDoc: PDFDocument;
-    page: any; // PDFPage
+    page: PDFPage;
     y: number;
     width: number;
     height: number;
@@ -116,13 +114,13 @@ const ensureSpaceAndDraw = (
     yOffset: number;
     font: PDFFont;
     size: number;
-    color?: ReturnType<typeof rgb>;
+    color?: Color;
     xOffset?: number;
     lineHeight: number;
   }[],
   // DEBUGGING: Added a label to identify the content being processed
-  contentLabel: string 
-): { page: any; y: number } => {
+  contentLabel: string
+): { page: PDFPage; y: number } => {
   let { pdfDoc, page, y, width, height, margin } = currentParams;
 
   const totalLinesHeight =
@@ -130,7 +128,7 @@ const ensureSpaceAndDraw = (
       ? Math.abs(textLines[textLines.length - 1].yOffset) +
         textLines[0].lineHeight
       : 0;
-  
+
   console.log(`[ensureSpaceAndDraw] Processing: "${contentLabel}"`);
   console.log(`[ensureSpaceAndDraw] Current Y: ${y.toFixed(2)}, Content Height: ${totalLinesHeight.toFixed(2)}, Bottom Margin: ${siddurConfig.pdfMargins.bottom}`);
 
@@ -142,7 +140,7 @@ const ensureSpaceAndDraw = (
     const availableSpace = y - siddurConfig.pdfMargins.bottom;
     console.warn(`
       *************************************************
-      *** CREATING NEW PAGE              ***
+      *** CREATING NEW PAGE                         ***
       *************************************************
       Reason: Not enough space for "${contentLabel}".
       - Available Space: ${availableSpace.toFixed(2)}
@@ -157,11 +155,11 @@ const ensureSpaceAndDraw = (
   }
 
   // Draw the lines
-  let currentBlockY = y; 
+  let currentBlockY = y;
   for (const lineInfo of textLines) {
     page.drawText(lineInfo.text, {
       x: margin + (lineInfo.xOffset || 0),
-      y: currentBlockY + lineInfo.yOffset, 
+      y: currentBlockY + lineInfo.yOffset,
       font: lineInfo.font,
       size: lineInfo.size,
       color:
@@ -192,7 +190,7 @@ export const generateSiddurPDF = async ({
 }: GenerateSiddurPDFParams): Promise<Uint8Array> => {
   console.log('--- STARTING SIDDUR PDF GENERATION ---');
   console.log(`Date: ${selectedDate}, Format: ${SiddurFormat[siddurFormat]}, User: ${userName || 'N/A'}`);
-  
+
   const dateForSiddur = new Date(selectedDate);
   const pdfDoc = await PDFDocument.create();
 
@@ -215,7 +213,7 @@ export const generateSiddurPDF = async ({
   const { width, height } = page.getSize();
   const margin = siddurConfig.pdfMargins.left;
   let y = height - siddurConfig.pdfMargins.top;
-  
+
   console.log(`Initial page created. Width: ${width}, Height: ${height}, Top Margin: ${siddurConfig.pdfMargins.top}, Initial Y: ${y}`);
 
   let commonPdfParams = {
@@ -309,7 +307,16 @@ export const generateSiddurPDF = async ({
       page, // Pass the most recent page
       y,    // Pass the most recent y
       calculateTextLines,
-      ensureSpaceAndDraw: (params, textLines, label) => ensureSpaceAndDraw(params, textLines, label),
+      // FIX: Adapt the callback to ensure the full context is passed.
+      // The `drawingContext` from `generateAshkenazContent` may be missing font properties.
+      // This merges the static `commonPdfParams` (with fonts) with the dynamic `drawingContext` (with current page/y).
+      ensureSpaceAndDraw: (drawingContext, textLines, label) => {
+        const completeContext = {
+          ...commonPdfParams,
+          ...drawingContext,
+        };
+        return ensureSpaceAndDraw(completeContext, textLines, label);
+      },
     });
     page = updatedPage;
     y = updatedY;
