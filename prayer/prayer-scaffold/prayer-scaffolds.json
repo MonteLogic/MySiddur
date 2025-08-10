@@ -1,0 +1,32 @@
+{
+  "prayer-preambles": {
+    "waking-prayers": {
+      "prayer-name": "Waking Prayers",
+      "preface": "These prayers are said at home before going to Shul.",
+      "prime-hours": "5:46 AM - 10:33 AM",
+      "sub-prime-hours": "10:33AM - 12:56 PM",
+      "cutoff": "12:56 PM"
+    },
+    "shacharis": {
+      "prayer-name": "Shacharis",
+      "preface": "Shacharis is the daily morning prayer service, ideally recited with a congregation. It is the longest of the daily prayers and includes the Shema and the Amidah.",
+      "prime-hours": "6:06 AM - 10:32 AM",
+      "sub-prime-hours": "10:32 AM - 12:59 PM",
+      "cutoff": "12:59 PM"
+    },
+    "mincha": {
+      "prayer-name": "Mincha",
+      "preface": "Mincha is the daily afternoon prayer, corresponding to the afternoon sacrifice in the Temple. Its earliest time begins a half-hour after halachic midday.",
+      "prime-hours": "4:46 PM - 7:54 PM",
+      "sub-prime-hours": "1:33 PM - 4:46 PM",
+      "cutoff": "7:54 PM"
+    },
+    "maariv": {
+      "prayer-name": "Maariv",
+      "preface": "Maariv is the daily evening prayer service, recited after nightfall. Halachically, the day ends and a new day begins at nightfall.",
+      "prime-hours": "8:23 PM - 12:59 AM",
+      "sub-prime-hours": "7:54 PM - 8:23 PM",
+      "cutoff": "4:46 AM"
+    }
+  }
+}
