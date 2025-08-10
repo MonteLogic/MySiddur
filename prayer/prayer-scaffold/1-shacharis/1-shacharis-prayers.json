@@ -1,0 +1,9 @@
+{
+  "prayer-times": {
+    "prayer-name": "Shacharis",
+    "preamble": "Shacharis is the daily morning prayer service, ideally recited with a congregation. It is the longest of the daily prayers and includes the Shema and the Amidah.",
+    "prime-hours": "6:06 AM - 10:32 AM",
+    "sub-prime-hours": "10:32 AM - 12:59 PM",
+    "cutoff": "12:59 PM"
+  }
+}

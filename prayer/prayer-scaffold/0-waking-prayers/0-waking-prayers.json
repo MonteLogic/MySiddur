@@ -1,0 +1,9 @@
+{
+  "prayer-times": {
+    "prayer-name":"Waking Prayers",
+    "preamble": "These prayers are said at home before going to Shul.",
+    "prime-hours": "5:46 AM - 10:33 AM",
+    "sub-prime-hours": "10:33AM - 12:56 PM",
+    "cutoff": "12:56 PM"
+  }
+}
