@@ -1,7 +1,7 @@
 // utils/siddur-pdf-utils/ashkenaz/ashkenaz-content-generation.ts
 
 import { PDFDocument, rgb, PDFFont, PDFPage, Color } from 'pdf-lib';
-import ashPrayerInfo from 'prayer-content/ashkenazi-prayer-info.json';
+import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
 import siddurConfig from './siddur-formatting-config.json';
 
 //================================================================================
