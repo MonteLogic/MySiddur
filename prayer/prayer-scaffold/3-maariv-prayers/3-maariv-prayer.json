@@ -1,0 +1,9 @@
+{
+  "prayer-times": {
+    "prayer-name": "Maariv",
+    "preamble": "Maariv is the daily evening prayer service, recited after nightfall. Halachically, the day ends and a new day begins at nightfall.",
+    "prime-hours": "8:23 PM - 12:59 AM",
+    "sub-prime-hours": "7:54 PM - 8:23 PM",
+    "cutoff": "4:46 AM"
+  }
+}
