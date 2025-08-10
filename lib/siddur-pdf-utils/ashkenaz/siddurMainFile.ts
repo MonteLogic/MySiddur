@@ -2,7 +2,7 @@ import { PDFDocument, StandardFonts, rgb, PDFFont, PDFPage, Color } from 'pdf-li
 import fontkit from '@pdf-lib/fontkit';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import ashPrayerInfo from 'prayer-content/ashkenazi-prayer-info.json';
+import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
 import siddurConfig from './siddur-formatting-config.json';
 import { generateAshkenazContent } from './ashkenaz-content-generation';
 
