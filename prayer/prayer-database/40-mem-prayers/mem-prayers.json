@@ -1,6 +1,9 @@
 {
-  "0rwa": {
+  "40-0rwa": {
     "prayer-title": "Modei Ani",
+    "Introduction": "Give thanks upon waking",
+    "Instruction": "Said with hands clasped together",
+    "prayer-id": "0wp1",
     "Word Mappings": {
       "0": {
         "hebrew": "מוֹדֶה אֲנִי",
