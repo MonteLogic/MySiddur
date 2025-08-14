@@ -13,7 +13,7 @@ import siddurConfig from './siddur-formatting-config.json';
  * Represents a single prayer object, inferred from the structure of `ashPrayerInfo.json`.
  * It can contain blessings, parts, or simple Hebrew/English text.
  */
-type Prayer = (typeof ashPrayerInfo.sections)[0]['prayers'][0];
+type Prayer = (typeof ashPrayerInfo.services.shacharis.sections)[0]['prayers'][0];
 
 /**
  * @interface PdfDrawingContext
@@ -441,7 +441,7 @@ export const generateAshkenazContent = (
 
     console.log('--- [DEBUG] STARTING generateAshkenazContent ---');
 
-    for (const section of ashPrayerInfo.sections) {
+    for (const section of ashPrayerInfo.services.shacharis.sections) {
         console.log(`\n--- [DEBUG] Starting Section: "${section.sectionTitle}" ---`);
         console.log(`[DEBUG] Y at start of section: ${context.y.toFixed(2)}`);
 
