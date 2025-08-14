@@ -1,0 +1,18 @@
+{
+  "Waking Prayers": {
+    "Modei Ani": {
+      "Introduction": "Give thanks upon waking",
+      "Instruction": "Said with hands clasped together",
+      "prayer-id": "0wp1",
+      "hebrew": "מוֹדֶה אֲנִי לְפָנֶֽיךָ מֶֽלֶךְ חַי וְקַיָּם, שֶׁהֶחֱזַֽרְתָּ בִּי נִשְׁמָתִי בְּחֶמְלָה, רַבָּה אֱמוּנָתֶֽךָ",
+      "english": "I offer thanks to You, living and eternal King, for You have mercifully restored my soul within me; Your faithfulness is great."
+    },
+
+    "Netilat Yadayim": {
+      "preface": "Ritual Handwashing",
+      "prayer-id": "0rwA",
+      "hebrew": "בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, אֲשֶׁר יָצַר אֶת הָאָדָם בְּחָכְמָה, וּבָֽרָא בוֹ נְקָבִים נְקָבִים, חֲלוּלִים חֲלוּלִים. גָּלוּי וְיָדֽוּעַ לִפְנֵי כִסֵּא כְבוֹדֶֽךָ, שֶׁאִם יִפָּתֵֽחַ אֶחָד מֵהֶם, אוֹ יִסָּתֵם אֶחָד מֵהֶם, אִי אֶפְשַׁר לְהִתְקַיֵּם וְלַעֲמֹד לְפָנֶֽיךָ. בָּרוּךְ אַתָּה יְהֹוָה, רוֹפֵא כָל בָּשָׂר וּמַפְלִיא לַעֲשׂוֹת.",
+      "english": "Blessed are You, Lord our God, King of the universe, Who formed man with wisdom and created in him many openings and many hollows. It is manifest and known before the Throne of Your Glory that if one of them were to be ruptured or one of them were to be blocked, it would be impossible to survive and to stand before You. Blessed are You, Lord, Who heals all flesh and does wondrously."
+    }
+  }
+}

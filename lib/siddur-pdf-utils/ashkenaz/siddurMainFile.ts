@@ -2,7 +2,7 @@ import { PDFDocument, StandardFonts, rgb, PDFFont, PDFPage, Color } from 'pdf-li
 import fontkit from '@pdf-lib/fontkit';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import ashPrayerInfo from 'prayer-content/ashkenazi-prayer-info.json';
+import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
 import siddurConfig from './siddur-formatting-config.json';
 import { generateAshkenazContent } from './ashkenaz-content-generation';
 
@@ -54,7 +54,7 @@ interface GenerateSiddurPDFParams {
 /**
  * Type alias for a single prayer object, inferred from the structure of `ashPrayerInfo`.
  */
-type Prayer = typeof ashPrayerInfo.sections[0]['prayers'][0];
+type Prayer = typeof ashPrayerInfo.services.shacharis.sections[0]['prayers'][0];
 
 // NEW HELPER FUNCTION: Calculates text lines and their relative Y positions for a given block
 const calculateTextLines = (
@@ -257,7 +257,7 @@ export const generateSiddurPDF = async ({
   console.log(`Y after Siddur Title spacing: ${y.toFixed(2)}`);
 
   lines = calculateTextLines(
-    `Service: ${ashPrayerInfo.service}`,
+    `Service: ${ashPrayerInfo.services.shacharis.sections}`,
     englishFont,
     siddurConfig.fontSizes.service,
     width - margin * 2,

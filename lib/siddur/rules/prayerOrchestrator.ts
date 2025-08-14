@@ -22,7 +22,7 @@ import {
     selectedDate: Date;
     nusach: Nusach;
     userName?: string;
-    timeOfDay: 'Shacharit' | 'Mincha' | 'Maariv' | 'Musaf'; // Example, can be more granular
+    timeOfDay: 'Shacharis' | 'Mincha' | 'Maariv' | 'Musaf'; // Example, can be more granular
     // Add other parameters: e.g., for a mourner, specific holiday, etc.
   }
   
