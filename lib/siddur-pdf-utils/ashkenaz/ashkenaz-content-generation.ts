@@ -1,4 +1,3 @@
-
 import { detailedPrayerData } from '#/prayer/prayer-content/compiled-prayer-data';
 import { PDFDocument, rgb, PDFFont, PDFPage, Color } from 'pdf-lib';
 import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
@@ -103,14 +102,15 @@ const drawDividerLine = (context: PdfDrawingContext): PdfDrawingContext => {
     start: { x: margin, y: y },
     end: { x: width - margin, y: y },
     thickness: dividerThickness,
-    color: rgb(...(siddurConfig.colors.dividerLine as [number, number, number])),
+    color: rgb(
+      ...(siddurConfig.colors.dividerLine as [number, number, number]),
+    ),
   });
   y -= dividerThickness;
   y -= dividerSpacing;
 
   return { ...context, page, y };
 };
-
 
 const drawSourceIfPresent = (
   context: PdfDrawingContext,
@@ -136,7 +136,8 @@ const drawSourceIfPresent = (
     siddurConfig.lineSpacing.prayerPartSource,
   );
 
-  const estimatedHeight = sourceLineInfos.length * siddurConfig.lineSpacing.prayerPartSource;
+  const estimatedHeight =
+    sourceLineInfos.length * siddurConfig.lineSpacing.prayerPartSource;
 
   if (y - estimatedHeight < siddurConfig.pdfMargins.bottom) {
     page = pdfDoc.addPage();
@@ -150,15 +151,20 @@ const drawSourceIfPresent = (
       y: tempY + lineInfo.yOffset,
       font: fonts.english,
       size: siddurConfig.fontSizes.prayerPartSource,
-      color: rgb(...(siddurConfig.colors.sourceText as [number, number, number])),
+      color: rgb(
+        ...(siddurConfig.colors.sourceText as [number, number, number]),
+      ),
       lineHeight: siddurConfig.lineSpacing.prayerPartSource,
     });
   }
 
-  const finalY = tempY + (sourceLineInfos.length > 0 ? sourceLineInfos[sourceLineInfos.length - 1].yOffset : 0);
+  const finalY =
+    tempY +
+    (sourceLineInfos.length > 0
+      ? sourceLineInfos[sourceLineInfos.length - 1].yOffset
+      : 0);
   return { ...context, page, y: finalY };
 };
-
 
 const drawBlessingsPrayer = (
   context: PdfDrawingContext,
@@ -191,8 +197,9 @@ const drawBlessingsPrayer = (
         englishLineInfos.length * siddurConfig.lineSpacing.blessingEnglish,
         hebrewLineInfos.length * siddurConfig.lineSpacing.blessingHebrew,
       ) + siddurConfig.verticalSpacing.afterBlessingGroup;
-    
-    const innerPageBreakThreshold = siddurConfig.pdfMargins.bottom + siddurConfig.verticalSpacing.pageBuffer;
+
+    const innerPageBreakThreshold =
+      siddurConfig.pdfMargins.bottom + siddurConfig.verticalSpacing.pageBuffer;
 
     if (blessingY - estimatedBlessingHeight < innerPageBreakThreshold) {
       page = context.pdfDoc.addPage();
@@ -205,7 +212,9 @@ const drawBlessingsPrayer = (
         y: blessingY + lineInfo.yOffset,
         font: fonts.english,
         size: siddurConfig.fontSizes.blessingEnglish,
-        color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
+        color: rgb(
+          ...(siddurConfig.colors.defaultText as [number, number, number]),
+        ),
         lineHeight: siddurConfig.lineSpacing.blessingEnglish,
       });
     }
@@ -216,20 +225,27 @@ const drawBlessingsPrayer = (
         y: blessingY + lineInfo.yOffset,
         font: fonts.hebrew,
         size: siddurConfig.fontSizes.blessingHebrew,
-        color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
+        color: rgb(
+          ...(siddurConfig.colors.defaultText as [number, number, number]),
+        ),
         lineHeight: siddurConfig.lineSpacing.blessingHebrew,
       });
     }
 
     blessingY =
       Math.min(
-        blessingY + (englishLineInfos.length > 0 ? englishLineInfos[englishLineInfos.length - 1].yOffset : 0),
-        blessingY + (hebrewLineInfos.length > 0 ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset : 0),
+        blessingY +
+          (englishLineInfos.length > 0
+            ? englishLineInfos[englishLineInfos.length - 1].yOffset
+            : 0),
+        blessingY +
+          (hebrewLineInfos.length > 0
+            ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset
+            : 0),
       ) - siddurConfig.verticalSpacing.afterBlessingGroup;
   }
   return { ...context, page, y: blessingY };
 };
-
 
 const drawPartsPrayer = (
   context: PdfDrawingContext,
@@ -263,7 +279,8 @@ const drawPartsPrayer = (
         hebrewLineInfos.length * siddurConfig.lineSpacing.prayerPartHebrew,
       ) + siddurConfig.verticalSpacing.afterPartGroup;
 
-    const innerPageBreakThreshold = siddurConfig.pdfMargins.bottom + siddurConfig.verticalSpacing.pageBuffer;
+    const innerPageBreakThreshold =
+      siddurConfig.pdfMargins.bottom + siddurConfig.verticalSpacing.pageBuffer;
     if (partY - estimatedPartHeight < innerPageBreakThreshold) {
       page = context.pdfDoc.addPage();
       partY = height - siddurConfig.pdfMargins.top;
@@ -276,7 +293,9 @@ const drawPartsPrayer = (
         y: tempEnglishY + lineInfo.yOffset,
         font: fonts.english,
         size: siddurConfig.fontSizes.prayerPartEnglish,
-        color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
+        color: rgb(
+          ...(siddurConfig.colors.defaultText as [number, number, number]),
+        ),
         lineHeight: siddurConfig.lineSpacing.prayerPartEnglish,
       });
     }
@@ -288,14 +307,22 @@ const drawPartsPrayer = (
         y: tempHebrewY + lineInfo.yOffset,
         font: fonts.hebrew,
         size: siddurConfig.fontSizes.prayerPartHebrew,
-        color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
+        color: rgb(
+          ...(siddurConfig.colors.defaultText as [number, number, number]),
+        ),
         lineHeight: siddurConfig.lineSpacing.prayerPartHebrew,
       });
     }
 
     const endOfTextY = Math.min(
-      tempEnglishY + (englishLineInfos.length > 0 ? englishLineInfos[englishLineInfos.length - 1].yOffset : 0),
-      tempHebrewY + (hebrewLineInfos.length > 0 ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset : 0),
+      tempEnglishY +
+        (englishLineInfos.length > 0
+          ? englishLineInfos[englishLineInfos.length - 1].yOffset
+          : 0),
+      tempHebrewY +
+        (hebrewLineInfos.length > 0
+          ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset
+          : 0),
     );
 
     let partContext = { ...context, page, y: endOfTextY };
@@ -306,7 +333,17 @@ const drawPartsPrayer = (
   return { ...context, page, y: partY };
 };
 
-
+/**
+ * Draws a prayer with color-coded English AND Hebrew text based on detailed word mappings.
+ * This function handles complex word-wrapping for multi-colored phrases in both columns.
+ *
+ * @param context The current PDF drawing context.
+ * @param prayer The prayer object, which is a `SimplePrayer` with a `prayer-id`.
+ * @param params The main generation parameters, including fonts.
+ * @param columnWidth The calculated width of the text column.
+ * @returns The updated PDF drawing context after drawing the prayer.
+ * @private
+ */
 const drawColorMappedPrayer = (
   context: PdfDrawingContext,
   prayer: SimplePrayer,
@@ -314,44 +351,76 @@ const drawColorMappedPrayer = (
   columnWidth: number,
 ): PdfDrawingContext => {
   let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const { calculateTextLines } = params;
 
+  // --- 1. SETUP ---
   const prayerId = prayer['prayer-id'];
-  if (!prayerId) return context; // Should not happen if called correctly
+  if (!prayerId) return context; // Should not happen
 
   const prayerData = detailedPrayerData[prayerId];
   if (!prayerData || !prayerData['Word Mappings']) {
+    console.error(
+      `[ERROR] No detailed data for prayer-id: ${prayerId}. Falling back.`,
+    );
     return drawSimplePrayerText(context, prayer, params, columnWidth);
   }
 
-  const hebrewLineInfos = calculateTextLines(
-    prayer.hebrew,
-    fonts.hebrew,
-    siddurConfig.fontSizes.blessingHebrew,
-    columnWidth,
-    siddurConfig.lineSpacing.defaultHebrewPrayer,
+  const wordMappings = prayerData['Word Mappings'];
+  const colors = siddurConfig.colors.wordMappingColors.map((c) =>
+    rgb(c[0], c[1], c[2]),
   );
 
+  // --- 2. COLOR-MAPPED HEBREW RENDERING (RTL) ---
+  console.log(
+    `   [DEBUG] Drawing color-mapped Hebrew text for "${prayer.title}".`,
+  );
+  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
+  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
+  const hebrewColumnStart = width / 2 + siddurConfig.layout.hebrewColumnXOffset;
+  const hebrewColumnEnd = width - margin;
   let hebrewY = y;
-  for (const lineInfo of hebrewLineInfos) {
-    page.drawText(lineInfo.text, {
-      x: width / 2 + siddurConfig.layout.hebrewColumnXOffset,
-      y: hebrewY + lineInfo.yOffset,
-      font: fonts.hebrew,
-      size: siddurConfig.fontSizes.blessingHebrew,
-      color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
-      lineHeight: siddurConfig.lineSpacing.defaultHebrewPrayer,
-    });
-  }
-  const hebrewEndY = hebrewY + (hebrewLineInfos.length > 0 ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset : 0);
+  let currentHebrewX = hebrewColumnEnd; // Start drawing from the far right
 
-  const wordMappings = prayerData['Word Mappings'];
-  const colors = siddurConfig.colors.wordMappingColors.map((c) => rgb(c[0], c[1], c[2]));
+  Object.values(wordMappings).forEach((mapping: any, index) => {
+    const color = colors[index % colors.length];
+    const phrase = mapping.hebrew + ' '; // Add space for separation
+    const words = phrase.split(/( )/);
+
+    for (const word of words) {
+      if (word === '') continue;
+      const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
+
+      // --- Hebrew Word Wrap Logic (RTL) ---
+      // If the next word doesn't fit on the line (i.e., goes past the left boundary)...
+      if (currentHebrewX - wordWidth < hebrewColumnStart) {
+        currentHebrewX = hebrewColumnEnd; // ...reset X to the right edge.
+        hebrewY -= hebrewLineHeight; // ...move down to the next line.
+
+        if (hebrewY < siddurConfig.pdfMargins.bottom) {
+          page = pdfDoc.addPage();
+          hebrewY = height - siddurConfig.pdfMargins.top;
+        }
+      }
+
+      // --- RTL Drawing ---
+      // For RTL, we move the cursor left *before* drawing the word.
+      currentHebrewX -= wordWidth;
+      page.drawText(word, {
+        x: currentHebrewX,
+        y: hebrewY,
+        font: fonts.hebrew,
+        size: hebrewFontSize,
+        color: color,
+      });
+    }
+  });
+  const hebrewEndY = hebrewY - hebrewLineHeight;
+
+  // --- 3. COLOR-MAPPED ENGLISH RENDERING (LTR) ---
+  console.log(`   [DEBUG] Drawing color-mapped English text.`);
   const englishFontSize = siddurConfig.fontSizes.blessingEnglish;
   const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
-
-  let currentX = margin;
   let englishY = y;
+  let currentEnglishX = margin; // Start drawing from the far left
 
   Object.values(wordMappings).forEach((mapping: any, index) => {
     const color = colors[index % colors.length];
@@ -361,28 +430,41 @@ const drawColorMappedPrayer = (
     for (const word of words) {
       if (word === '') continue;
       const wordWidth = fonts.english.widthOfTextAtSize(word, englishFontSize);
-      if (currentX + wordWidth > margin + columnWidth) {
-        currentX = margin;
+
+      // --- English Word Wrap Logic (LTR) ---
+      if (currentEnglishX + wordWidth > margin + columnWidth) {
+        currentEnglishX = margin;
         englishY -= englishLineHeight;
         if (englishY < siddurConfig.pdfMargins.bottom) {
           page = pdfDoc.addPage();
           englishY = height - siddurConfig.pdfMargins.top;
         }
       }
+
       page.drawText(word, {
-        x: currentX,
+        x: currentEnglishX,
         y: englishY,
         font: fonts.english,
         size: englishFontSize,
         color: color,
       });
-      currentX += wordWidth;
+      currentEnglishX += wordWidth;
     }
   });
-
   const englishEndY = englishY - englishLineHeight;
-  let updatedContext = { ...context, page, y: Math.min(hebrewEndY, englishEndY) };
-  updatedContext = drawSourceIfPresent(updatedContext, prayer, params, columnWidth);
+
+  // --- 4. FINALIZE AND UPDATE CONTEXT ---
+  let updatedContext = {
+    ...context,
+    page,
+    y: Math.min(hebrewEndY, englishEndY),
+  };
+  updatedContext = drawSourceIfPresent(
+    updatedContext,
+    prayer,
+    params,
+    columnWidth,
+  );
   updatedContext.y -= siddurConfig.verticalSpacing.afterPrayerText;
 
   return updatedContext;
@@ -419,7 +501,9 @@ const drawSimplePrayerText = (
       y: tempEnglishY + lineInfo.yOffset,
       font: fonts.english,
       size: siddurConfig.fontSizes.blessingEnglish,
-      color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
+      color: rgb(
+        ...(siddurConfig.colors.defaultText as [number, number, number]),
+      ),
       lineHeight: siddurConfig.lineSpacing.defaultEnglishPrayer,
     });
   }
@@ -431,18 +515,31 @@ const drawSimplePrayerText = (
       y: tempHebrewY + lineInfo.yOffset,
       font: fonts.hebrew,
       size: siddurConfig.fontSizes.blessingHebrew,
-      color: rgb(...(siddurConfig.colors.defaultText as [number, number, number])),
+      color: rgb(
+        ...(siddurConfig.colors.defaultText as [number, number, number]),
+      ),
       lineHeight: siddurConfig.lineSpacing.defaultHebrewPrayer,
     });
   }
 
   const currentY = Math.min(
-    tempEnglishY + (englishLineInfos.length > 0 ? englishLineInfos[englishLineInfos.length - 1].yOffset : 0),
-    tempHebrewY + (hebrewLineInfos.length > 0 ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset : 0),
+    tempEnglishY +
+      (englishLineInfos.length > 0
+        ? englishLineInfos[englishLineInfos.length - 1].yOffset
+        : 0),
+    tempHebrewY +
+      (hebrewLineInfos.length > 0
+        ? hebrewLineInfos[hebrewLineInfos.length - 1].yOffset
+        : 0),
   );
 
   let updatedContext = { ...context, page, y: currentY };
-  updatedContext = drawSourceIfPresent(updatedContext, prayer, params, columnWidth);
+  updatedContext = drawSourceIfPresent(
+    updatedContext,
+    prayer,
+    params,
+    columnWidth,
+  );
   updatedContext.y -= siddurConfig.verticalSpacing.afterPrayerText;
 
   return updatedContext;
@@ -462,8 +559,11 @@ const drawPrayer = (
 
   // --- 1. HANDLE COMMON PROPERTIES AND PAGE BREAKS ---
   console.log(`\n  --- [DEBUG] Starting Prayer: "${prayer.title}" ---`);
-  const columnWidth = width / 2 - margin - siddurConfig.layout.hebrewColumnXOffset;
-  const prayerTitleTextHeight = fonts.englishBold.heightAtSize(siddurConfig.fontSizes.prayerTitle) + siddurConfig.verticalSpacing.beforePrayerTitle;
+  const columnWidth =
+    width / 2 - margin - siddurConfig.layout.hebrewColumnXOffset;
+  const prayerTitleTextHeight =
+    fonts.englishBold.heightAtSize(siddurConfig.fontSizes.prayerTitle) +
+    siddurConfig.verticalSpacing.beforePrayerTitle;
 
   let estimatedPrayerContentHeight = 50; // Default estimate
   if ('blessings' in prayer) {
@@ -509,7 +609,11 @@ const drawPrayer = (
   currentContext = { ...context, page, y };
 
   // --- 2. DELEGATE DRAWING WITH A SINGLE, EXHAUSTIVE CHECK ---
-  if ('prayer-id' in prayer && prayer['prayer-id'] && detailedPrayerData[prayer['prayer-id']]) {
+  if (
+    'prayer-id' in prayer &&
+    prayer['prayer-id'] &&
+    detailedPrayerData[prayer['prayer-id']]
+  ) {
     return drawColorMappedPrayer(currentContext, prayer, params, columnWidth);
   }
   if ('blessings' in prayer) {
@@ -525,7 +629,6 @@ const drawPrayer = (
   console.error(`[ERROR] Unrecognized prayer format for "${prayer}"`);
   return currentContext;
 };
-
 
 export const generateAshkenazContent = (
   params: AshkenazContentGenerationParams,
@@ -570,11 +673,21 @@ export const generateAshkenazContent = (
 
     for (const section of service.sections) {
       const sectionTitleTextHeight =
-        context.fonts.englishBold.heightAtSize(siddurConfig.fontSizes.sectionTitle) *
-        (section.sectionTitle.length > siddurConfig.layout.sectionTitleLengthThreshold ? 2 : 1);
+        context.fonts.englishBold.heightAtSize(
+          siddurConfig.fontSizes.sectionTitle,
+        ) *
+        (section.sectionTitle.length >
+        siddurConfig.layout.sectionTitleLengthThreshold
+          ? 2
+          : 1);
       const sectionDescTextHeight =
-        context.fonts.english.heightAtSize(siddurConfig.fontSizes.sectionDescription) *
-        (section.description.length > siddurConfig.layout.sectionDescriptionLengthThreshold ? 3 : 1);
+        context.fonts.english.heightAtSize(
+          siddurConfig.fontSizes.sectionDescription,
+        ) *
+        (section.description.length >
+        siddurConfig.layout.sectionDescriptionLengthThreshold
+          ? 3
+          : 1);
       const estimatedSectionHeaderHeight =
         sectionTitleTextHeight +
         siddurConfig.verticalSpacing.afterSectionTitleText +
@@ -605,7 +718,9 @@ export const generateAshkenazContent = (
           ...l,
           font: context.fonts.englishBold,
           size: siddurConfig.fontSizes.sectionTitle,
-          color: rgb(...(siddurConfig.colors.sectionTitle as [number, number, number])),
+          color: rgb(
+            ...(siddurConfig.colors.sectionTitle as [number, number, number]),
+          ),
           lineHeight: siddurConfig.lineSpacing.sectionTitle,
         })),
         `Section Title: ${section.sectionTitle}`,
@@ -625,7 +740,13 @@ export const generateAshkenazContent = (
           ...l,
           font: context.fonts.english,
           size: siddurConfig.fontSizes.sectionDescription,
-          color: rgb(...(siddurConfig.colors.sectionDescription as [number, number, number])),
+          color: rgb(
+            ...(siddurConfig.colors.sectionDescription as [
+              number,
+              number,
+              number,
+            ]),
+          ),
           lineHeight: siddurConfig.lineSpacing.sectionDescription,
         })),
         `Section Description: ${section.sectionTitle}`,
