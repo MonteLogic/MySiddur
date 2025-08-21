@@ -288,6 +288,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "0": {
         "hebrew": "מוֹדֶה אֲנִי",
         "english": "I thank",
+        "transliteration": "Modeh Ani",
         "detailed-array": [
           [
             1,
@@ -302,6 +303,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "1": {
         "hebrew": "לְפָנֶֽיךָ",
         "english": "before You",
+        "transliteration": "l'fanekha",
         "detailed-array": [
           [
             0,
@@ -315,6 +317,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "2": {
         "hebrew": "מֶֽלֶךְ חַי וְקַיָּם",
         "english": "King living and eternal",
+        "transliteration": "melekh khai v'kayam",
         "detailed-array": [
           [
             0,
@@ -336,6 +339,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "3": {
         "hebrew": "שֶׁהֶחֱזַֽרְתָּ בִּי נִשְׁמָתִי",
         "english": "that You returned in me my soul",
+        "transliteration": "shehechezarta bi nishmati",
         "detailed-array": [
           [
             0,
@@ -364,6 +368,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "4": {
         "hebrew": "בְּחֶמְלָה",
         "english": "with compassion",
+        "transliteration": "b'chemlah",
         "detailed-array": [
           [
             0,
@@ -377,6 +382,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "5": {
         "hebrew": "רַבָּה אֱמוּנָתֶֽךָ",
         "english": "great is Your faithfulness",
+        "transliteration": "rabbah emunatekha",
         "detailed-array": [
           [
             0,
