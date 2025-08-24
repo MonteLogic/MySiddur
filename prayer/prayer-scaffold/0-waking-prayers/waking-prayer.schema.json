@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Detailed Prayer for Modei Ani",
+  "type": "object",
+  "properties": {
+    "prayer-id": {
+      "description": "This ID MUST be 0wp1 to link correctly.",
+      "type": "string",
+      "const": "0wp1"
+    },
+    "commentary": { "type": "array" },
+    "word-mappings": { "type": "object" }
+  },
+  "required": ["prayer-id", "commentary", "word-mappings"]
+}

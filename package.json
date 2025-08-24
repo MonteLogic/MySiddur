@@ -16,7 +16,8 @@
     "test:db": "tsx tests/sqlite-test/setup-test-db.ts",
     "test:playwright": " exec playwright test",
     "local-db-create": "node tests/db-create/index.ts",
-    "generate-markdown-paths": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate.ts"
+    "generate-markdown-paths": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate.ts",
+    "build-prayers": "node build-prayer-data.js"
   },
   "git": {
     "pre-commit": "lint-staged"

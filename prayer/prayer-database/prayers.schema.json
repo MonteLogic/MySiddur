@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Memorial Prayer Schema with Word Mappings",
+  "description": "Defines the structure for prayer files that include detailed word mappings.",
+  "type": "object",
+  "patternProperties": {
+    "^[\\w\\d-]+$": {
+      "description": "Matches any prayer ID key, like '40-0rwa'.",
+      "type": "object",
+      "properties": {
+        "prayer-title": { "type": "string" },
+        "Introduction": { "type": "string" },
+        "Instruction": { "type": "string" },
+        "prayer-id": { "type": "string" },
+        "Word Mappings": {
+          "type": "object",
+          "patternProperties": {
+            "^[0-9]+$": {
+              "description": "Matches the numeric keys for each word group.",
+              "type": "object",
+              "properties": {
+                "hebrew": { "type": "string" },
+                "english": { "type": "string" },
+                "detailed-array": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": [
+                      { "type": "integer" },
+                      {
+                        "oneOf": [
+                          { "type": "integer" },
+                          { "type": "array", "items": { "type": "integer" } }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": ["hebrew", "english", "detailed-array"]
+            }
+          }
+        }
+      },
+      "required": ["prayer-title", "prayer-id", "Word Mappings"]
+    }
+  }
+}

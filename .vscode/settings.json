@@ -1,5 +1,8 @@
 {
   "typescript.tsdk": "node_modules/.pnpm/typescript@4.9.4/node_modules/typescript/lib",
+   "path-intellisense.mappings": {
+    "file": true // Tell the extension to activate on any key named "file"
+  },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "cSpell.words": [
     "bibmblsyg",
