@@ -438,7 +438,7 @@ export const detailedPrayerData: { [key: string]: any } = {
       "2": {
         "hebrew": "יְיָ",
         "english": "ETERNAL",
-        "transliteration": "Adonai",
+        "transliteration": "Ad-nai",
         "detailed-array": [
           [
             0,
