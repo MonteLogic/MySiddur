@@ -6,6 +6,7 @@ import { AshkenazContentGenerationParams, PdfDrawingContext, Prayer } from './dr
 import { drawPrayer } from './drawing/prayer-drawing';
 import { drawDividerLine } from './drawing/drawing-helpers';
 
+
 export const generateAshkenazContent = (
   params: AshkenazContentGenerationParams,
 ): { page: PDFPage; y: number } => {
@@ -24,12 +25,15 @@ export const generateAshkenazContent = (
   for (const [serviceIndex, service] of allServices.entries()) {
     if (!service || !Array.isArray(service.sections)) continue;
 
-    // FIX: Draw the service title
-    let lines = calculateTextLines(service['display-name'], context.fonts.englishBold, siddurConfig.fontSizes.service, context.width - context.margin * 2, siddurConfig.lineSpacing.service);
+    // This line creates the title string.
+    // It combines the text "Service: " with the value of "display-name" from your JSON file.
+    const serviceTitle = `Service: ${service['display-name']}`;
+    let lines = calculateTextLines(serviceTitle, context.fonts.englishBold, siddurConfig.fontSizes.service, context.width - context.margin * 2, siddurConfig.lineSpacing.service);
+    
     ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
       context,
       lines.map((l) => ({ ...l, font: context.fonts.englishBold, size: siddurConfig.fontSizes.service, lineHeight: siddurConfig.lineSpacing.service })),
-      `Service: ${service['display-name']}`,
+      serviceTitle,
     ));
     context.y -= siddurConfig.verticalSpacing.afterSiddurTitle; // Re-use spacing
 
