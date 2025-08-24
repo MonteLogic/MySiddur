@@ -18,7 +18,8 @@
     "prayerPartHebrew": 17,
     "prayerPartSource": 11,
     "defaultEnglishPrayer": 15,
-    "defaultHebrewPrayer": 17
+    "defaultHebrewPrayer": 17,
+    "prayerInstruction": 12
   },
   "verticalSpacing": {
     "afterSiddurTitle": 40,
@@ -30,7 +31,9 @@
     "afterBlessingGroup": 15,
     "afterPartGroup": 25,
     "afterPrayerText": 21,
-    "pageBuffer": 20
+    "pageBuffer": 20,
+    "afterPrayerInstruction": 18,
+    "betweenInstructions": 15
   },
   "fontSizes": {
     "siddurTitle": 24,
@@ -45,7 +48,8 @@
     "prayerPartHebrew": 14,
     "prayerPartSource": 9,
     "otherNusachContent": 12,
-    "defaultEnglishPrayer": 12
+    "defaultEnglishPrayer": 12,
+    "prayerInstruction": 10
   },
   "colors": {
     "siddurTitle": [0, 0.53, 0.71],

@@ -2,6 +2,7 @@
   "siddurTitle": "Siddur for Weekday Shacharit",
   "services": {
     "waking-prayers": {
+      "display-name":"Waking Prayers",
       "sections": [
         {
           "sectionTitle": "Birchot HaShachar (Morning Blessings)",
@@ -171,9 +172,9 @@
         }
       ]
     },
-
     "shacharis": {
       "siddurNote": "This Siddur is intended for weekday Shacharit services and aims to follow traditional Orthodox liturgy. Instructions for ritual actions, such as taking three steps before and after the Amidah, will be included at the appropriate liturgical points.",
+      "display-name":"Shacharis",
       "sections": [
         {
           "sectionTitle": "Birchot HaShachar (Morning Blessings)",
