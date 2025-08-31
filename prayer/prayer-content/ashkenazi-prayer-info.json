@@ -29,80 +29,14 @@
               "english": "Blessed are You, ETERNAL our God, King of the universe, Who formed man with wisdom and created in him many openings and many cavities. It is obvious and known before Your Throne of Glory that if but one of them were to be ruptured or if but one of them were to be blocked, it would be impossible to survive and to stand before You even for one hour. Blessed are You, ETERNAL, Who heals all flesh and acts wondrously."
             },
             {
-
               "prayer-id": "1-0rw1",
               "title": "Elohai Neshamah (My God, the Soul)",
               "hebrew": "אֱלֹהַי, נְשָׁמָה שֶׁנָּתַֽתָּ בִּי טְהוֹרָה הִיא. אַתָּה בְרָאתָהּ, אַתָּה יְצַרְתָּהּ, אַתָּה נְפַחְתָּהּ בִּי, וְאַתָּה מְשַׁמְּרָהּ בְּקִרְבִּי, וְאַתָּה עָתִיד לִטְּלָהּ מִמֶּֽנִּי, וּלְהַחֲזִירָהּ בִּי לֶעָתִיד לָבֹא. כָּל זְמַן שֶׁהַנְּשָׁמָה בְקִרְבִּי, מוֹדֶה אֲנִי לְפָנֶֽיךָ יְיָ אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי, רִבּוֹן כָּל הַמַּעֲשִׂים, אֲדוֹן כָּל הַנְּשָׁמוֹת. בָּרוּךְ אַתָּה יְיָ, הַמַּחֲזִיר נְשָׁמוֹת לִפְגָרִים מֵתִים׃",
               "english": "My God, the soul You placed within me is pure. You created it, You formed it, You breathed it into me, and You preserve it within me. You will eventually take it from me, and restore it to me in the time to come. As long as the soul is within me, I give thanks to You, ETERNAL my God and God of my ancestors, Master of all works, Lord of all souls. Blessed are You, ETERNAL, Who restores souls to dead bodies."
             },
             {
-              "title": "Series of Morning Blessings",
-              "blessings": [
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, הַנּוֹתֵן לַשֶּֽׂכְוִי בִינָה לְהַבְחִין בֵּין יוֹם וּבֵין לָֽיְלָה׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who gives the rooster understanding to distinguish between day and night."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַֽׂנִי גּוֹי׃ (For men) / שֶׁלֹּא עָשַֽׂנִי גּוֹיָה׃ (For women)",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who has not made me a gentile."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַֽׂנִי עָֽבֶד׃ (For men) / שֶׁלֹּא עָשַֽׂנִי שִׁפְחָה׃ (For women)",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who has not made me a slave."
-                },
-                {
-                  "hebrew": "(Men say:) בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַֽׂנִי אִשָּׁה׃",
-                  "english": "(Men say:) Blessed are You, ETERNAL our God, King of the universe, Who has not made me a woman."
-                },
-                {
-                  "hebrew": "(Women say:) בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, שֶׁעָשַֽׂנִי כִּרְצוֹנוֹ׃",
-                  "english": "(Women say:) Blessed are You, ETERNAL our God, King of the universe, Who has made me according to His will."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, פּוֹקֵֽחַ עִוְרִים׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who gives sight to the blind."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, מַלְבִּישׁ עֲרֻמִּים׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who clothes the naked."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, מַתִּיר אֲסוּרִים׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who releases the bound."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, זוֹקֵף כְּפוּפִים׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who straightens the bent."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, רוֹקַע הָאָֽרֶץ עַל הַמָּֽיִם׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who spreads out the earth upon the waters."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, הַמֵּכִין מִצְעֲדֵי גָֽבֶר׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who prepares the steps of man."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, שֶׁעָֽשָׂה לִי כָּל צָרְכִּי׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who has provided me with all my needs."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, אוֹזֵר יִשְׂרָאֵל בִּגְבוּרָה׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who girds Israel with strength."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, עוֹטֵר יִשְׂרָאֵל בְּתִפְאָרָה׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who crowns Israel with glory."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, הַנּוֹתֵן לַיָּעֵף כֹּֽחַ׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who gives strength to the weary."
-                },
-                {
-                  "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, הַמַּעֲבִיר שֵׁנָה מֵעֵינָי וּתְנוּמָה מֵעַפְעַפָּי׃",
-                  "english": "Blessed are You, ETERNAL our God, King of the universe, Who removes sleep from my eyes and slumber from my eyelids."
-                }
-              ]
+              "title": "Birchot HaShachar (Series of Morning Blessings)",
+              "prayer-id":"2-0rwa"
             },
             {
               "title": "Yehi Ratzon (May it be Your will)",

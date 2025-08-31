@@ -1,4 +1,3 @@
-// lib/siddur-pdf-utils/ashkenaz/drawing/prayer-drawing.ts
 import { rgb } from 'pdf-lib';
 import { detailedPrayerData } from '#/prayer/prayer-content/compiled-prayer-data';
 import {
@@ -77,16 +76,17 @@ const drawPartsPrayer = (
   return { ...context, page, y: partY };
 };
 
+// FIX 1: Changed parameter type from `SimplePrayer` to the more general `Prayer`.
+// This resolves the error where a `BlessingsPrayer` or `PartsPrayer` couldn't be assigned.
+// The `drawSourceIfPresent` function works with the base properties, so this is safe.
 const drawTwoColumnColorMappedPrayer = (
   context: PdfDrawingContext,
-  prayer: SimplePrayer,
+  prayer: Prayer, 
+  wordMappings: any,
   params: AshkenazContentGenerationParams,
   columnWidth: number,
 ): PdfDrawingContext => {
   let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const prayerId = prayer['prayer-id']!;
-  const prayerData = detailedPrayerData[prayerId];
-  const wordMappings = prayerData['Word Mappings'];
   const colors = siddurConfig.colors.wordMappingColors.map(c => rgb(c[0], c[1], c[2]));
   const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
   const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
@@ -145,15 +145,14 @@ const drawTwoColumnColorMappedPrayer = (
   return updatedContext;
 };
 
+// FIX 1 (cont.): Changed parameter type from `SimplePrayer` to `Prayer` for consistency.
 const drawThreeColumnColorMappedPrayer = (
   context: PdfDrawingContext,
-  prayer: SimplePrayer,
+  prayer: Prayer,
+  wordMappings: any,
   _params: AshkenazContentGenerationParams,
 ): PdfDrawingContext => {
     let { page, y, margin, fonts, width, pdfDoc, height } = context;
-    const prayerId = prayer['prayer-id']!;
-    const prayerData = detailedPrayerData[prayerId];
-    const wordMappings = prayerData['Word Mappings'];
     const colors = siddurConfig.colors.wordMappingColors.map(c => rgb(c[0], c[1], c[2]));
     const columnGutter = 15;
     const totalContentWidth = width - margin * 2;
@@ -232,6 +231,66 @@ const drawThreeColumnColorMappedPrayer = (
     return updatedContext;
 };
 
+const drawSubPrayers = (
+  context: PdfDrawingContext,
+  detailedPrayer: any,
+  params: AshkenazContentGenerationParams,
+): PdfDrawingContext => {
+  let currentContext = context;
+  const subPrayers = detailedPrayer['sub-prayers'];
+  const { calculateTextLines, ensureSpaceAndDraw } = params;
+  const { fonts, width, margin } = context;
+
+  const columnWidth = width / 2 - margin - siddurConfig.layout.hebrewColumnXOffset;
+
+  for (const subPrayerId in subPrayers) {
+    if (Object.prototype.hasOwnProperty.call(subPrayers, subPrayerId)) {
+      const subPrayer = subPrayers[subPrayerId];
+      
+      currentContext.y -= siddurConfig.verticalSpacing.afterPartGroup;
+
+      const subTitleLines = calculateTextLines(
+        subPrayer['prayer-title'],
+        fonts.englishBold,
+        siddurConfig.fontSizes.prayerPartEnglish,
+        width - margin * 2,
+        siddurConfig.lineSpacing.prayerTitle,
+      );
+      
+      // FIX 3: Added the required `lineHeight` property to the object passed to `ensureSpaceAndDraw`.
+      const titleDrawingInfo = subTitleLines.map(l => ({
+        ...l,
+        font: fonts.englishBold,
+        size: siddurConfig.fontSizes.prayerPartEnglish,
+        lineHeight: siddurConfig.lineSpacing.prayerTitle,
+      }));
+
+      const { page, y } = ensureSpaceAndDraw(
+        currentContext,
+        titleDrawingInfo,
+        `Sub-Prayer Title: ${subPrayer['prayer-title']}`,
+      );
+      
+      // FIX 2: Corrected typo from `afterPrayerTitle` to `afterPrayerText`, as suggested by the error.
+      currentContext = { ...currentContext, page, y: y - siddurConfig.verticalSpacing.afterPrayerText };
+
+      const wordMappings = subPrayer['Word Mappings'];
+      if (!wordMappings || Object.keys(wordMappings).length === 0) continue;
+
+      const firstMapping = Object.values(wordMappings)[0] as any;
+      const hasTransliteration = firstMapping && (firstMapping.transliteration || firstMapping.Transliteration);
+
+      if (hasTransliteration) {
+        currentContext = drawThreeColumnColorMappedPrayer(currentContext, detailedPrayer, wordMappings, params);
+      } else {
+        currentContext = drawTwoColumnColorMappedPrayer(currentContext, detailedPrayer, wordMappings, params, columnWidth);
+      }
+    }
+  }
+
+  return currentContext;
+};
+
 const drawSimplePrayerText = (
   context: PdfDrawingContext,
   prayer: SimplePrayer,
@@ -292,18 +351,23 @@ export const drawPrayer = (
   if (prayerId && detailedPrayerData[prayerId]) {
     const prayerData = detailedPrayerData[prayerId];
     currentContext = drawIntroductionInstruction(currentContext, prayerData, params);
-  }
 
-  if ('prayer-id' in prayer && prayer['prayer-id'] && detailedPrayerData[prayer['prayer-id']]?.['Word Mappings']) {
-    const prayerData = detailedPrayerData[prayer['prayer-id']];
-    const firstMapping = prayerData['Word Mappings']['0'] as any;
-    const hasTransliteration = firstMapping && (firstMapping.transliteration || firstMapping.Transliteration);
-    if (hasTransliteration) {
-      return drawThreeColumnColorMappedPrayer(currentContext, prayer, params);
-    } else {
-      return drawTwoColumnColorMappedPrayer(currentContext, prayer, params, columnWidth);
+    if (prayerData['sub-prayers']) {
+      return drawSubPrayers(currentContext, prayerData, params);
+    }
+    
+    if (prayerData['Word Mappings']) {
+      const wordMappings = prayerData['Word Mappings'];
+      const firstMapping = wordMappings['0'] as any;
+      const hasTransliteration = firstMapping && (firstMapping.transliteration || firstMapping.Transliteration);
+      if (hasTransliteration) {
+        return drawThreeColumnColorMappedPrayer(currentContext, prayer, wordMappings, params);
+      } else {
+        return drawTwoColumnColorMappedPrayer(currentContext, prayer, wordMappings, params, columnWidth);
+      }
     }
   }
+
   if ('blessings' in prayer) return drawBlessingsPrayer(currentContext, prayer, params, columnWidth);
   if ('parts' in prayer) return drawPartsPrayer(currentContext, prayer, params, columnWidth);
   if ('hebrew' in prayer) return drawSimplePrayerText(currentContext, prayer, params, columnWidth);
