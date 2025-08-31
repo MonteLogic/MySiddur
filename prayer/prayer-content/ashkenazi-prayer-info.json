@@ -2,7 +2,7 @@
   "siddurTitle": "Siddur for Weekday Shacharit",
   "services": {
     "waking-prayers": {
-      "display-name":"Waking Prayers",
+      "display-name": "Waking Prayers",
       "sections": [
         {
           "sectionTitle": "Birchot HaShachar (Morning Blessings)",
@@ -23,6 +23,7 @@
               "english": "Blessed are You, ETERNAL our God, King of the universe, Who has sanctified us with His commandments, and commanded us concerning the washing of hands."
             },
             {
+              "prayer-id": "1-0rwa",
               "title": "Asher Yatzar (Who Formed)",
               "hebrew": "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵֽינוּ מֶֽלֶךְ הָעוֹלָם, אֲשֶׁר יָצַר אֶת הָאָדָם בְּחָכְמָה, וּבָֽרָא בוֹ נְקָבִים נְקָבִים, חֲלוּלִים חֲלוּלִים. גָּלוּי וְיָדֽוּעַ לִפְנֵי כִסֵּא כְבוֹדֶֽךָ, שֶׁאִם יִפָּתֵֽחַ אֶחָד מֵהֶם, אוֹ יִסָּתֵם אֶחָד מֵהֶם, אִי אֶפְשַׁר לְהִתְקַיֵּם וְלַעֲמֹד לְפָנֶֽיךָ אֲפִילוּ שָׁעָה אֶחָת. בָּרוּךְ אַתָּה יְיָ, רוֹפֵא כָל בָּשָׂר וּמַפְלִיא לַעֲשׂוֹת׃",
               "english": "Blessed are You, ETERNAL our God, King of the universe, Who formed man with wisdom and created in him many openings and many cavities. It is obvious and known before Your Throne of Glory that if but one of them were to be ruptured or if but one of them were to be blocked, it would be impossible to survive and to stand before You even for one hour. Blessed are You, ETERNAL, Who heals all flesh and acts wondrously."
@@ -174,7 +175,7 @@
     },
     "shacharis": {
       "siddurNote": "This Siddur is intended for weekday Shacharit services and aims to follow traditional Orthodox liturgy. Instructions for ritual actions, such as taking three steps before and after the Amidah, will be included at the appropriate liturgical points.",
-      "display-name":"Shacharis",
+      "display-name": "Shacharis",
       "sections": [
         {
           "sectionTitle": "Birchot HaShachar (Morning Blessings)",
