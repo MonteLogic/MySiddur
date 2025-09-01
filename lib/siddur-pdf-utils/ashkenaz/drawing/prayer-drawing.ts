@@ -1,7 +1,21 @@
 import { rgb } from 'pdf-lib';
-import fs from 'fs'; // --- MODIFIED ---
-import path from 'path'; // --- MODIFIED ---
-import { prayerIndex } from '#/prayer/prayer-content/prayer-index'; // --- MODIFIED ---
+import fs from 'fs';
+import path from 'path';
+// --- MODIFIED: The rest of the file is the same, only this import block changes ---
+
+let prayerIndex: { [key: string]: any } = {}; // Default to an empty index
+
+try {
+  // Try to load the generated index file using require()
+  prayerIndex = require('#/generated/prayer-index').prayerIndex;
+} catch (error) {
+  // If it fails, print a friendly warning and continue with the empty index
+  console.warn(
+    `[INFO] Generated 'prayer-index.ts' not found. Proceeding with simple text only.`,
+  );
+}
+// --- END MODIFICATION ---
+
 import {
   PdfDrawingContext,
   AshkenazContentGenerationParams,
@@ -16,6 +30,17 @@ import {
   drawIntroductionInstruction,
 } from './drawing-helpers';
 import siddurConfig from '../siddur-formatting-config.json';
+
+const getDetailedPrayerData = (prayerId: string): any | null => {
+  try {
+    const filePath = path.join(process.cwd(), 'prayer-data-private', `${prayerId}.json`);
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(fileContent);
+  } catch (error) {
+    console.warn(`[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`);
+    return null;
+  }
+};
 
 const drawBlessingsPrayer = (
   context: PdfDrawingContext,
@@ -95,23 +120,6 @@ const drawBlessingsPrayer = (
   return { ...context, page, y: blessingY };
 };
 
-const getDetailedPrayerData = (prayerId: string): any | null => {
-  try {
-    // --- ADD THIS LINE FOR DEBUGGING ---
-    console.log(`[DEBUG] Project root (cwd): ${process.cwd()}`);
-
-    const filePath = path.join(process.cwd(), 'prayer-data-private', `${prayerId}.json`);
-    
-    // --- ADD THIS LINE FOR DEBUGGING ---
-    console.log(`[DEBUG] Attempting to read: ${filePath}`);
-
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    console.warn(`[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`);
-    return null;
-  }
-};
 const drawPartsPrayer = (
   context: PdfDrawingContext,
   prayer: PartsPrayer,
@@ -614,13 +622,10 @@ export const drawPrayer = (
   y -= siddurConfig.verticalSpacing.beforePrayerTitle;
   currentContext = { ...context, page, y };
 
-  // --- MODIFIED ---
-  // The logic below now dynamically loads data instead of using a giant imported object.
   const prayerId = 'prayer-id' in prayer ? prayer['prayer-id'] : undefined;
   if (prayerId && prayerIndex[prayerId]) {
     const prayerData = getDetailedPrayerData(prayerId);
 
-    // Only proceed if we successfully loaded the data file
     if (prayerData) {
       currentContext = drawIntroductionInstruction(
         currentContext,
@@ -658,7 +663,6 @@ export const drawPrayer = (
     }
   }
 
-  // This part remains as a fallback for prayers defined directly in the liturgy file
   if ('blessings' in prayer)
     return drawBlessingsPrayer(currentContext, prayer, params, columnWidth);
   if ('parts' in prayer)
