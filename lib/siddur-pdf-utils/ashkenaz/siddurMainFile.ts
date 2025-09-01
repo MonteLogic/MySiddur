@@ -1,5 +1,12 @@
 // lib/siddur-pdf-utils/ashkenaz/siddurMainFile.ts
-import { PDFDocument, StandardFonts, rgb, PDFFont, PDFPage, Color } from 'pdf-lib';
+import {
+  PDFDocument,
+  StandardFonts,
+  rgb,
+  PDFFont,
+  PDFPage,
+  Color,
+} from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -13,7 +20,11 @@ export enum SiddurFormat {
 }
 
 export const formatDate = (date: Date): string => {
-  return date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+  return date.toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+  });
 };
 
 interface GenerateSiddurPDFParams {
@@ -54,14 +65,39 @@ const calculateTextLines = (
 };
 
 const ensureSpaceAndDraw = (
-  currentParams: { pdfDoc: PDFDocument; page: PDFPage; y: number; width: number; height: number; margin: number; englishFont: PDFFont; englishBoldFont: PDFFont; hebrewFont: PDFFont },
-  textLines: { text: string; yOffset: number; font: PDFFont; size: number; color?: Color; xOffset?: number; lineHeight: number }[],
-  contentLabel: string
+  currentParams: {
+    pdfDoc: PDFDocument;
+    page: PDFPage;
+    y: number;
+    width: number;
+    height: number;
+    margin: number;
+    englishFont: PDFFont;
+    englishBoldFont: PDFFont;
+    hebrewFont: PDFFont;
+  },
+  textLines: {
+    text: string;
+    yOffset: number;
+    font: PDFFont;
+    size: number;
+    color?: Color;
+    xOffset?: number;
+    lineHeight: number;
+  }[],
+  contentLabel: string,
 ): { page: PDFPage; y: number } => {
   let { pdfDoc, page, y, height, margin } = currentParams;
-  const totalLinesHeight = textLines.length > 0 ? Math.abs(textLines[textLines.length - 1].yOffset) + textLines[0].lineHeight : 0;
+  const totalLinesHeight =
+    textLines.length > 0
+      ? Math.abs(textLines[textLines.length - 1].yOffset) +
+        textLines[0].lineHeight
+      : 0;
 
-  if (y - totalLinesHeight < siddurConfig.pdfMargins.bottom + siddurConfig.verticalSpacing.pageBuffer) {
+  if (
+    y - totalLinesHeight <
+    siddurConfig.pdfMargins.bottom + siddurConfig.verticalSpacing.pageBuffer
+  ) {
     page = pdfDoc.addPage();
     y = height - siddurConfig.pdfMargins.top;
   }
@@ -73,22 +109,39 @@ const ensureSpaceAndDraw = (
       y: currentBlockY + lineInfo.yOffset,
       font: lineInfo.font,
       size: lineInfo.size,
-      color: lineInfo.color || rgb(siddurConfig.colors.defaultText[0], siddurConfig.colors.defaultText[1], siddurConfig.colors.defaultText[2]),
+      color:
+        lineInfo.color ||
+        rgb(
+          siddurConfig.colors.defaultText[0],
+          siddurConfig.colors.defaultText[1],
+          siddurConfig.colors.defaultText[2],
+        ),
       lineHeight: lineInfo.lineHeight,
     });
   }
-  y = currentBlockY + (textLines.length > 0 ? textLines[textLines.length - 1].yOffset : 0);
+  y =
+    currentBlockY +
+    (textLines.length > 0 ? textLines[textLines.length - 1].yOffset : 0);
   return { page, y };
 };
 
-export const generateSiddurPDF = async ({ selectedDate, siddurFormat, userName }: GenerateSiddurPDFParams): Promise<Uint8Array> => {
+export const generateSiddurPDF = async ({
+  selectedDate,
+  siddurFormat,
+  userName,
+}: GenerateSiddurPDFParams): Promise<Uint8Array> => {
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);
 
-  const hebrewFontBytes = await fs.readFile(path.join(process.cwd(), 'fonts', 'NotoSansHebrew-Regular.ttf'));
-  const englishFontBytes = await fs.readFile(path.join(process.cwd(), 'fonts', 'NotoSans-Regular.ttf'));
-  const hebrewFont = await pdfDoc.embedFont(hebrewFontBytes);
-  const englishFont = await pdfDoc.embedFont(englishFontBytes);
+  const hebrewFontBytes = await fs.readFile(
+    path.join(process.cwd(), 'fonts', 'NotoSansHebrew-Regular.ttf'),
+  );
+  const englishFontBytes = await fs.readFile(
+    path.join(process.cwd(), 'fonts', 'NotoSans-Regular.ttf'),
+  ); // FIX: Explicitly convert the Buffer to a Uint8Array.
+
+  const hebrewFont = await pdfDoc.embedFont(new Uint8Array(hebrewFontBytes));
+  const englishFont = await pdfDoc.embedFont(new Uint8Array(englishFontBytes));
   const englishBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   let page = pdfDoc.addPage();
@@ -96,14 +149,38 @@ export const generateSiddurPDF = async ({ selectedDate, siddurFormat, userName }
   const margin = siddurConfig.pdfMargins.left;
   let y = height - siddurConfig.pdfMargins.top;
 
-  let commonPdfParams = { pdfDoc, page, y, width, height, margin, englishFont, englishBoldFont, hebrewFont };
+  let commonPdfParams = {
+    pdfDoc,
+    page,
+    y,
+    width,
+    height,
+    margin,
+    englishFont,
+    englishBoldFont,
+    hebrewFont,
+  };
 
   // --- PDF Header ---
-  let lines = calculateTextLines(ashPrayerInfo.siddurTitle, englishBoldFont, siddurConfig.fontSizes.siddurTitle, width - margin * 2, siddurConfig.lineSpacing.siddurTitle);
+  let lines = calculateTextLines(
+    ashPrayerInfo.siddurTitle,
+    englishBoldFont,
+    siddurConfig.fontSizes.siddurTitle,
+    width - margin * 2,
+    siddurConfig.lineSpacing.siddurTitle,
+  );
   ({ page, y } = ensureSpaceAndDraw(
     { ...commonPdfParams, page, y },
-    lines.map((l) => ({ ...l, font: englishBoldFont, size: siddurConfig.fontSizes.siddurTitle, color: rgb(...(siddurConfig.colors.siddurTitle as [number, number, number])), lineHeight: siddurConfig.lineSpacing.siddurTitle })),
-    'Siddur Title'
+    lines.map((l) => ({
+      ...l,
+      font: englishBoldFont,
+      size: siddurConfig.fontSizes.siddurTitle,
+      color: rgb(
+        ...(siddurConfig.colors.siddurTitle as [number, number, number]),
+      ),
+      lineHeight: siddurConfig.lineSpacing.siddurTitle,
+    })),
+    'Siddur Title',
   ));
   commonPdfParams = { ...commonPdfParams, page, y };
   y -= siddurConfig.verticalSpacing.afterSiddurTitle;
@@ -111,11 +188,22 @@ export const generateSiddurPDF = async ({ selectedDate, siddurFormat, userName }
   // REMOVED the buggy "Service" line from here. It is now handled in generateAshkenazContent.
 
   if (userName) {
-    lines = calculateTextLines(`For: ${userName}`, englishFont, siddurConfig.fontSizes.userName, width - margin * 2, siddurConfig.lineSpacing.userName);
+    lines = calculateTextLines(
+      `For: ${userName}`,
+      englishFont,
+      siddurConfig.fontSizes.userName,
+      width - margin * 2,
+      siddurConfig.lineSpacing.userName,
+    );
     ({ page, y } = ensureSpaceAndDraw(
       { ...commonPdfParams, page, y },
-      lines.map((l) => ({ ...l, font: englishFont, size: siddurConfig.fontSizes.userName, lineHeight: siddurConfig.lineSpacing.userName })),
-      'User Name'
+      lines.map((l) => ({
+        ...l,
+        font: englishFont,
+        size: siddurConfig.fontSizes.userName,
+        lineHeight: siddurConfig.lineSpacing.userName,
+      })),
+      'User Name',
     ));
     commonPdfParams = { ...commonPdfParams, page, y };
   }
@@ -125,7 +213,8 @@ export const generateSiddurPDF = async ({ selectedDate, siddurFormat, userName }
   if (siddurFormat === SiddurFormat.NusachAshkenaz) {
     const { page: updatedPage, y: updatedY } = generateAshkenazContent({
       ...commonPdfParams,
-      page, y,
+      page,
+      y,
       calculateTextLines,
       ensureSpaceAndDraw: (drawingContext, textLines, label) => {
         const completeContext = { ...commonPdfParams, ...drawingContext };
