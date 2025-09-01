@@ -36,7 +36,8 @@
             },
             {
               "title": "Birchot HaShachar (Series of Morning Blessings)",
-              "prayer-id":"2-0rwa"
+              "prayer-id":"2-0rwa",
+              "sub-prayers": 1
             },
             {
               "title": "Yehi Ratzon (May it be Your will)",
