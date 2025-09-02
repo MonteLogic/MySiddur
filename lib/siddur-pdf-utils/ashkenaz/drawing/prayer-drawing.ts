@@ -1,8 +1,36 @@
-import { rgb } from 'pdf-lib';
+/**
+ * @file This module is responsible for drawing various types of prayers onto a PDF document using the pdf-lib library.
+ * It handles different prayer formats, including simple text, blessings, and multi-part prayers,
+ * as well as complex color-mapped layouts for word-by-word translations.
+ * @packageDocumentation
+ */
+
+import { PDFPage, rgb } from 'pdf-lib';
 import fs from 'fs';
 import path from 'path';
-// --- MODIFIED: The rest of the file is the same, only this import block changes ---
 
+import {
+  PdfDrawingContext,
+  AshkenazContentGenerationParams,
+  Prayer,
+  SimplePrayer,
+  BlessingsPrayer,
+  PartsPrayer,
+  BasePrayer,
+  WordMapping,
+} from './types';
+import {
+  drawSourceIfPresent,
+  drawIntroductionInstruction,
+} from './drawing-helpers';
+import siddurConfig from '../siddur-formatting-config.json';
+
+/**
+ * A dynamically loaded index of prayer data. It maps prayer IDs to their detailed information.
+ * The structure is a key-value store where keys are prayer IDs (strings) and values can be of any type,
+ * typically objects containing prayer metadata.
+ * @internal
+ */
 let prayerIndex: { [key: string]: any } = {}; // Default to an empty index
 
 try {
@@ -14,34 +42,41 @@ try {
     `[INFO] Generated 'prayer-index.ts' not found. Proceeding with simple text only.`,
   );
 }
-// --- END MODIFICATION ---
 
-import {
-  PdfDrawingContext,
-  AshkenazContentGenerationParams,
-  Prayer,
-  SimplePrayer,
-  BlessingsPrayer,
-  PartsPrayer,
-  BasePrayer,
-} from './types';
-import {
-  drawSourceIfPresent,
-  drawIntroductionInstruction,
-} from './drawing-helpers';
-import siddurConfig from '../siddur-formatting-config.json';
-
+/**
+ * Retrieves detailed prayer data from a JSON file based on the prayer ID.
+ *
+ * @param prayerId - The unique identifier for the prayer.
+ * @returns The parsed JSON object containing detailed prayer data, or `null` if the file cannot be found or read.
+ * @internal
+ */
 const getDetailedPrayerData = (prayerId: string): any | null => {
   try {
-    const filePath = path.join(process.cwd(), 'prayer-data-private', `${prayerId}.json`);
+    const filePath = path.join(
+      process.cwd(),
+      'prayer-data-private',
+      `${prayerId}.json`,
+    );
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(fileContent);
   } catch (error) {
-    console.warn(`[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`);
+    console.warn(
+      `[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`,
+    );
     return null;
   }
 };
 
+/**
+ * Draws a prayer composed of multiple blessings in a two-column (English/Hebrew) layout.
+ *
+ * @param context - The current PDF drawing context.
+ * @param prayer - The `BlessingsPrayer` object containing the blessings to draw.
+ * @param params - The content generation parameters, including helper functions.
+ * @param columnWidth - The calculated width for a single text column.
+ * @returns The updated PDF drawing context after drawing the blessings.
+ * @internal
+ */
 const drawBlessingsPrayer = (
   context: PdfDrawingContext,
   prayer: BlessingsPrayer,
@@ -120,6 +155,16 @@ const drawBlessingsPrayer = (
   return { ...context, page, y: blessingY };
 };
 
+/**
+ * Draws a prayer composed of multiple parts in a two-column (English/Hebrew) layout.
+ *
+ * @param context - The current PDF drawing context.
+ * @param prayer - The `PartsPrayer` object containing the parts to draw.
+ * @param params - The content generation parameters, including helper functions.
+ * @param columnWidth - The calculated width for a single text column.
+ * @returns The updated PDF drawing context after drawing the parts.
+ * @internal
+ */
 const drawPartsPrayer = (
   context: PdfDrawingContext,
   prayer: PartsPrayer,
@@ -208,15 +253,29 @@ const drawPartsPrayer = (
   return { ...context, page, y: partY };
 };
 
+/**
+ * Draws a prayer with color-mapped words in a two-column layout (English and Hebrew).
+ * Each corresponding English and Hebrew word/phrase is drawn in the same color.
+ *
+ * Note: This isn't actively being used.
+ *
+ * @param context - The current PDF drawing context.
+ * @param prayer - The prayer object, used for metadata like the source.
+ * @param wordMappings - An object containing word-by-word mappings between English and Hebrew.
+ * @param params - The content generation parameters.
+ * @param columnWidth - The calculated width for the English text column.
+ * @returns The updated PDF drawing context.
+ * @internal
+ */
 const drawTwoColumnColorMappedPrayer = (
   context: PdfDrawingContext,
   prayer: Prayer,
-  wordMappings: any,
+  wordMappings: WordMapping,
   params: AshkenazContentGenerationParams,
   columnWidth: number,
 ): PdfDrawingContext => {
   let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const colors = siddurConfig.colors.wordMappingColors.map((c) =>
+  const colors = Object.values(siddurConfig.colors.wordMappingColors).map((c) =>
     rgb(c[0], c[1], c[2]),
   );
   const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
@@ -297,16 +356,29 @@ const drawTwoColumnColorMappedPrayer = (
   return updatedContext;
 };
 
+/**
+ * Draws a prayer with color-mapped words in a three-column layout (English, Transliteration, and Hebrew).
+ * Each corresponding word/phrase across the three columns is drawn in the same color.
+ *
+ * @param context - The current PDF drawing context.
+ * @param prayer - The prayer object, used for metadata like the source.
+ * @param wordMappings - An object containing word-by-word mappings.
+ * @param _params - The content generation parameters (unused in this function).
+ * @returns The updated PDF drawing context.
+ * @internal
+ */
 const drawThreeColumnColorMappedPrayer = (
   context: PdfDrawingContext,
   prayer: Prayer,
-  wordMappings: any,
+  wordMappings: WordMapping,
   _params: AshkenazContentGenerationParams,
 ): PdfDrawingContext => {
   let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const colors = siddurConfig.colors.wordMappingColors.map((c) =>
+  const colors = Object.values(siddurConfig.colors.wordMappingColors).map((c) =>
     rgb(c[0], c[1], c[2]),
   );
+
+  // toDo: put this in a JSON file.
   const columnGutter = 15;
   const totalContentWidth = width - margin * 2;
   const columnWidth = (totalContentWidth - 2 * columnGutter) / 3;
@@ -421,6 +493,15 @@ const drawThreeColumnColorMappedPrayer = (
   return updatedContext;
 };
 
+/**
+ * Iterates through and draws sub-prayers associated with a main prayer.
+ *
+ * @param context - The current PDF drawing context.
+ * @param detailedPrayer - The detailed prayer data object containing a `sub-prayers` property.
+ * @param params - The content generation parameters.
+ * @returns The updated PDF drawing context after drawing all sub-prayers.
+ * @internal
+ */
 const drawSubPrayers = (
   context: PdfDrawingContext,
   detailedPrayer: any,
@@ -497,6 +578,16 @@ const drawSubPrayers = (
   return currentContext;
 };
 
+/**
+ * Draws a simple prayer with standard English and Hebrew text in a two-column layout.
+ *
+ * @param context - The current PDF drawing context.
+ * @param prayer - The `SimplePrayer` object containing the text to draw.
+ * @param params - The content generation parameters.
+ * @param columnWidth - The calculated width for a single text column.
+ * @returns The updated PDF drawing context.
+ * @internal
+ */
 const drawSimplePrayerText = (
   context: PdfDrawingContext,
   prayer: SimplePrayer,
@@ -569,6 +660,21 @@ const drawSimplePrayerText = (
   return updatedContext;
 };
 
+/**
+ * Main function to draw a single prayer onto the PDF. It determines the prayer's format
+ * and calls the appropriate drawing helper function.
+ *
+ * @remarks
+ * This function acts as a dispatcher. It first handles drawing the prayer's title,
+ * then checks for detailed data (like word mappings or sub-prayers). If found, it uses
+ * specialized drawing functions. Otherwise, it falls back to drawing based on the
+ * prayer's structure (`blessings`, `parts`, or simple `hebrew`/`english` text).
+ *
+ * @param context - The initial PDF drawing context before this prayer.
+ * @param prayer - The `Prayer` object to be drawn.
+ * @param params - The content generation parameters, including font information and helper functions.
+ * @returns The final PDF drawing context after the prayer has been completely drawn.
+ */
 export const drawPrayer = (
   context: PdfDrawingContext,
   prayer: Prayer,
