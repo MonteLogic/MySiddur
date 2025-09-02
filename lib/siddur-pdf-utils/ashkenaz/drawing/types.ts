@@ -10,18 +10,12 @@ import { PDFDocument, PDFFont, PDFPage } from 'pdf-lib';
  */
 export interface PdfDrawingContext {
   /** The main PDF document object from pdf-lib. */
-  pdfDoc: PDFDocument;
-  /** The current page being drawn on. */
-  page: PDFPage;
-  /** The current vertical position (y-coordinate) on the page. */
-  y: number;
-  /** The total width of the page. */
-  width: number;
-  /** The total height of the page. */
-  height: number;
-  /** The page margin. */
-  margin: number;
-  /** An object containing the loaded fonts. */
+  pdfDoc: PDFDocument /** The current page being drawn on. */;
+  page: PDFPage /** The current vertical position (y-coordinate) on the page. */;
+  y: number /** The total width of the page. */;
+  width: number /** The total height of the page. */;
+  height: number /** The page margin. */;
+  margin: number /** An object containing the loaded fonts. */;
   fonts: {
     english: PDFFont;
     englishBold: PDFFont;
@@ -34,14 +28,10 @@ export interface PdfDrawingContext {
  */
 export interface LineInfo {
   /** The text content of the line. */
-  text: string;
-  /** The vertical offset for this line from the starting y-position. */
-  yOffset: number;
-  /** The font to be used for this line. */
-  font: PDFFont;
-  /** The font size for this line. */
-  size: number;
-  /** The line height for this line. */
+  text: string /** The vertical offset for this line from the starting y-position. */;
+  yOffset: number /** The font to be used for this line. */;
+  font: PDFFont /** The font size for this line. */;
+  size: number /** The line height for this line. */;
   lineHeight: number;
 }
 
@@ -49,15 +39,30 @@ export interface LineInfo {
  * A set of parameters and helper functions for content generation.
  */
 export interface AshkenazContentGenerationParams {
-  /** Calculates how to break a string into multiple lines based on width. */
+  /** The main PDF document object from pdf-lib. */
+  pdfDoc: PDFDocument /** The current page being drawn on. */;
+  page: PDFPage /** The current vertical position (y-coordinate) on the page. */;
+  y: number /** The total width of the page. */;
+  width: number /** The total height of the page. */;
+  height: number /** The page margin. */;
+  margin: number;
+  /** The regular English font. */
+  englishFont: PDFFont;
+  /** The bold English font. */
+  englishBoldFont: PDFFont;
+  /** The Hebrew font. */
+  hebrewFont: PDFFont /** Calculates how to break a string into multiple lines based on width. */;
+
   calculateTextLines: (
     text: string,
     font: PDFFont,
     fontSize: number,
     maxWidth: number,
     lineHeight: number,
-  ) => Omit<LineInfo, 'font' | 'size' | 'lineHeight'>[];
-  /** Ensures there is enough vertical space on the page before drawing. */
+  ) => Omit<
+    LineInfo,
+    'font' | 'size' | 'lineHeight'
+  >[] /** Ensures there is enough vertical space on the page before drawing. */;
   ensureSpaceAndDraw: (
     context: PdfDrawingContext,
     lines: LineInfo[],
@@ -70,11 +75,8 @@ export interface AshkenazContentGenerationParams {
  */
 export type WordMapping = {
   [key: string]: {
-    /** The English translation. */
-    english: string;
-    /** The Hebrew text. */
-    hebrew: string;
-    /** The transliteration of the Hebrew text. May also appear as "Transliteration". */
+    /** The English translation. */ english: string /** The Hebrew text. */;
+    hebrew: string /** The transliteration of the Hebrew text. May also appear as "Transliteration". */;
     transliteration?: string;
     Transliteration?: string;
   };
@@ -85,10 +87,8 @@ export type WordMapping = {
  */
 export interface BasePrayer {
   /** The title of the prayer. */
-  title: string;
-  /** A unique identifier for fetching detailed prayer data. */
-  'prayer-id'?: string;
-  /** Optional citation for the prayer's source. */
+  title: string /** A unique identifier for fetching detailed prayer data. */;
+  'prayer-id'?: string /** Optional citation for the prayer's source. */;
   source?: string;
 }
 
@@ -97,8 +97,7 @@ export interface BasePrayer {
  */
 export interface SimplePrayer extends BasePrayer {
   /** The full English text of the prayer. */
-  english: string;
-  /** The full Hebrew text of the prayer. */
+  english: string /** The full Hebrew text of the prayer. */;
   hebrew: string;
 }
 
