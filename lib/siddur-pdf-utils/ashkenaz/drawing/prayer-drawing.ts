@@ -1,20 +1,13 @@
-import { rgb } from 'pdf-lib';
+/**
+ * @file This module is responsible for drawing various types of prayers onto a PDF document using the pdf-lib library.
+ * It handles different prayer formats, including simple text, blessings, and multi-part prayers,
+ * as well as complex color-mapped layouts for word-by-word translations with subscript numbering for repetitions.
+ * @packageDocumentation
+ */
+
+import { PDFPage, rgb, PDFFont, RGB } from 'pdf-lib';
 import fs from 'fs';
 import path from 'path';
-// --- MODIFIED: The rest of the file is the same, only this import block changes ---
-
-let prayerIndex: { [key: string]: any } = {}; // Default to an empty index
-
-try {
-  // Try to load the generated index file using require()
-  prayerIndex = require('#/generated/prayer-index').prayerIndex;
-} catch (error) {
-  // If it fails, print a friendly warning and continue with the empty index
-  console.warn(
-    `[INFO] Generated 'prayer-index.ts' not found. Proceeding with simple text only.`,
-  );
-}
-// --- END MODIFICATION ---
 
 import {
   PdfDrawingContext,
@@ -24,6 +17,7 @@ import {
   BlessingsPrayer,
   PartsPrayer,
   BasePrayer,
+  WordMapping,
 } from './types';
 import {
   drawSourceIfPresent,
@@ -31,17 +25,116 @@ import {
 } from './drawing-helpers';
 import siddurConfig from '../siddur-formatting-config.json';
 
+// --- START: COLOR CYCLER & SUBSCRIPT LOGIC ---
+
+/**
+ * Creates a function that cycles through an array of text colors.
+ * When it loops, it provides a subscript number indicating the cycle count.
+ *
+ * @param textColors - An array of color objects for the text.
+ * @returns A function that returns an object with the textColor and an optional subscript string.
+ */
+const createColorCycler = (textColors: RGB[]) => {
+  let currentIndex = 0;
+  let cycleCount = 0;
+  return () => {
+    const textColor = textColors[currentIndex];
+    // Provide the cycle number as a string (e.g., '1', '2') for subsequent cycles.
+    const subscript = cycleCount > 0 ? String(cycleCount) : undefined;
+
+    // Increment index for the next call
+    currentIndex++;
+    if (currentIndex >= textColors.length) {
+      currentIndex = 0;
+      cycleCount++;
+    }
+
+    return { textColor, subscript };
+  };
+};
+
+// 1. Prepare the array of pdf-lib color objects from the config file for TEXT.
+const MAPPED_COLORS_ARRAY = Object.values(
+  siddurConfig.colors.wordMappingColors,
+).map((value) => {
+  const [r, g, b] = value as [number, number, number];
+  return rgb(r, g, b);
+});
+
+/**
+ * Draws a single word on the PDF page, with an optional subscript number.
+ * @internal
+ */
+const drawWordWithSubscript = (
+  page: PDFPage,
+  word: string,
+  subscript: string | undefined,
+  font: PDFFont,
+  size: number,
+  x: number,
+  y: number,
+  textColor: RGB,
+) => {
+  // Draw the main word
+  page.drawText(word, { x, y, font, size, color: textColor });
+
+  // If a subscript is provided, draw it next to the word
+  if (subscript) {
+    const wordWidth = font.widthOfTextAtSize(word, size);
+    const subscriptSize = size * 0.6; // Subscript is 60% of the main font size
+    const subscriptYOffset = size * 0.15; // Lower the subscript slightly
+
+    page.drawText(subscript, {
+      x: x + wordWidth,
+      y: y - subscriptYOffset,
+      font,
+      size: subscriptSize,
+      color: textColor,
+    });
+  }
+};
+
+// --- END: COLOR CYCLER & SUBSCRIPT LOGIC ---
+
+/**
+ * A dynamically loaded index of prayer data.
+ * @internal
+ */
+let prayerIndex: { [key: string]: any } = {};
+
+try {
+  prayerIndex = require('#/generated/prayer-index').prayerIndex;
+} catch (error) {
+  console.warn(
+    `[INFO] Generated 'prayer-index.ts' not found. Proceeding with simple text only.`,
+  );
+}
+
+/**
+ * Retrieves detailed prayer data from a JSON file based on the prayer ID.
+ * @internal
+ */
 const getDetailedPrayerData = (prayerId: string): any | null => {
   try {
-    const filePath = path.join(process.cwd(), 'prayer-data-private', `${prayerId}.json`);
+    const filePath = path.join(
+      process.cwd(),
+      'prayer-data-private',
+      `${prayerId}.json`,
+    );
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(fileContent);
   } catch (error) {
-    console.warn(`[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`);
+    console.warn(
+      `[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`,
+    );
     return null;
   }
 };
 
+/**
+ * Draws a prayer composed of multiple blessings in a two-column (English/Hebrew) layout.
+ * @internal
+ */
 const drawBlessingsPrayer = (
   context: PdfDrawingContext,
   prayer: BlessingsPrayer,
@@ -120,6 +213,10 @@ const drawBlessingsPrayer = (
   return { ...context, page, y: blessingY };
 };
 
+/**
+ * Draws a prayer composed of multiple parts in a two-column (English/Hebrew) layout.
+ * @internal
+ */
 const drawPartsPrayer = (
   context: PdfDrawingContext,
   prayer: PartsPrayer,
@@ -208,17 +305,20 @@ const drawPartsPrayer = (
   return { ...context, page, y: partY };
 };
 
+/**
+ * Draws a prayer with color-mapped words in a two-column layout (English and Hebrew).
+ * @internal
+ */
 const drawTwoColumnColorMappedPrayer = (
   context: PdfDrawingContext,
   prayer: Prayer,
-  wordMappings: any,
+  wordMappings: WordMapping,
   params: AshkenazContentGenerationParams,
   columnWidth: number,
 ): PdfDrawingContext => {
   let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const colors = siddurConfig.colors.wordMappingColors.map((c) =>
-    rgb(c[0], c[1], c[2]),
-  );
+  const getNextColor = createColorCycler(MAPPED_COLORS_ARRAY);
+
   const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
   const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
   const hebrewColumnStart = width / 2 + siddurConfig.layout.hebrewColumnXOffset;
@@ -226,12 +326,18 @@ const drawTwoColumnColorMappedPrayer = (
   let hebrewY = y;
   let currentHebrewX = hebrewColumnEnd;
 
-  Object.values(wordMappings).forEach((mapping: any, index) => {
-    const color = colors[index % colors.length];
+  Object.values(wordMappings).forEach((mapping: any) => {
+    const { textColor, subscript } = getNextColor();
     (mapping.hebrew + ' ').split(/( )/).forEach((word) => {
       if (word === '') return;
       const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
-      if (currentHebrewX - wordWidth < hebrewColumnStart) {
+      const subscriptSize = hebrewFontSize * 0.6;
+      const subscriptWidth = subscript
+        ? fonts.hebrew.widthOfTextAtSize(subscript, subscriptSize)
+        : 0;
+      const totalWidth = wordWidth + subscriptWidth;
+
+      if (currentHebrewX - totalWidth < hebrewColumnStart) {
         currentHebrewX = hebrewColumnEnd;
         hebrewY -= hebrewLineHeight;
         if (hebrewY < siddurConfig.pdfMargins.bottom) {
@@ -239,14 +345,17 @@ const drawTwoColumnColorMappedPrayer = (
           hebrewY = height - siddurConfig.pdfMargins.top;
         }
       }
-      currentHebrewX -= wordWidth;
-      page.drawText(word, {
-        x: currentHebrewX,
-        y: hebrewY,
-        font: fonts.hebrew,
-        size: hebrewFontSize,
-        color,
-      });
+      currentHebrewX -= totalWidth;
+      drawWordWithSubscript(
+        page,
+        word,
+        subscript,
+        fonts.hebrew,
+        hebrewFontSize,
+        currentHebrewX,
+        hebrewY,
+        textColor,
+      );
     });
   });
   const hebrewEndY = hebrewY - hebrewLineHeight;
@@ -256,27 +365,34 @@ const drawTwoColumnColorMappedPrayer = (
   let englishY = y;
   let currentEnglishX = margin;
 
-  Object.values(wordMappings).forEach((mapping: any, index) => {
-    const color = colors[index % colors.length];
+  const getNextColorForEnglish = createColorCycler(MAPPED_COLORS_ARRAY);
+
+  Object.values(wordMappings).forEach((mapping: any) => {
+    const { textColor, subscript } = getNextColorForEnglish();
     (mapping.english + ' ').split(/( )/).forEach((word) => {
       if (word === '') return;
       const wordWidth = fonts.english.widthOfTextAtSize(word, englishFontSize);
-      if (currentEnglishX + wordWidth > margin + columnWidth) {
+      const subscriptSize = englishFontSize * 0.6;
+      const subscriptWidth = subscript
+        ? fonts.english.widthOfTextAtSize(subscript, subscriptSize)
+        : 0;
+      const totalWidth = wordWidth + subscriptWidth;
+
+      if (currentEnglishX + totalWidth > margin + columnWidth) {
         currentEnglishX = margin;
         englishY -= englishLineHeight;
-        if (englishY < siddurConfig.pdfMargins.bottom) {
-          page = pdfDoc.addPage();
-          englishY = height - siddurConfig.pdfMargins.top;
-        }
       }
-      page.drawText(word, {
-        x: currentEnglishX,
-        y: englishY,
-        font: fonts.english,
-        size: englishFontSize,
-        color,
-      });
-      currentEnglishX += wordWidth;
+      drawWordWithSubscript(
+        page,
+        word,
+        subscript,
+        fonts.english,
+        englishFontSize,
+        currentEnglishX,
+        englishY,
+        textColor,
+      );
+      currentEnglishX += totalWidth;
     });
   });
   const englishEndY = englishY - englishLineHeight;
@@ -297,130 +413,247 @@ const drawTwoColumnColorMappedPrayer = (
   return updatedContext;
 };
 
+/**
+ * Draws a prayer with color-mapped words in a three-column layout (English, Transliteration, and Hebrew).
+ * Each corresponding word/phrase across the three columns is drawn in the same color. If the color palette repeats,
+ * a continuously incrementing subscript number (starting from 1) is appended to the phrase.
+ *
+ * @param context - The current PDF drawing context.
+ * @param prayer - The prayer object, used for metadata like the source.
+ * @param wordMappings - An object containing word-by-word mappings.
+ * @param _params - The content generation parameters (unused in this function).
+ * @returns The updated PDF drawing context.
+ * @internal
+ */
 const drawThreeColumnColorMappedPrayer = (
-  context: PdfDrawingContext,
-  prayer: Prayer,
-  wordMappings: any,
-  _params: AshkenazContentGenerationParams,
+  context: PdfDrawingContext,
+  prayer: Prayer,
+  wordMappings: WordMapping,
+  _params: AshkenazContentGenerationParams,
 ): PdfDrawingContext => {
-  let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const colors = siddurConfig.colors.wordMappingColors.map((c) =>
-    rgb(c[0], c[1], c[2]),
-  );
-  const columnGutter = 15;
-  const totalContentWidth = width - margin * 2;
-  const columnWidth = (totalContentWidth - 2 * columnGutter) / 3;
-  const englishColumnStart = margin;
-  const transliterationColumnStart = margin + columnWidth + columnGutter;
-  const hebrewColumnStart = margin + 2 * columnWidth + 2 * columnGutter;
-  const hebrewColumnEnd = width - margin;
-  const englishFontSize = siddurConfig.fontSizes.blessingEnglish;
-  const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
-  const translitFontSize = siddurConfig.fontSizes.blessingEnglish;
-  const translitLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
-  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
-  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
-  let englishY = y,
-    translitY = y,
-    hebrewY = y;
-  let currentEnglishX = englishColumnStart;
-  let currentTranslitX = transliterationColumnStart;
-  let currentHebrewX = hebrewColumnEnd;
+  let { page, y, margin, fonts, width, pdfDoc, height } = context;
+  const colors = Object.values(siddurConfig.colors.wordMappingColors).map((c) =>
+    rgb(c[0], c[1], c[2]),
+  );
 
-  Object.values(wordMappings).forEach((mapping: any, index) => {
-    const color = colors[index % colors.length];
-    const checkAndHandlePageBreak = () => {
-      if (
-        englishY < siddurConfig.pdfMargins.bottom ||
-        translitY < siddurConfig.pdfMargins.bottom ||
-        hebrewY < siddurConfig.pdfMargins.bottom
-      ) {
-        page = pdfDoc.addPage();
-        const topY = height - siddurConfig.pdfMargins.top;
-        englishY = topY;
-        translitY = topY;
-        hebrewY = topY;
-        currentEnglishX = englishColumnStart;
-        currentTranslitX = transliterationColumnStart;
-        currentHebrewX = hebrewColumnEnd;
-      }
-    };
+  const columnGutter = 15;
+  const totalContentWidth = width - margin * 2;
+  const columnWidth = (totalContentWidth - 2 * columnGutter) / 3;
+  const englishColumnStart = margin;
+  const transliterationColumnStart = margin + columnWidth + columnGutter;
+  const hebrewColumnStart = margin + 2 * columnWidth + 2 * columnGutter;
+  const hebrewColumnEnd = width - margin;
+  const englishFontSize = siddurConfig.fontSizes.blessingEnglish;
+  const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
+  const translitFontSize = siddurConfig.fontSizes.blessingEnglish;
+  const translitLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
+  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
+  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
+  let englishY = y,
+    translitY = y,
+    hebrewY = y;
+  let currentEnglishX = englishColumnStart;
+  let currentTranslitX = transliterationColumnStart;
+  let currentHebrewX = hebrewColumnEnd;
 
-    (mapping.english + ' ').split(/( )/).forEach((word) => {
-      if (word === '') return;
-      const wordWidth = fonts.english.widthOfTextAtSize(word, englishFontSize);
-      if (currentEnglishX + wordWidth > englishColumnStart + columnWidth) {
-        currentEnglishX = englishColumnStart;
-        englishY -= englishLineHeight;
-        checkAndHandlePageBreak();
-      }
-      page.drawText(word, {
-        x: currentEnglishX,
-        y: englishY,
-        font: fonts.english,
-        size: englishFontSize,
-        color,
-      });
-      currentEnglishX += wordWidth;
-    });
+  Object.values(wordMappings).forEach((mapping: any, index) => {
+    const color = colors[index % colors.length];
+    const checkAndHandlePageBreak = () => {
+      if (
+        englishY < siddurConfig.pdfMargins.bottom ||
+        translitY < siddurConfig.pdfMargins.bottom ||
+        hebrewY < siddurConfig.pdfMargins.bottom
+      ) {
+        page = pdfDoc.addPage();
+        const topY = height - siddurConfig.pdfMargins.top;
+        englishY = topY;
+        translitY = topY;
+        hebrewY = topY;
+        currentEnglishX = englishColumnStart;
+        currentTranslitX = transliterationColumnStart;
+        currentHebrewX = hebrewColumnEnd;
+      }
+    };
 
-    const translitText =
-      mapping.transliteration || mapping.Transliteration || '';
-    (translitText + ' ').split(/( )/).forEach((word) => {
-      if (word === '') return;
-      const wordWidth = fonts.english.widthOfTextAtSize(word, translitFontSize);
-      if (
-        currentTranslitX + wordWidth >
-        transliterationColumnStart + columnWidth
-      ) {
-        currentTranslitX = transliterationColumnStart;
-        translitY -= translitLineHeight;
-        checkAndHandlePageBreak();
-      }
-      page.drawText(word, {
-        x: currentTranslitX,
-        y: translitY,
-        font: fonts.english,
-        size: translitFontSize,
-        color,
-      });
-      currentTranslitX += wordWidth;
-    });
+    // --- English Column ---
+    mapping.english.split(/( )/).forEach((word: string) => {
+      if (word === '') return;
+      const wordWidth = fonts.english.widthOfTextAtSize(word, englishFontSize);
+      if (currentEnglishX + wordWidth > englishColumnStart + columnWidth) {
+        currentEnglishX = englishColumnStart;
+        englishY -= englishLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(word, {
+        x: currentEnglishX,
+        y: englishY,
+        font: fonts.english,
+        size: englishFontSize,
+        color,
+      });
+      currentEnglishX += wordWidth;
+    });
+    if (index >= colors.length) {
+      const subscriptText = `${(index - colors.length) + 1}`;
+      const enSubscriptSize = englishFontSize * 0.6;
+      const enSubscriptFont = fonts.english;
+      const enSubscriptWidth = enSubscriptFont.widthOfTextAtSize(
+        subscriptText,
+        enSubscriptSize,
+      );
+      if (
+        currentEnglishX + enSubscriptWidth >
+        englishColumnStart + columnWidth
+      ) {
+        currentEnglishX = englishColumnStart;
+        englishY -= englishLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(subscriptText, {
+        x: currentEnglishX,
+        y: englishY - (englishFontSize - enSubscriptSize) * 0.5,
+        font: enSubscriptFont,
+        size: enSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
+      currentEnglishX += enSubscriptWidth;
+    }
+    const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
+    if (currentEnglishX + enSpaceWidth > englishColumnStart + columnWidth) {
+      currentEnglishX = englishColumnStart;
+      englishY -= englishLineHeight;
+      checkAndHandlePageBreak();
+    }
+    currentEnglishX += enSpaceWidth;
 
-    (mapping.hebrew + ' ').split(/( )/).forEach((word) => {
-      if (word === '') return;
-      const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
-      if (currentHebrewX - wordWidth < hebrewColumnStart) {
-        currentHebrewX = hebrewColumnEnd;
-        hebrewY -= hebrewLineHeight;
-        checkAndHandlePageBreak();
-      }
-      currentHebrewX -= wordWidth;
-      page.drawText(word, {
-        x: currentHebrewX,
-        y: hebrewY,
-        font: fonts.hebrew,
-        size: hebrewFontSize,
-        color,
-      });
-    });
-  });
+    // --- Transliteration Column ---
+    const translitText =
+      mapping.transliteration || mapping.Transliteration || '';
+    translitText.split(/( )/).forEach((word: string) => {
+      if (word === '') return;
+      const wordWidth = fonts.english.widthOfTextAtSize(word, translitFontSize);
+      if (
+        currentTranslitX + wordWidth >
+        transliterationColumnStart + columnWidth
+      ) {
+        currentTranslitX = transliterationColumnStart;
+        translitY -= translitLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(word, {
+        x: currentTranslitX,
+        y: translitY,
+        font: fonts.english,
+        size: translitFontSize,
+        color,
+      });
+      currentTranslitX += wordWidth;
+    });
+    if (index >= colors.length) {
+      const subscriptText = `${(index - colors.length) + 1}`;
+      const trSubscriptSize = translitFontSize * 0.6;
+      const trSubscriptFont = fonts.english;
+      const trSubscriptWidth = trSubscriptFont.widthOfTextAtSize(
+        subscriptText,
+        trSubscriptSize,
+      );
+      if (
+        currentTranslitX + trSubscriptWidth >
+        transliterationColumnStart + columnWidth
+      ) {
+        currentTranslitX = transliterationColumnStart;
+        translitY -= translitLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(subscriptText, {
+        x: currentTranslitX,
+        y: translitY - (translitFontSize - trSubscriptSize) * 0.5,
+        font: trSubscriptFont,
+        size: trSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
+      currentTranslitX += trSubscriptWidth;
+    }
+    const trSpaceWidth = fonts.english.widthOfTextAtSize(' ', translitFontSize);
+    if (
+      currentTranslitX + trSpaceWidth >
+      transliterationColumnStart + columnWidth
+    ) {
+      currentTranslitX = transliterationColumnStart;
+      translitY -= translitLineHeight;
+      checkAndHandlePageBreak();
+    }
+    currentTranslitX += trSpaceWidth;
 
-  let updatedContext = {
-    ...context,
-    page,
-    y: Math.min(englishY, translitY, hebrewY),
-  };
-  updatedContext = drawSourceIfPresent(
-    updatedContext,
-    prayer,
-    _params,
-    width - margin * 2,
-  );
-  updatedContext.y -= siddurConfig.verticalSpacing.afterPrayerText;
-  return updatedContext;
+    // --- Hebrew Column ---
+    mapping.hebrew.split(/( )/).forEach((word: string) => {
+      if (word === '') return;
+      const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
+      if (currentHebrewX - wordWidth < hebrewColumnStart) {
+        currentHebrewX = hebrewColumnEnd;
+        hebrewY -= hebrewLineHeight;
+        checkAndHandlePageBreak();
+      }
+      currentHebrewX -= wordWidth;
+      page.drawText(word, {
+        x: currentHebrewX,
+        y: hebrewY,
+        font: fonts.hebrew,
+        size: hebrewFontSize,
+        color,
+      });
+    });
+    if (index >= colors.length) {
+      const subscriptText = `${(index - colors.length) + 1}`;
+      const heSubscriptSize = hebrewFontSize * 0.6;
+      const heSubscriptFont = fonts.english;
+      const heSubscriptWidth = heSubscriptFont.widthOfTextAtSize(
+        subscriptText,
+        heSubscriptSize,
+      );
+      if (currentHebrewX - heSubscriptWidth < hebrewColumnStart) {
+        currentHebrewX = hebrewColumnEnd;
+        hebrewY -= hebrewLineHeight;
+        checkAndHandlePageBreak();
+      }
+      currentHebrewX -= heSubscriptWidth;
+      page.drawText(subscriptText, {
+        x: currentHebrewX,
+        y: hebrewY - (hebrewFontSize - heSubscriptSize) * 0.5,
+        font: heSubscriptFont,
+        size: heSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
+    }
+    const heSpaceWidth = fonts.hebrew.widthOfTextAtSize(' ', hebrewFontSize);
+    if (currentHebrewX - heSpaceWidth < hebrewColumnStart) {
+      currentHebrewX = hebrewColumnEnd;
+      hebrewY -= hebrewLineHeight;
+      checkAndHandlePageBreak();
+    }
+    currentHebrewX -= heSpaceWidth;
+  });
+
+  let updatedContext = {
+    ...context,
+    page,
+    y: Math.min(englishY, translitY, hebrewY),
+  };
+  updatedContext = drawSourceIfPresent(
+    updatedContext,
+    prayer,
+    _params,
+    width - margin * 2,
+  );
+  updatedContext.y -= siddurConfig.verticalSpacing.afterPrayerText;
+  return updatedContext;
 };
 
+
+/**
+ * Iterates through and draws sub-prayers associated with a main prayer.
+ * @internal
+ */
 const drawSubPrayers = (
   context: PdfDrawingContext,
   detailedPrayer: any,
@@ -497,6 +730,10 @@ const drawSubPrayers = (
   return currentContext;
 };
 
+/**
+ * Draws a simple prayer with standard English and Hebrew text in a two-column layout.
+ * @internal
+ */
 const drawSimplePrayerText = (
   context: PdfDrawingContext,
   prayer: SimplePrayer,
@@ -569,6 +806,10 @@ const drawSimplePrayerText = (
   return updatedContext;
 };
 
+/**
+ * Main function to draw a single prayer onto the PDF. It determines the prayer's format
+ * and calls the appropriate drawing helper function.
+ */
 export const drawPrayer = (
   context: PdfDrawingContext,
   prayer: Prayer,

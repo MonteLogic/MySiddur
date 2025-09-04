@@ -59,14 +59,14 @@
     "defaultText": [0, 0, 0],
     "instructions": [0.4, 0.4, 0.4],
     "dividerLine": [0.5, 0.5, 0.5],
-    "wordMappingColors": [
-      [0.8, 0.0, 0.0],
-      [0.0, 0.5, 0.0],
-      [0.0, 0.0, 0.8],
-      [0.8, 0.5, 0.0],
-      [0.5, 0.0, 0.5],
-      [0.0, 0.5, 0.5]
-    ]
+    "wordMappingColors": {
+      "red": [0.8, 0.0, 0.0],
+      "green": [0.0, 0.5, 0.0],
+      "blue": [0.0, 0.0, 0.8],
+      "orange": [0.8, 0.5, 0.0],
+      "purple": [0.5, 0.0, 0.5],
+      "teal": [0.0, 0.5, 0.5]
+    }
   },
   "layout": {
     "sectionTitleLengthThreshold": 50,
