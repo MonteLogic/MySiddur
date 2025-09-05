@@ -4,7 +4,7 @@
   "scripts": {
     "setup": "git submodule update --init --recursive && cd MySiddur-blog-content && pnpm i",
     "postinstall": "cd MySiddur-blog-content && pnpm install",
-    "build": "pnpm run generate-markdown-paths && next build",
+    "build": "pnpm run generate-markdown-paths && node build-prayer-data.js && next build",
     "dev": "next dev",
     "lint": "next lint",
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
