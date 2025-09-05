@@ -14,9 +14,17 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
     "id": "1-0rwa",
     "title": "Asher Yatzar (Who Formed)"
   },
+  "10-0rw1": {
+    "id": "10-0rw1",
+    "title": "Yehi Ratzon (Daily Guidance)"
+  },
   "2-0rwa": {
     "id": "2-0rwa",
     "title": "Birchot HaShachar (Series of Morning Blessings)"
+  },
+  "2-1rwa": {
+    "id": "2-1rwa",
+    "title": "Birchot HaTorah (Blessings for Torah Study)"
   },
   "40-0rwa": {
     "id": "40-0rwa",

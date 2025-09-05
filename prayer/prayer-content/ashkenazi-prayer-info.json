@@ -36,15 +36,17 @@
             },
             {
               "title": "Birchot HaShachar (Series of Morning Blessings)",
-              "prayer-id":"2-0rwa",
+              "prayer-id": "2-0rwa",
               "sub-prayers": 1
             },
             {
+              "prayer-id": "10-0rw1",
               "title": "Yehi Ratzon (May it be Your will)",
               "hebrew": "וִיהִי רָצוֹן מִלְּפָנֶֽיךָ יְיָ אֱלֹהֵֽינוּ וֵאלֹהֵי אֲבוֹתֵֽינוּ, שֶׁתַּרְגִּילֵֽנוּ בְּתוֹרָתֶֽךָ, וְדַבְּקֵֽנוּ בְּמִצְוֹתֶֽיךָ, וְאַל תְּבִיאֵֽנוּ לֹא לִידֵי חֵטְא, וְלֹא לִידֵי עֲבֵרָה וְעָוֹן, וְלֹא לִידֵי נִסָּיוֹן, וְלֹא לִידֵי בִזָּיוֹן, וְאַל תַּשְׁלֶט בָּֽנוּ יֵֽצֶר הָרָע, וְהַרְחִיקֵֽנוּ מֵאָדָם רָע וּמֵחָבֵר רָע, וְדַבְּקֵֽנוּ בְּיֵֽצֶר הַטּוֹב וּבְמַעֲשִׂים טוֹבִים, וְכֹף אֶת יִצְרֵֽנוּ לְהִשְׁתַּעְבֶּד לָךְ, וּתְנֵֽנוּ הַיּוֹם וּבְכָל יוֹם לְחֵן וּלְחֶֽסֶד וּלְרַחֲמִים בְּעֵינֶֽיךָ וּבְעֵינֵי כָל רוֹאֵֽינוּ, וְתִגְמְlֵֽנוּ חֲסָדִים טוֹבִים. בָּרוּךְ אַתָּה יְיָ, גּוֹמֵל חֲסָדִים טוֹבִים לְעַמּוֹ יִשְׂרָאֵל׃",
               "english": "May it be Your will, ETERNAL our God and God of our ancestors, that You accustom us to Your Torah and attach us to Your commandments. Do not bring us to sin, nor to transgression or iniquity, nor to trial, nor to disgrace. Do not let the evil inclination rule over us. Keep us far from a bad person and a bad friend. Attach us to the good inclination and to good deeds. Compel our inclination to be subservient to You. Grant us today and every day grace, kindness, and mercy in Your eyes and in the eyes of all who see us, and bestow upon us good kindnesses. Blessed are You, ETERNAL, Who bestows good kindnesses upon His people Israel."
             },
             {
+              "prayer-id":"2-1rwa",
               "title": "Birchot HaTorah (Blessings for Torah Study)",
               "parts": [
                 {

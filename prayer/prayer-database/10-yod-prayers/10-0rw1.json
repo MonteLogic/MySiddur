@@ -1,34 +1,34 @@
 {
   "10-0rw1": {
-    "prayer-title": "Yehi Ratzon (May it be Your will)",
+    "prayer-title": "Yehi Ratzon (Daily Guidance)",
     "version": "1.0.0",
-    "date_modified": "2025-09-04T02:30:52-05:00",
-    "Introduction": "A prayer for protection from harm and evil decrees.",
-    "Instruction": "Recited as part of the Tachanun service after the Amidah.",
+    "date_modified": "2025-09-04T05:09:40-05:00",
+    "Introduction": "A prayer for divine guidance, requesting to be aligned with the Torah and commandments, and to be protected from negative influences.",
+    "Instruction": "Recited daily, commonly as part of the morning blessings (Birkat HaShachar).",
     "prayer-id": "10-0rw1",
     "Word Mappings": {
       "0": {
         "hebrew": "יְהִי",
         "english": "May it be",
-        "transliteration": "Y'hi",
+        "transliteration": "Yehi",
         "detailed-array": [[0, [0, 1]]]
       },
       "1": {
         "hebrew": "רָצוֹן",
-        "english": "Your will",
+        "english": "Your will,",
         "transliteration": "ratzon",
         "detailed-array": [[0, [0, 1]]]
       },
       "2": {
-        "hebrew": "מִלְּפָנֶיךָ",
+        "hebrew": "מִלְּפָנֶיךָ,",
         "english": "before You,",
         "transliteration": "mil'fanekha,",
         "detailed-array": [[0, [0, 1]]]
       },
       "3": {
         "hebrew": "יְיָ",
-        "english": "ETERNAL,",
-        "transliteration": "Ad-nai,",
+        "english": "ETERNAL",
+        "transliteration": "Ad-nai",
         "detailed-array": [[0, 0]]
       },
       "4": {
@@ -40,8 +40,8 @@
       "5": {
         "hebrew": "וֵאלֹהֵי",
         "english": "and God of",
-        "transliteration": "v'Elohei",
-        "detailed-array": [[0, [0, 1]]]
+        "transliteration": "ve'Elohei",
+        "detailed-array": [[0, [0, 1, 2]]]
       },
       "6": {
         "hebrew": "אֲבוֹתֵינוּ,",
@@ -50,238 +50,364 @@
         "detailed-array": [[0, [0, 1]]]
       },
       "7": {
-        "hebrew": "שֶׁתַּצִּילֵנוּ",
-        "english": "that You save us",
-        "transliteration": "shetatzileinu",
+        "hebrew": "שֶׁתַּרְגִּילֵנוּ",
+        "english": "that You accustom us",
+        "transliteration": "shetargilenu",
         "detailed-array": [[0, [0, 1]]]
       },
       "8": {
-        "hebrew": "הַיּוֹם",
-        "english": "today",
-        "transliteration": "hayom",
-        "detailed-array": [[0, 0]]
+        "hebrew": "בְּתוֹרָתֶךָ,",
+        "english": "to Your Torah",
+        "transliteration": "b'toratekha,",
+        "detailed-array": [[0, [0, 1]]]
       },
       "9": {
-        "hebrew": "וּבְכָל",
-        "english": "and every",
-        "transliteration": "uv'khol",
+        "hebrew": "וְדַבְּקֵנוּ",
+        "english": "and attach us",
+        "transliteration": "v'dab'kenu",
         "detailed-array": [[0, [0, 1]]]
       },
       "10": {
+        "hebrew": "בְּמִצְוֹתֶיךָ.",
+        "english": "to Your commandments.",
+        "transliteration": "b'mitz'votekha.",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "11": {
+        "hebrew": "וְאַל",
+        "english": "Do",
+        "transliteration": "v'al",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "12": {
+        "hebrew": "תְּבִיאֵנוּ",
+        "english": "not bring us",
+        "transliteration": "t'vi'enu",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "13": {
+        "hebrew": "לֹא",
+        "english": "",
+        "transliteration": "lo",
+        "detailed-array": [[0, 0]]
+      },
+      "14": {
+        "hebrew": "לִידֵי",
+        "english": "to",
+        "transliteration": "lidei",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "15": {
+        "hebrew": "חֵטְא,",
+        "english": "sin,",
+        "transliteration": "chet,",
+        "detailed-array": [[0, 0]]
+      },
+      "16": {
+        "hebrew": "וְלֹא",
+        "english": "nor",
+        "transliteration": "v'lo",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "17": {
+        "hebrew": "לִידֵי",
+        "english": "to",
+        "transliteration": "lidei",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "18": {
+        "hebrew": "עָוֹן,",
+        "english": "transgression or iniquity,",
+        "transliteration": "avon,",
+        "detailed-array": [[0, 0]]
+      },
+      "19": {
+        "hebrew": "וְלֹא",
+        "english": "nor",
+        "transliteration": "v'lo",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "20": {
+        "hebrew": "לִידֵי",
+        "english": "to",
+        "transliteration": "lidei",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "21": {
+        "hebrew": "נִסָּיוֹן,",
+        "english": "trial,",
+        "transliteration": "nisayon,",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "22": {
+        "hebrew": "וְלֹא",
+        "english": "nor",
+        "transliteration": "v'lo",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "23": {
+        "hebrew": "לִידֵי",
+        "english": "to",
+        "transliteration": "lidei",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "24": {
+        "hebrew": "בִזָּיוֹן.",
+        "english": "disgrace.",
+        "transliteration": "bizayon.",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "25": {
+        "hebrew": "וְאַל",
+        "english": "Do not let",
+        "transliteration": "v'al",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "26": {
+        "hebrew": "תַּשְׁלֶט",
+        "english": "rule",
+        "transliteration": "tashlet",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "27": {
+        "hebrew": "בָּנוּ",
+        "english": "over us",
+        "transliteration": "banu",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "28": {
+        "hebrew": "יֵצֶר",
+        "english": "the evil inclination.",
+        "transliteration": "yetzer",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "29": {
+        "hebrew": "הָרָע.",
+        "english": "",
+        "transliteration": "hara.",
+        "detailed-array": [[0, 0]]
+      },
+      "30": {
+        "hebrew": "וְהַרְחִיקֵנוּ",
+        "english": "Keep us far",
+        "transliteration": "v'harchikenu",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "31": {
+        "hebrew": "מֵאָדָם",
+        "english": "from a bad person",
+        "transliteration": "me'adam",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "32": {
+        "hebrew": "רָע",
+        "english": "",
+        "transliteration": "ra",
+        "detailed-array": [[0, 0]]
+      },
+      "33": {
+        "hebrew": "וּמֵחָבֵר",
+        "english": "and a bad friend.",
+        "transliteration": "umechaver",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "34": {
+        "hebrew": "רָע.",
+        "english": "",
+        "transliteration": "ra.",
+        "detailed-array": [[0, 0]]
+      },
+      "35": {
+        "hebrew": "וְדַבְּקֵנוּ",
+        "english": "Attach us",
+        "transliteration": "v'dab'kenu",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "36": {
+        "hebrew": "בְּיֵצֶר",
+        "english": "to the good inclination",
+        "transliteration": "b'yetzer",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "37": {
+        "hebrew": "הַטּוֹב",
+        "english": "",
+        "transliteration": "hatov",
+        "detailed-array": [[0, 0]]
+      },
+      "38": {
+        "hebrew": "וּבְמַעֲשִׂים",
+        "english": "and to good deeds.",
+        "transliteration": "uv'ma'asim",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "39": {
+        "hebrew": "טוֹבִים.",
+        "english": "",
+        "transliteration": "tovim.",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "40": {
+        "hebrew": "וְכֹף",
+        "english": "Compel",
+        "transliteration": "v'chof",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "41": {
+        "hebrew": "אֶת",
+        "english": "",
+        "transliteration": "et",
+        "detailed-array": [[0, 0]]
+      },
+      "42": {
+        "hebrew": "יִצְרֵנוּ",
+        "english": "our inclination",
+        "transliteration": "yitz'renu",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "43": {
+        "hebrew": "לְהִשְׁתַּעְבֶּד",
+        "english": "to be subservient",
+        "transliteration": "l'hishta'bed",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "44": {
+        "hebrew": "לָךְ.",
+        "english": "to You.",
+        "transliteration": "lach.",
+        "detailed-array": [[0, 0]]
+      },
+      "45": {
+        "hebrew": "וּתְנֵנוּ",
+        "english": "Grant us",
+        "transliteration": "ut'nenu",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "46": {
+        "hebrew": "הַיּוֹם",
+        "english": "today",
+        "transliteration": "hayom",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "47": {
+        "hebrew": "וּבְכָל",
+        "english": "and every",
+        "transliteration": "uv'chol",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "48": {
         "hebrew": "יוֹם",
         "english": "day",
         "transliteration": "yom",
         "detailed-array": [[0, 0]]
       },
-      "11": {
-        "hebrew": "וָיוֹם,",
-        "english": "on and on,",
-        "transliteration": "vayom,",
+      "49": {
+        "hebrew": "לְחֵן",
+        "english": "grace,",
+        "transliteration": "l'chen",
         "detailed-array": [[0, 0]]
       },
-      "12": {
-        "hebrew": "מֵעַזּוּת",
-        "english": "from impudence,",
-        "transliteration": "me'azut",
+      "50": {
+        "hebrew": "וּלְחֶסֶד",
+        "english": "kindness,",
+        "transliteration": "ul'chesed",
         "detailed-array": [[0, [0, 1]]]
       },
-      "13": {
-        "hebrew": "פָּנִים",
-        "english": "brazenness",
-        "transliteration": "panim",
-        "detailed-array": [[0, 0]]
-      },
-      "14": {
-        "hebrew": "וּמֵחֻצְפָּה,",
-        "english": "and chutzpah,",
-        "transliteration": "umechutspah,",
+      "51": {
+        "hebrew": "וּלְרַחֲמִים",
+        "english": "and mercy",
+        "transliteration": "ul'rachamim",
         "detailed-array": [[0, [0, 1]]]
       },
-      "15": {
-        "hebrew": "וּמֵאָדָם",
-        "english": "and from an evil person,",
-        "transliteration": "ume'adam",
+      "52": {
+        "hebrew": "בְּעֵינֶיךָ",
+        "english": "in Your eyes",
+        "transliteration": "b'eynekha",
         "detailed-array": [[0, [0, 1]]]
       },
-      "16": {
-        "hebrew": "רָע,",
-        "english": "from a bad person,",
-        "transliteration": "ra,",
-        "detailed-array": [[0, 0]]
-      },
-      "17": {
-        "hebrew": "וּמֵחָבֵר",
-        "english": "and from a bad friend,",
-        "transliteration": "umechaver",
+      "53": {
+        "hebrew": "וּבְעֵינֵי",
+        "english": "and in the eyes",
+        "transliteration": "uv'einei",
         "detailed-array": [[0, [0, 1]]]
       },
-      "18": {
-        "hebrew": "רָע,",
-        "english": "from a bad companion,",
-        "transliteration": "ra,",
+      "54": {
+        "hebrew": "כָל",
+        "english": "of all",
+        "transliteration": "chol",
         "detailed-array": [[0, 0]]
       },
-      "19": {
-        "hebrew": "וּמִשָּׁכֵן",
-        "english": "and from a bad neighbor,",
-        "transliteration": "umishakhen",
+      "55": {
+        "hebrew": "רוֹאֵינוּ.",
+        "english": "who see us,",
+        "transliteration": "ro'einu.",
         "detailed-array": [[0, [0, 1]]]
       },
-      "20": {
-        "hebrew": "רָע,",
-        "english": "from a bad neighbor,",
-        "transliteration": "ra,",
-        "detailed-array": [[0, 0]]
-      },
-      "21": {
-        "hebrew": "וּמִפֶּגַע",
-        "english": "and from a bad accident,",
-        "transliteration": "umipega",
+      "56": {
+        "hebrew": "וְתִגְמְלֵנוּ",
+        "english": "and bestow upon us",
+        "transliteration": "v'tig'm'lenu",
         "detailed-array": [[0, [0, 1]]]
       },
-      "22": {
-        "hebrew": "רָע,",
-        "english": "from a bad incident,",
-        "transliteration": "ra,",
-        "detailed-array": [[0, 0]]
-      },
-      "23": {
-        "hebrew": "וּמֵעַיִן",
-        "english": "and from the evil eye,",
-        "transliteration": "ume'ayin",
+      "57": {
+        "hebrew": "חֲסָדִים",
+        "english": "good kindnesses.",
+        "transliteration": "chasadim",
         "detailed-array": [[0, [0, 1]]]
       },
-      "24": {
-        "hebrew": "הָרָע,",
-        "english": "the evil eye,",
-        "transliteration": "hara,",
-        "detailed-array": [[0, 0]]
-      },
-      "25": {
-        "hebrew": "וּמִלָּשׁוֹן",
-        "english": "and from an evil tongue,",
-        "transliteration": "umilashon",
+      "58": {
+        "hebrew": "טוֹבִים.",
+        "english": "",
+        "transliteration": "tovim.",
         "detailed-array": [[0, [0, 1]]]
       },
-      "26": {
-        "hebrew": "הָרָע,",
-        "english": "the evil tongue,",
-        "transliteration": "hara,",
+      "59": {
+        "hebrew": "בָּרוּךְ",
+        "english": "Blessed",
+        "transliteration": "Baruch",
         "detailed-array": [[0, 0]]
       },
-      "27": {
-        "hebrew": "וּמִמַּלְשִׁינוּת,",
-        "english": "and from slander,",
-        "transliteration": "umimalshinut,",
+      "60": {
+        "hebrew": "אַתָּה",
+        "english": "are You,",
+        "transliteration": "atah",
         "detailed-array": [[0, [0, 1]]]
       },
-      "28": {
-        "hebrew": "וּמֵעֵדוּת",
-        "english": "and from false testimony,",
-        "transliteration": "ume'edut",
+      "61": {
+        "hebrew": "יְיָ,",
+        "english": "ETERNAL,",
+        "transliteration": "Ad-nai,",
+        "detailed-array": [[0, 0]]
+      },
+      "62": {
+        "hebrew": "הַגּוֹמֵל",
+        "english": "Who bestows",
+        "transliteration": "hagomel",
         "detailed-array": [[0, [0, 1]]]
       },
-      "29": {
-        "hebrew": "שֶׁקֶר,",
-        "english": "false testimony,",
-        "transliteration": "sheker,",
-        "detailed-array": [[0, 0]]
-      },
-      "30": {
-        "hebrew": "וּמִשִּׂנְאַת",
-        "english": "and from baseless hatred,",
-        "transliteration": "umisina'at",
+      "63": {
+        "hebrew": "חֲסָדִים",
+        "english": "good kindnesses",
+        "transliteration": "chasadim",
         "detailed-array": [[0, [0, 1]]]
       },
-      "31": {
-        "hebrew": "חִנָּם,",
-        "english": "baseless hatred,",
-        "transliteration": "chinam,",
-        "detailed-array": [[0, 0]]
-      },
-      "32": {
-        "hebrew": "וּמֵאַכְזָרִיּוּת,",
-        "english": "and from cruelty,",
-        "transliteration": "ume'akhzariyut,",
+      "64": {
+        "hebrew": "טוֹבִים",
+        "english": "",
+        "transliteration": "tovim",
         "detailed-array": [[0, [0, 1]]]
       },
-      "33": {
-        "hebrew": "וּמִדִּין",
-        "english": "and from a harsh judgment,",
-        "transliteration": "umidin",
+      "65": {
+        "hebrew": "לְעַמּוֹ",
+        "english": "upon His people",
+        "transliteration": "l'amo",
         "detailed-array": [[0, [0, 1]]]
       },
-      "34": {
-        "hebrew": "קָשֶׁה,",
-        "english": "harsh judgment,",
-        "transliteration": "kasheh,",
-        "detailed-array": [[0, 0]]
-      },
-      "35": {
-        "hebrew": "וּמִבַּעַל",
-        "english": "and from a cruel adversary,",
-        "transliteration": "umiba'al",
+      "66": {
+        "hebrew": "יִשְׂרָאֵל.",
+        "english": "Israel.",
+        "transliteration": "Yisrael.",
         "detailed-array": [[0, [0, 1]]]
-      },
-      "36": {
-        "hebrew": "דִּין",
-        "english": "adversary,",
-        "transliteration": "din",
-        "detailed-array": [[0, 0]]
-      },
-      "37": {
-        "hebrew": "קָשֶׁה,",
-        "english": "cruel,",
-        "transliteration": "kasheh,",
-        "detailed-array": [[0, 0]]
-      },
-      "38": {
-        "hebrew": "בֵּין",
-        "english": "whether",
-        "transliteration": "bein",
-        "detailed-array": [[0, 0]]
-      },
-      "39": {
-        "hebrew": "שֶׁהוּא",
-        "english": "he is",
-        "transliteration": "shehu",
-        "detailed-array": [[0, [0, 1]]]
-      },
-      "40": {
-        "hebrew": "בֶּן",
-        "english": "a son of",
-        "transliteration": "ben",
-        "detailed-array": [[0, 0]]
-      },
-      "41": {
-        "hebrew": "בְּרִית",
-        "english": "the covenant",
-        "transliteration": "brit",
-        "detailed-array": [[0, 0]]
-      },
-      "42": {
-        "hebrew": "וְאֵין",
-        "english": "or not",
-        "transliteration": "v'ein",
-        "detailed-array": [[0, [0, 1]]]
-      },
-      "43": {
-        "hebrew": "שֶׁאֵינוֹ",
-        "english": "he is",
-        "transliteration": "she'eino",
-        "detailed-array": [[0, [0, 1]]]
-      },
-      "44": {
-        "hebrew": "בֶּן",
-        "english": "a son of",
-        "transliteration": "ben",
-        "detailed-array": [[0, 0]]
-      },
-      "45": {
-        "hebrew": "בְּרִית.",
-        "english": "the covenant.",
-        "transliteration": "brit.",
-        "detailed-array": [[0, 0]]
       }
     }
   }
