@@ -33,5 +33,9 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
   "50-0rwa": {
     "id": "50-0rwa",
     "title": "Netilat Yadayim"
+  },
+  "80-0rw1": {
+    "id": "80-0rw1",
+    "title": "Parashat HaTamid (The Daily Offering)"
   }
 };
