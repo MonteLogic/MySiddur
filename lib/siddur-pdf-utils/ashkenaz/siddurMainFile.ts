@@ -125,6 +125,8 @@ const ensureSpaceAndDraw = (
   return { page, y };
 };
 
+// lib/siddur-pdf-utils/ashkenaz/siddurMainFile.ts
+
 export const generateSiddurPDF = async ({
   selectedDate,
   siddurFormat,
@@ -138,7 +140,7 @@ export const generateSiddurPDF = async ({
   );
   const englishFontBytes = await fs.readFile(
     path.join(process.cwd(), 'fonts', 'NotoSans-Regular.ttf'),
-  ); // FIX: Explicitly convert the Buffer to a Uint8Array.
+  );
 
   const hebrewFont = await pdfDoc.embedFont(new Uint8Array(hebrewFontBytes));
   const englishFont = await pdfDoc.embedFont(new Uint8Array(englishFontBytes));
@@ -185,8 +187,6 @@ export const generateSiddurPDF = async ({
   commonPdfParams = { ...commonPdfParams, page, y };
   y -= siddurConfig.verticalSpacing.afterSiddurTitle;
 
-  // REMOVED the buggy "Service" line from here. It is now handled in generateAshkenazContent.
-
   if (userName) {
     lines = calculateTextLines(
       `For: ${userName}`,
@@ -226,6 +226,28 @@ export const generateSiddurPDF = async ({
   } else {
     // Placeholder for other formats
   }
+
+  // START: Add Page Numbers
+  const pages = pdfDoc.getPages();
+  const totalPages = pages.length;
+  for (let i = 0; i < totalPages; i++) {
+    const page = pages[i];
+    const pageNumber = i + 1;
+    const pageNumberText = `${pageNumber} / ${totalPages}`;
+    const fontSize = 10; // A reasonable font size for page numbers
+
+    const textWidth = englishFont.widthOfTextAtSize(pageNumberText, fontSize);
+    const { width: pageWidth } = page.getSize(); // Use a different name to avoid shadowing
+
+    page.drawText(pageNumberText, {
+      x: (pageWidth - textWidth) / 2, // Horizontally centered
+      y: siddurConfig.pdfMargins.bottom / 2, // Positioned in the middle of the bottom margin
+      font: englishFont,
+      size: fontSize,
+      color: rgb(0, 0, 0), // Black color for the text
+    });
+  }
+  // END: Add Page Numbers
 
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;
