@@ -1,3 +1,4 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/prayer-drawing
 /**
  * @file This module is responsible for drawing various types of prayers onto a PDF document using the pdf-lib library.
  * It handles different prayer formats, including simple text, blessings, and multi-part prayers,
