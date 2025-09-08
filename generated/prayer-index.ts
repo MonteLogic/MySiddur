@@ -36,6 +36,6 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
   },
   "80-0rw1": {
     "id": "80-0rw1",
-    "title": "Parashat HaTamid (The Daily Offering)"
+    "title": "Parashat HaTamid (The Daily Offering) - Morning Version"
   }
 };
