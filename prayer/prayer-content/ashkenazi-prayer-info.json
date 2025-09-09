@@ -90,7 +90,6 @@
           "sectionTitle": "Birchot HaShachar (Morning Blessings)",
           "description": "It is customary to recite these blessings upon waking and preparing for the day. Some are said at home, others in the synagogue.",
           "prayers": [
-
             {
               "title": "Elohai Neshamah (My God, the Soul)",
               "hebrew": "אֱלֹהַי, נְשָׁמָה שֶׁנָּתַֽתָּ בִּי טְהוֹרָה הִיא. אַתָּה בְרָאתָהּ, אַתָּה יְצַרְתָּהּ, אַתָּה נְפַחְתָּהּ בִּי, וְאַתָּה מְשַׁמְּרָהּ בְּקִרְבִּי, וְאַתָּה עָתִיד לִטְּלָהּ מִמֶּֽנִּי, וּלְהַחֲזִירָהּ בִּי לֶעָתִיד לָבֹא. כָּל זְמַן שֶׁהַנְּשָׁמָה בְקִרְבִּי, מוֹדֶה אֲנִי לְפָנֶֽיךָ יְיָ אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי, רִבּוֹן כָּל הַמַּעֲשִׂים, אֲדוֹן כָּל הַנְּשָׁמוֹת. בָּרוּךְ אַתָּה יְיָ, הַמַּחֲזִיר נְשָׁמוֹת לִפְגָרִים מֵתִים׃",
@@ -105,6 +104,84 @@
             }
           ]
         },
+
+        {
+          "sectionTitle": "Pesukei D'Zimra (Verses of Praise)",
+          "description": "This section prepares the worshipper for the central prayers by focusing on God's greatness. It is a collection of psalms and biblical verses.",
+          "prayers": [
+            {
+              "title": "Baruch She'amar (Blessed is He Who Spoke) - (בָּרוּךְ שֶׁאָמַר)",
+              "prayer-id": "2-1-bsh-880-(full)-baruch-sheamar",
+              "source": "Talmudic and mystical sources",
+              "hebrew": "בָּרוּךְ שֶׁאָמַר וְהָיָה הָעוֹלָם, בָּרוּךְ הוּא...",
+              "english": "Blessed is He who spoke, and the world came into being. Blessed is He...",
+              "englishCommentary": "Baruch She'amar serves as the formal opening to Pesukei D'Zimra, the 'Verses of Praise.'..."
+            },
+            {
+              "title": "Ashrei (Happy Are They) - (אַשְׁרֵי)",
+              "prayer-id": "1-1-asr-291-(full)-ashrei",
+              "source": "Psalm 145",
+              "hebrew": "אַשְׁרֵי יוֹשְׁבֵי בֵיתֶךָ עוֹד יְהַלְלוּךָ סֶּלָה...",
+              "english": "Happy are those who dwell in Your house; they will yet praise You. Selah...",
+              "englishCommentary": "Ashrei is central to Jewish prayer, recited three times daily..."
+            },
+            {
+              "title": "Psalms 146-150 - (תהילים קמו-קנ)",
+              "prayer-id": "400-1-thm-533-(full)-psalms-146-150",
+              "source": "Psalms 146-150",
+              "hebrew": "(Text of Psalms 146, 147, 148, 149, and 150)",
+              "english": "(Text of Psalms 146, 147, 148, 149, and 150)",
+              "englishCommentary": "This series of five psalms forms the climactic core of Pesukei D'Zimra..."
+            },
+            {
+              "title": "Yishtabach (May Your Name Be Praised) - (יִשְׁתַּבַּח)",
+              "prayer-id": "10-1-yst-705-(full)-yishtabach",
+              "source": "Talmudic and liturgical sources",
+              "hebrew": "יִשְׁתַּבַּח שִׁמְךָ לָעַד מַלְכֵּנוּ...",
+              "english": "May Your name be praised forever, our King...",
+              "englishCommentary": "Yishtabach is the blessing that concludes Pesukei D'Zimra..."
+            }
+          ]
+        },
+
+        {
+          "sectionTitle": "Korbanot (Offerings)",
+          "description": "Selections concerning the daily temple offerings. It is customary to recite some or all of the following.",
+          "prayers": [
+            {
+              "title": "Parashat HaTamid (The Daily Offering) - (פָּרָשַׁת הַתָּמִיד)",
+              "prayer-id": "80-1-pth-381-(full)",
+              "source": "Numbers 28:1-8",
+              "hebrew": "וַיְדַבֵּ֥ר יְיָ אֶל־מֹשֶׁ֥ה לֵּאמֹֽר׃...",
+              "english": "Hashem spoke to Moses, saying:...",
+              "englishCommentary": "Parashat HaTamid is the section from Numbers 28:1-8 that details the Tamid, or the 'continual offering.'..."
+            },
+            {
+              "title": "Eizehu Mekoman (Where is Their Place?) - (אֵיזֶהוּ מְקוֹמָן)",
+              "prayer-id": "1-1-emk-924-(full)-eizehu-mekoman",
+              "source": "Mishnah Zevachim, Chapter 5",
+              "hebrew": "אֵיזֶהוּ מְקוֹמָן שֶׁל זְבָחִים...",
+              "english": "What is the place of sacrifices?...",
+              "englishCommentary": "This passage from the Mishnah details the specific locations within the Temple where different types of sacrifices were brought."
+            },
+            {
+              "title": "Rabbi Yishmael Omer (Rabbi Yishmael Says) - (רַבִּי יִשְׁמָעֵאל אוֹמֵר)",
+              "prayer-id": "200-1-ryo-157-(full)",
+              "source": "Baraitta of Rabbi Yishmael",
+              "hebrew": "רַבִּי יִשְׁמָעֵאל אוֹמֵר: בִּשְׁלֹשׁ עֶשְׂרֵה מִדּוֹת הַתּוֹרָה נִדְרֶשֶׁת...",
+              "english": "Rabbi Yishmael says: The Torah is expounded by thirteen principles:...",
+              "englishCommentary": "This text outlines the thirteen hermeneutic principles used to interpret the Torah, forming a foundational element of Talmudic logic."
+            },
+            {
+              "title": "Yehi Ratzon (May it Be Your Will) - (יְהִי רָצוֹן)",
+              "prayer-id": "10-1-yrz-642-(full)",
+              "hebrew": "יְהִי רָצוֹן מִלְּפָנֶיךָ יְיָ אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ...",
+              "english": "May it be Your will, ETERNAL our God and God of our ancestors...",
+              "englishCommentary": "This short, concluding prayer for the Korbanot section expresses the hope for the rebuilding of the Temple."
+            }
+          ]
+        },
+
         {
           "sectionTitle": "Korbanot (Offerings)",
           "description": "Selections concerning the daily temple offerings. It is customary to recite some or all of the following.",
