@@ -53,7 +53,7 @@ export interface PrayerSection {
 
 // This is the structured data that will be passed to the PDF generator
 export interface SiddurContent {
-  title: string;                  // e.g., "Siddur for Shabbat Shacharit"
+  title: string;                  // e.g., "Siddur for Shabbat Shacharis"
   dateInfo: {
     gregorian: string;
     hebrew: string;

@@ -12,7 +12,11 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
   },
   "1-0rwa": {
     "id": "1-0rwa",
-    "title": "Asher Yatzar (Who Formed)"
+    "title": "Asher Yatzar (Who Formed) - Morning Version"
+  },
+  "1-1rw1-brs": {
+    "id": "1-1rw1-brs",
+    "title": "Baruch She'amar (Blessed is He Who Spoke)"
   },
   "10-0rw1": {
     "id": "10-0rw1",
@@ -34,8 +38,8 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
     "id": "50-0rwa",
     "title": "Netilat Yadayim"
   },
-  "80-0rw1": {
-    "id": "80-0rw1",
-    "title": "Parashat HaTamid (The Daily Offering)"
+  "80-1-pth-381-(full)": {
+    "id": "80-1-pth-381-(full)",
+    "title": "Parashat HaTamid (The Daily Offering) - Morning Version"
   }
 };

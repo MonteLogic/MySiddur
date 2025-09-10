@@ -1,10 +1,14 @@
 {
-  "80-0rw1": {
-    "prayer-title": "Parashat HaTamid (The Daily Offering)",
+  "80-1-pth-381-(full)": {
+    "prayer-title": "Parashat HaTamid (The Daily Offering) - Morning Version",
+    "hebrew-title": "פָּרָשַׁת הַתָּמִיד",
     "version": "1.0.0",
     "date_modified": "2025-09-07T01:54:48-05:00",
     "Introduction": "The biblical passage from Numbers 28:1-8, detailing the instructions for the daily Tamid offering in the Tabernacle and later the Temple.",
-    "Instruction": "Recited as part of the Korbanot (sacrifices) section during the Shacharit (morning) prayer service.",
+    "Instruction": "Recited as part of the Korbanot (sacrifices) section during the Shacharis (morning) prayer service.",
+    "more-info": "The morning Tamid offering was the first official act in the Temple each day.",
+    "when-to-recite": "This prayer in this longer form is said during Shacharis morning davening in the Shul. This may only be said at home when certain Shuls are pressed for time.",
+    "service": "Shacharis",
     "prayer-id": "80-0rw1",
     "Word Mappings": {
       "0": {

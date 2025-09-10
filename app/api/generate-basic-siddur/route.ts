@@ -25,8 +25,13 @@ export async function GET(request: NextRequest) {
 
     const pdfBytes = await generateSiddurPDF(params);
 
-    // Create a NextResponse with the PDF data and correct headers
-    return new NextResponse(pdfBytes, {
+    // FIX: Use a type assertion `as ArrayBuffer` on the buffer property.
+    // This explicitly tells TypeScript to treat the `ArrayBufferLike` object
+    // as a standard `ArrayBuffer`, which satisfies the type requirements
+    // for the Blob constructor and resolves the build error.
+    const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: 'application/pdf' });
+
+    return new NextResponse(blob, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
@@ -44,44 +49,3 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// If you wanted to accept parameters via POST request with a JSON body:
-/*
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json(); // Parse the JSON body
-
-    // Validate body parameters here (e.g., using Zod or similar)
-    const { selectedDate, siddurFormat, userName } = body;
-
-    if (!selectedDate || siddurFormat === undefined) {
-      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
-    }
-
-    const params = {
-      selectedDate,
-      siddurFormat: siddurFormat as SiddurFormat, // Ensure type safety
-      userName,
-    };
-
-    const pdfBytes = await generateSiddurPDF(params);
-
-    return new NextResponse(pdfBytes, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="basic_siddur.pdf"',
-      },
-    });
-
-  } catch (error: any) {
-    if (error instanceof SyntaxError) { // Handle JSON parsing errors
-      return NextResponse.json({ error: 'Invalid JSON payload' }, { status: 400 });
-    }
-    console.error('PDF Generation Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate PDF' },
-      { status: 500 }
-    );
-  }
-}
-*/
