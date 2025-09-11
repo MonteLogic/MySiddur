@@ -1,0 +1,109 @@
+{
+  "siddur-version": "1.0.0",
+  "service": "Shacharis",
+  "day": "Weekday",
+  "display-name": "Shacharis for Weekdays (Full)",
+  "siddurNote": "A complete and ordered structure for the weekday morning prayer service. Each prayer-id links to the full prayer text.",
+  "sections": [
+    {
+      "section-id": "sh-wd-01",
+      "sectionTitle": "Birchot HaShachar (Morning Blessings)",
+      "sectionTitleHebrew": "ברכות השחר",
+      "description": "Preliminary blessings and prayers recited upon waking and at the beginning of the service.",
+      "prayers": [
+        { "prayer-id": "sh-wd-01-01", "title": "Modeh Ani", "hebrewTitle": "מודה אני" },
+        { "prayer-id": "sh-wd-01-02", "title": "Birchot HaTorah", "hebrewTitle": "ברכות התורה" },
+        { "prayer-id": "sh-wd-01-03", "title": "Main Morning Blessings", "hebrewTitle": "ברכות השחר" },
+        { "prayer-id": "sh-wd-01-04", "title": "Yehi Ratzon", "hebrewTitle": "יהי רצון" }
+      ]
+    },
+    {
+      "section-id": "sh-wd-02",
+      "sectionTitle": "Korbanot (Offerings)",
+      "sectionTitleHebrew": "קרבנות",
+      "description": "Readings related to the Temple sacrifices, serving as a spiritual substitute.",
+      "prayers": [
+        { "prayer-id": "sh-wd-02-01", "title": "Parashat HaTamid", "hebrewTitle": "פרשת התמיד" },
+        { "prayer-id": "sh-wd-02-02", "title": "Eizehu Mekoman", "hebrewTitle": "איזהו מקומן" },
+        { "prayer-id": "sh-wd-02-03", "title": "Rabbi Yishmael Omer", "hebrewTitle": "רבי ישמעאל אומר" }
+      ]
+    },
+    {
+      "section-id": "sh-wd-03",
+      "sectionTitle": "Pesukei D'Zimra (Verses of Praise)",
+      "sectionTitleHebrew": "פסוקי דזמרא",
+      "description": "A collection of psalms and praises to prepare for the core part of the service.",
+      "prayers": [
+        { "prayer-id": "sh-wd-03-01", "title": "Baruch She'amar", "hebrewTitle": "ברוך שאמר", "instructions": "Recited standing." },
+        { "prayer-id": "sh-wd-03-02", "title": "Mizmor L'Todah (Psalm 100)", "hebrewTitle": "מזמור לתודה", "omittedOn": ["Erev Pesach", "Chol HaMoed Pesach", "Erev Yom Kippur"] },
+        { "prayer-id": "sh-wd-03-03", "title": "Yehi Chevod", "hebrewTitle": "יהי כבוד" },
+        { "prayer-id": "sh-wd-03-04", "title": "Ashrei (Psalm 145)", "hebrewTitle": "אשרי" },
+        { "prayer-id": "sh-wd-03-05", "title": "Halleluyah Psalms (146-150)", "hebrewTitle": "תהילים קמ\"ו-ק\"ן" },
+        { "prayer-id": "sh-wd-03-06", "title": "Baruch Hashem L'olam", "hebrewTitle": "ברוך ה' לעולם" },
+        { "prayer-id": "sh-wd-03-07", "title": "Vayevarech David", "hebrewTitle": "ויברך דוד" },
+        { "prayer-id": "sh-wd-03-08", "title": "Yishtabach", "hebrewTitle": "ישתבח", "instructions": "Recited standing." }
+      ]
+    },
+    {
+      "section-id": "sh-wd-04",
+      "sectionTitle": "Kriyat Shema and its Blessings",
+      "sectionTitleHebrew": "קריאת שמע וברכותיה",
+      "description": "The declaration of faith and its surrounding blessings.",
+      "prayers": [
+        { "prayer-id": "sh-wd-04-01", "title": "Half-Kaddish", "hebrewTitle": "חצי קדיש" },
+        { "prayer-id": "sh-wd-04-02", "title": "Barchu", "hebrewTitle": "ברכו", "instructions": "Leader chants, congregation responds. Bow." },
+        { "prayer-id": "sh-wd-04-03", "title": "Yotzer Ohr", "hebrewTitle": "יוצר אור", "description": "First blessing before Shema." },
+        { "prayer-id": "sh-wd-04-04", "title": "Ahavah Rabbah", "hebrewTitle": "אהבה רבה", "description": "Second blessing before Shema." },
+        { "prayer-id": "sh-wd-04-05", "title": "Shema Yisrael", "hebrewTitle": "שמע ישראל", "instructions": "First verse said with eyes covered." },
+        { "prayer-id": "sh-wd-04-06", "title": "Emet V'Yatziv", "hebrewTitle": "אמת ויציב", "description": "Blessing after Shema." }
+      ]
+    },
+    {
+      "section-id": "sh-wd-05",
+      "sectionTitle": "Amidah (Shemoneh Esrei)",
+      "sectionTitleHebrew": "עמידה - שמונה עשרה",
+      "description": "The central prayer of the service, recited silently while standing.",
+      "prayers": [
+        { "prayer-id": "sh-wd-05-01", "title": "Silent Amidah", "hebrewTitle": "תפילת לחש", "instructions": "Stand with feet together. Take 3 steps forward before beginning. Bow at specific points." },
+        { "prayer-id": "sh-wd-05-02", "title": "Chazzan's Repetition", "hebrewTitle": "חזרת הש\"ץ", "instructions": "Leader's repetition of the Amidah." },
+        { "prayer-id": "sh-wd-05-03", "title": "Kedusha", "hebrewTitle": "קדושה", "description": "Congregational sanctification within the Repetition.", "instructions": "Recited standing, rising on toes." }
+      ]
+    },
+    {
+      "section-id": "sh-wd-06",
+      "sectionTitle": "Tachanun",
+      "sectionTitleHebrew": "תחנון",
+      "description": "Supplicatory prayers.",
+      "omittedOn": ["Mondays & Thursdays (long Tachanun)", "Rosh Chodesh", "Chanukah", "Purim", "Tu B'Shvat", "and other festive days."],
+      "prayers": [
+        { "prayer-id": "sh-wd-06-01", "title": "Tachanun", "hebrewTitle": "תחנון", "instructions": "Recited seated, with head resting on arm on weekdays (except Mon/Thurs)." }
+      ]
+    },
+    {
+      "section-id": "sh-wd-07",
+      "sectionTitle": "Torah Reading",
+      "sectionTitleHebrew": "קריאת התורה",
+      "description": "Reading of the weekly Torah portion.",
+      "applicableDays": ["Monday", "Thursday"],
+      "prayers": [
+        { "prayer-id": "sh-wd-07-01", "title": "Taking out the Torah", "hebrewTitle": "הוצאת ספר תורה" },
+        { "prayer-id": "sh-wd-07-02", "title": "Torah Blessings (Aliyot)", "hebrewTitle": "ברכות התורה" },
+        { "prayer-id": "sh-wd-07-03", "title": "Returning the Torah", "hebrewTitle": "הכנסת ספר תורה" }
+      ]
+    },
+    {
+      "section-id": "sh-wd-08",
+      "sectionTitle": "Concluding Prayers",
+      "sectionTitleHebrew": "סיום התפילה",
+      "description": "Final prayers of the Shacharis service.",
+      "prayers": [
+        { "prayer-id": "sh-wd-08-01", "title": "Ashrei (Psalm 145)", "hebrewTitle": "אשרי" },
+        { "prayer-id": "sh-wd-08-02", "title": "Uva L'Tzion", "hebrewTitle": "ובא לציון" },
+        { "prayer-id": "sh-wd-08-03", "title": "Kaddish Shalem (Full Kaddish)", "hebrewTitle": "קדיש שלם" },
+        { "prayer-id": "sh-wd-08-04", "title": "Aleinu", "hebrewTitle": "עלינו", "instructions": "Recited standing. Bow." },
+        { "prayer-id": "sh-wd-08-05", "title": "Shir Shel Yom (Psalm of the Day)", "hebrewTitle": "שיר של יום" },
+        { "prayer-id": "sh-wd-08-06", "title": "Kaddish Yatom (Mourner's Kaddish)", "hebrewTitle": "קדיש יתום" }
+      ]
+    }
+  ]
+}
