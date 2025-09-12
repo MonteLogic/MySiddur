@@ -22,6 +22,10 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
     "id": "10-0rw1",
     "title": "Yehi Ratzon (Daily Guidance)"
   },
+  "10-1-yst-705-(full)": {
+    "id": "10-1-yst-705-(full)",
+    "title": "Yishtabach (May He be Praised)"
+  },
   "2-0rwa": {
     "id": "2-0rwa",
     "title": "Birchot HaShachar (Series of Morning Blessings)"
@@ -30,9 +34,17 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
     "id": "2-1rwa",
     "title": "Birchot HaTorah (Blessings for Torah Study)"
   },
+  "200-1-ryo-157-(full)": {
+    "id": "200-1-ryo-157-(full)",
+    "title": "Rabbi Yishmael Omer (Rabbi Yishmael Says) - Full"
+  },
   "40-0rwa": {
     "id": "40-0rwa",
     "title": "Modei Ani"
+  },
+  "400-1thm-533-(full)": {
+    "id": "400-1thm-533-(full)",
+    "title": "Tehilim (Psalms) 146-150"
   },
   "50-0rwa": {
     "id": "50-0rwa",

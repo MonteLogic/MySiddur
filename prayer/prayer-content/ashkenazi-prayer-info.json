@@ -110,13 +110,13 @@
               "version": "1.0.0"
             },
             {
-              "title": "Psalms 146-150",
+              "title": "Tehilim(Psalms) 146-150",
               "hebrew-title": "(תהילים קמו-קנ)",
-              "prayer-id": "400-1-thm-533-(full)-psalms-146-150",
-              "source": "Psalms 146-150",
-              "hebrew": "(Text of Psalms 146, 147, 148, 149, and 150)",
-              "english": "(Text of Psalms 146, 147, 148, 149, and 150)",
-              "englishCommentary": "This series of five psalms forms the climactic core of Pesukei D'Zimra..."
+              "prayer-id": "400-1thm-533-(full)",
+              "source": "Tehilim (Psalms) 146-150",
+              "hebrew": "(Text of Tehilim 146, 147, 148, 149, and 150)",
+              "english": "(Text of Tehilim 146, 147, 148, 149, and 150)",
+              "englishCommentary": "This series of five tehilims forms the climactic core of Pesukei D'Zimra..."
             },
             {
               "title": "Yishtabach (May Your Name Be Praised)",
@@ -145,7 +145,7 @@
             {
               "title": "Eizehu Mekoman (Where is Their Place?)",
               "hebrew-title": "(אֵיזֶהוּ מְקוֹמָן)",
-              "prayer-id": "1-1-emk-924-(full)",
+              "prayer-id": "1-1emk-924-(full)",
               "source": "Mishnah Zevachim, Chapter 5",
               "hebrew": "אֵיזֶהוּ מְקוֹמָן שֶׁל זְבָחִים...",
               "english": "What is the place of sacrifices?...",
