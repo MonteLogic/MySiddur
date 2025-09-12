@@ -14,6 +14,10 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
     "id": "1-0rwa",
     "title": "Asher Yatzar (Who Formed) - Morning Version"
   },
+  "1-1emk-924-(full)": {
+    "id": "1-1emk-924-(full)",
+    "title": "Eizehu Mekoman (Where is Their Place?)"
+  },
   "1-1rw1-brs": {
     "id": "1-1rw1-brs",
     "title": "Baruch She'amar (Blessed is He Who Spoke)"

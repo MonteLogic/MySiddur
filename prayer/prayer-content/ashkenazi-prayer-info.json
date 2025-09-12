@@ -1,5 +1,6 @@
 {
   "siddurTitle": "Siddur for Weekday Shacharis",
+  "description-of-file": "This file is just a generic basic siddur viz. one size fits all.",
   "services": {
     "waking-prayers": {
       "display-name": "Waking Prayers",
