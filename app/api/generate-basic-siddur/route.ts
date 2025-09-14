@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   const formatParam = searchParams.get('format');
   const userNameParam = searchParams.get('userName');
   const dateParam = searchParams.get('date') || new Date().toISOString();
+  const styleParam = searchParams.get('style') || 'Recommended'; // Add style parameter
 
   let siddurFormat: SiddurFormat;
   if (formatParam === 'NusachSefard') {
@@ -21,6 +22,7 @@ export async function GET(request: NextRequest) {
       selectedDate: dateParam,
       siddurFormat: siddurFormat,
       userName: userNameParam || undefined, // Pass undefined if not provided
+      style: styleParam, // Add style parameter
     };
 
     const pdfBytes = await generateSiddurPDF(params);

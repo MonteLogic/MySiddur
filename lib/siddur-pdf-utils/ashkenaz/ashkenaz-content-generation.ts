@@ -23,6 +23,7 @@ export const generateAshkenazContent = (
     englishFont,
     englishBoldFont,
     hebrewFont,
+    style = 'Recommended',
     calculateTextLines,
     ensureSpaceAndDraw,
   } = params;
@@ -135,7 +136,7 @@ export const generateAshkenazContent = (
       context.y -= siddurConfig.verticalSpacing.afterSectionDescription;
 
       for (const prayer of section.prayers as Prayer[]) {
-        context = drawPrayer(context, prayer, params);
+        context = drawPrayer(context, prayer, { ...params, style });
       }
     }
 

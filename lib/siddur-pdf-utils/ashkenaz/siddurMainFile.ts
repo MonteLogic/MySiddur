@@ -31,6 +31,7 @@ interface GenerateSiddurPDFParams {
   selectedDate: string;
   siddurFormat: SiddurFormat;
   userName?: string;
+  style?: string;
 }
 
 const calculateTextLines = (
@@ -131,6 +132,7 @@ export const generateSiddurPDF = async ({
   selectedDate,
   siddurFormat,
   userName,
+  style = 'Recommended',
 }: GenerateSiddurPDFParams): Promise<Uint8Array> => {
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);
@@ -172,6 +174,7 @@ export const generateSiddurPDF = async ({
       ...commonPdfParams,
       page,
       y,
+      style,
       calculateTextLines,
       ensureSpaceAndDraw: (drawingContext, textLines, label) => {
         const completeContext = { ...commonPdfParams, ...drawingContext };

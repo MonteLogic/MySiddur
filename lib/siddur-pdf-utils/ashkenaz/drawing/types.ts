@@ -51,7 +51,10 @@ export interface AshkenazContentGenerationParams {
   /** The bold English font. */
   englishBoldFont: PDFFont;
   /** The Hebrew font. */
-  hebrewFont: PDFFont /** Calculates how to break a string into multiple lines based on width. */;
+  hebrewFont: PDFFont;
+  /** The selected style for prayer display (Recommended or all-transliterated). */
+  style?: string;
+  /** Calculates how to break a string into multiple lines based on width. */;
 
   calculateTextLines: (
     text: string,
