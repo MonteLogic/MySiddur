@@ -1,0 +1,57 @@
+{
+  "siddur-version": "1.0.0",
+  "service": "Shacharis",
+  "day": "Weekday",
+  "display-name": "Shacharis for Weekdays (Sections Overview)",
+  "siddurNote": "An overview of the sections for the weekday morning prayer service. Each section-id corresponds to a more detailed structure.",
+  "sections": [
+    {
+      "section-id": "sh-wd-01",
+      "sectionTitle": "Birchot HaShachar (Morning Blessings)",
+      "sectionTitleHebrew": "ברכות השחר",
+      "description": "Preliminary blessings and prayers recited upon waking and at the beginning of the service."
+    },
+    {
+      "section-id": "sh-wd-02",
+      "sectionTitle": "Korbanot (Offerings)",
+      "sectionTitleHebrew": "קרבנות",
+      "description": "Readings related to the Temple sacrifices, serving as a spiritual substitute."
+    },
+    {
+      "section-id": "sh-wd-03",
+      "sectionTitle": "Pesukei D'Zimra (Verses of Praise)",
+      "sectionTitleHebrew": "פסוקי דזמרא",
+      "description": "A collection of psalms and praises to prepare for the core part of the service."
+    },
+    {
+      "section-id": "sh-wd-04",
+      "sectionTitle": "Kriyat Shema and its Blessings",
+      "sectionTitleHebrew": "קריאת שמע וברכותיה",
+      "description": "The declaration of faith and its surrounding blessings."
+    },
+    {
+      "section-id": "sh-wd-05",
+      "sectionTitle": "Amidah (Shemoneh Esrei)",
+      "sectionTitleHebrew": "עמידה - שמונה עשרה",
+      "description": "The central prayer of the service, recited silently while standing."
+    },
+    {
+      "section-id": "sh-wd-06",
+      "sectionTitle": "Tachanun",
+      "sectionTitleHebrew": "תחנון",
+      "description": "Supplicatory prayers."
+    },
+    {
+      "section-id": "sh-wd-07",
+      "sectionTitle": "Torah Reading",
+      "sectionTitleHebrew": "קריאת התורה",
+      "description": "Reading of the weekly Torah portion."
+    },
+    {
+      "section-id": "sh-wd-08",
+      "sectionTitle": "Concluding Prayers",
+      "sectionTitleHebrew": "סיום התפילה",
+      "description": "Final prayers of the Shacharis service."
+    }
+  ]
+}

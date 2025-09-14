@@ -1,0 +1,603 @@
+Make the "Baruch She'amar (Blessed is He Who Spoke) -" format it in a translation style like:
+
+
+
+{
+
+  "1-0rw1": {
+
+    "prayer-title": "Elohai Neshamah (My God, the Soul)",
+
+    "version": "1.0.0",
+
+    "date_modified": "2025-08-31T02:30:52-05:00",
+
+    "Introduction": "A prayer acknowledging the purity of the soul, recited upon waking.",
+
+    "Instruction": "Recited in the morning blessings, traditionally upon waking.",
+
+    "prayer-id": "1-0rw1",
+
+    "Word Mappings": {
+
+      "0": {
+
+        "hebrew": "אֱלֹהַי,",
+
+        "english": "My God,",
+
+        "transliteration": "Elohai,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "1": {
+
+        "hebrew": "נְשָׁמָה",
+
+        "english": "the soul",
+
+        "transliteration": "neshamah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "2": {
+
+        "hebrew": "שֶׁנָּתַתָּ",
+
+        "english": "which You have given",
+
+        "transliteration": "shenatata",
+
+        "detailed-array": [[0, [0, 1, 2, 3]]]
+
+      },
+
+      "3": {
+
+        "hebrew": "בִּי",
+
+        "english": "in me",
+
+        "transliteration": "bi",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "4": {
+
+        "hebrew": "טְהוֹרָה",
+
+        "english": "pure",
+
+        "transliteration": "t'horah",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "5": {
+
+        "hebrew": "הִיא.",
+
+        "english": "it is.",
+
+        "transliteration": "hi.",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "6": {
+
+        "hebrew": "אַתָּה",
+
+        "english": "You",
+
+        "transliteration": "Atah",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "7": {
+
+        "hebrew": "בְרָאתָהּ,",
+
+        "english": "created it,",
+
+        "transliteration": "v'ratah,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "8": {
+
+        "hebrew": "אַתָּה",
+
+        "english": "You",
+
+        "transliteration": "Atah",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "9": {
+
+        "hebrew": "יְצַרְתָּהּ,",
+
+        "english": "formed it,",
+
+        "transliteration": "y'tzartah,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "10": {
+
+        "hebrew": "אַתָּה",
+
+        "english": "You",
+
+        "transliteration": "Atah",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "11": {
+
+        "hebrew": "נְפַחְתָּהּ",
+
+        "english": "breathed it",
+
+        "transliteration": "n'fachtah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "12": {
+
+        "hebrew": "בִּי,",
+
+        "english": "into me,",
+
+        "transliteration": "bi,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "13": {
+
+        "hebrew": "וְאַתָּה",
+
+        "english": "and You",
+
+        "transliteration": "v'Atah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "14": {
+
+        "hebrew": "מְשַׁמְּרָהּ",
+
+        "english": "preserve it",
+
+        "transliteration": "m'shamrah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "15": {
+
+        "hebrew": "בְּקִרְבִּי,",
+
+        "english": "within me,",
+
+        "transliteration": "b'kirbi,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "16": {
+
+        "hebrew": "וְאַתָּה",
+
+        "english": "and You",
+
+        "transliteration": "v'Atah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "17": {
+
+        "hebrew": "עָתִיד",
+
+        "english": "will eventually",
+
+        "transliteration": "atid",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "18": {
+
+        "hebrew": "לִטְּלָהּ",
+
+        "english": "take it",
+
+        "transliteration": "lit'lah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "19": {
+
+        "hebrew": "מִמֶּנִּי,",
+
+        "english": "from me,",
+
+        "transliteration": "mimeni,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "20": {
+
+        "hebrew": "וּלְהַחֲזִירָהּ",
+
+        "english": "and to restore it",
+
+        "transliteration": "ul'hachazirah",
+
+        "detailed-array": [[0, [0, 1, 2, 3]]]
+
+      },
+
+      "21": {
+
+        "hebrew": "בִּי",
+
+        "english": "to me",
+
+        "transliteration": "bi",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "22": {
+
+        "hebrew": "לֶעָתִיד",
+
+        "english": "in the time",
+
+        "transliteration": "le'atid",
+
+        "detailed-array": [[0, [0, 1, 2]]]
+
+      },
+
+      "23": {
+
+        "hebrew": "לָבוֹא.",
+
+        "english": "to come.",
+
+        "transliteration": "lavo.",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "24": {
+
+        "hebrew": "כָּל",
+
+        "english": "So long",
+
+        "transliteration": "Kol",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "25": {
+
+        "hebrew": "זְמַן",
+
+        "english": "as",
+
+        "transliteration": "z'man",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "26": {
+
+        "hebrew": "שֶׁהַנְּשָׁמָה",
+
+        "english": "the soul",
+
+        "transliteration": "shehaneshamah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "27": {
+
+        "hebrew": "בְקִרְבִּי,",
+
+        "english": "is within me,",
+
+        "transliteration": "b'kirbi,",
+
+        "detailed-array": [[0, [0, 1, 2]]]
+
+      },
+
+      "28": {
+
+        "hebrew": "מוֹדֶה",
+
+        "english": "thank",
+
+        "transliteration": "modeh",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "29": {
+
+        "hebrew": "אֲנִי",
+
+        "english": "I",
+
+        "transliteration": "ani",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "30": {
+
+        "hebrew": "לְפָנֶיךָ,",
+
+        "english": "You,",
+
+        "transliteration": "l'fanekha,",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "31": {
+
+        "hebrew": "יְיָ",
+
+        "english": "ETERNAL,",
+
+        "transliteration": "Ad-nai,",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "32": {
+
+        "hebrew": "אֱלֹהַי",
+
+        "english": "my God",
+
+        "transliteration": "Elohai",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "33": {
+
+        "hebrew": "וֵאלֹהֵי",
+
+        "english": "and God of",
+
+        "transliteration": "v'Elohei",
+
+        "detailed-array": [[0, [0, 1, 2]]]
+
+      },
+
+      "34": {
+
+        "hebrew": "אֲבוֹתַי,",
+
+        "english": "my ancestors,",
+
+        "transliteration": "avotai,",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "35": {
+
+        "hebrew": "רִבּוֹן",
+
+        "english": "Master of",
+
+        "transliteration": "Ribon",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "36": {
+
+        "hebrew": "כָּל",
+
+        "english": "all",
+
+        "transliteration": "kol",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "37": {
+
+        "hebrew": "הַמַּעֲשִׂים,",
+
+        "english": "works,",
+
+        "transliteration": "hama'asim,",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "38": {
+
+        "hebrew": "אֲדוֹן",
+
+        "english": "Lord of",
+
+        "transliteration": "Adon",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "39": {
+
+        "hebrew": "כָּל",
+
+        "english": "all",
+
+        "transliteration": "kol",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "40": {
+
+        "hebrew": "הַנְּשָׁמוֹת.",
+
+        "english": "souls.",
+
+        "transliteration": "haneshamot.",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "41": {
+
+        "hebrew": "בָּרוּךְ",
+
+        "english": "Blessed",
+
+        "transliteration": "Baruch",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "42": {
+
+        "hebrew": "אַתָּה",
+
+        "english": "You are",
+
+        "transliteration": "atah",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "43": {
+
+        "hebrew": "יְיָ,",
+
+        "english": "ETERNAL,",
+
+        "transliteration": "Ad-nai,",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "44": {
+
+        "hebrew": "הַמַּחֲזִיר",
+
+        "english": "Who restores",
+
+        "transliteration": "hamachazir",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "45": {
+
+        "hebrew": "נְשָׁמוֹת",
+
+        "english": "souls",
+
+        "transliteration": "neshamot",
+
+        "detailed-array": [[0, 0]]
+
+      },
+
+      "46": {
+
+        "hebrew": "לִפְגָרִים",
+
+        "english": "to bodies",
+
+        "transliteration": "lifgarim",
+
+        "detailed-array": [[0, [0, 1]]]
+
+      },
+
+      "47": {
+
+        "hebrew": "מֵתִים.",
+
+        "english": "dead.",
+
+        "transliteration": "metim.",
+
+        "detailed-array": [[0, 0]]
+
+      }
+
+    }
+
+  }
+
+}
