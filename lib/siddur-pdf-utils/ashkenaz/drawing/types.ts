@@ -54,7 +54,7 @@ export interface AshkenazContentGenerationParams {
   hebrewFont: PDFFont;
   /** The selected style for prayer display (Recommended or all-transliterated). */
   style?: string;
-  /** Calculates how to break a string into multiple lines based on width. */;
+  /** Calculates how to break a string into multiple lines based on width. */
 
   calculateTextLines: (
     text: string,
