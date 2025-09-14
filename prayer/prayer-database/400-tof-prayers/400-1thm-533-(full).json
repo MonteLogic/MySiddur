@@ -6,11 +6,14 @@
     "Introduction": "The final five psalms of the Book of Psalms, collectively known as the 'Halleluyah Psalms' because each begins and/or ends with the word 'Halleluyah' (Praise Yah). They are a crescendo of praise, recited daily as a significant part of the Pesukei Dezimra (Verses of Praise) in the Shacharit (morning) prayer service.",
     "Instruction": "Recited during Shacharit (morning prayers) as part of Pesukei Dezimra. It is customary to stand while reciting these psalms.",
     "prayer-id": "1-ps146-150",
+    "styles": {
+      "Recommended": ["Hebrew", "English"]
+    },
     "Word Mappings": {
       "0": {
         "hebrew": "הַלְלוּ־יָהּּ",
-        "english": "Praise Yah!",
-        "transliteration": "Hallelu-Yah",
+        "english": "Hallelujah",
+        "transliteration": "Hallelujah",
         "detailed-array": [[146, 1]]
       },
       "1": {
