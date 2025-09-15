@@ -7,10 +7,12 @@ import { uuid } from '#/utils/dbUtils';
 
 interface ChevronAddSampleRouteDataProps {
   onFillData: (data: Route, shifts: ShiftSlot[]) => void;
+  organizationID: string;
 }
 
 const ChevronAddSampleRouteData: React.FC<ChevronAddSampleRouteDataProps> = ({
   onFillData,
+  organizationID,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,7 @@ const ChevronAddSampleRouteData: React.FC<ChevronAddSampleRouteDataProps> = ({
   const handleFillSampleData = () => {
     const sampleRoute: Route = {
       id: uuid(),
+      organizationID: organizationID,
       routeNiceName: sampleRouteData.routeNiceName,
       routeIDFromPostOffice: sampleRouteData.routeIDFromPostOffice,
       dateRouteAcquired: new Date(

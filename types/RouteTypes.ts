@@ -1,10 +1,16 @@
-import { workTimeShift, users, routes } from '#/db/schema';
-import { json } from 'drizzle-orm/pg-core';
-import { WorkTimeShiftType } from '#/types/WorkTimeShiftTypes';
+// Updated types for Clerk metadata-based storage
 
-// Why?
-export type RouteType = typeof routes.$inferSelect;
-export type Route = typeof routes.$inferInsert;
+export interface Route {
+  id: string;
+  organizationID: string;
+  routeNiceName: string;
+  routeIDFromPostOffice?: string;
+  dateRouteAcquired: string;
+  dateAddedToCB: string;
+  img?: string;
+}
+
+export type RouteType = Route;
 
 export interface RouteListRoutePgProps {
   initialRoutes: any;
@@ -12,9 +18,10 @@ export interface RouteListRoutePgProps {
 }
 
 export interface RouteEditAddProps {
-  initialEmployees: typeof users[];
-  initialRoutes: typeof routes[];
+  initialEmployees: User[];
+  initialRoutes: Route[];
 }
+
 export interface RouteListProps {
   initialRoutes: Route[];
   workTime: WorkTimeShiftType[];
@@ -27,7 +34,7 @@ export interface RouteListProps {
   ) => void;
 }
 
-export type FormattedRouteType = [string, string, typeof json | undefined][];
+export type FormattedRouteType = [string, string, any | undefined][];
 
 export interface AddRouteComponentProps {
   handleRouteAdd: (newRoute: AddRouteType) => void;
@@ -42,3 +49,28 @@ export type AddRouteType = {
   dateAddedToCB: string;
   img?: string | null;
 };
+
+// Import types from other files
+export interface User {
+  id: string;
+  clerkID: string;
+  organizationID: string;
+  userNiceName: string;
+  email: string;
+  phone: string;
+  dateHired: string;
+  dateAddedToCB: string;
+  img?: string;
+}
+
+export interface WorkTimeShiftType {
+  id: string;
+  organizationID: string;
+  occupied: boolean;
+  userId: string;
+  shiftWorked: string;
+  dayScheduled: string;
+  dateAddedToCB: string;
+  routeId: string;
+  summary?: string;
+}
