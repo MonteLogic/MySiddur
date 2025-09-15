@@ -19,7 +19,7 @@ export const getSecondMenu = (
       },
       {
         name: 'My Profile',
-        slug: `employees/${userId}`,
+        slug: 'profile',
         description: 'My Profile page.',
       },
       {

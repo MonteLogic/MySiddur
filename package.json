@@ -1,6 +1,6 @@
 {
   "private": true,
-  "packageManager": "pnpm@9.x",
+  "packageManager": "pnpm@10.9.0",
   "scripts": {
     "setup": "git submodule update --init --recursive && cd MySiddur-blog-content && pnpm i",
     "postinstall": "cd MySiddur-blog-content && pnpm install",

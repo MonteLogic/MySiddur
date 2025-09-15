@@ -44,6 +44,34 @@ export interface SerializedEmployee extends User {
   privateMetadata?: string;
 }
 
+// Jewish Learning Profile Types
+export interface JewishLearningProfile {
+  gender?: 'man' | 'woman';
+  nusach?: 'Ashkenaz' | 'Sefard' | 'EdotHaMizrach';
+  hebrewName?: string;
+  learningLevel?: 'beginner' | 'intermediate' | 'advanced';
+  preferredLanguage?: 'hebrew' | 'english' | 'both';
+  includeTransliteration?: boolean;
+  includeEnglishTranslation?: boolean;
+  customPrayers?: string[];
+  notes?: string;
+  updatedAt?: string;
+}
+
+export interface UserProfile extends User {
+  firstName?: string;
+  lastName?: string;
+  emailAddress?: string | null;
+  imageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  privateMetadata?: {
+    subscription?: any;
+    stripeCustomerId?: string;
+    [key: string]: any;
+  } & JewishLearningProfile;
+}
+
 export interface EmployeeShiftInfo {
   selectedEmployeeID: string;
   selectedEmployeeName: string;
