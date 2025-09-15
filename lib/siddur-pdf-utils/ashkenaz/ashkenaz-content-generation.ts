@@ -12,7 +12,7 @@ import { drawDividerLine } from './drawing/drawing-helpers';
 
 export const generateAshkenazContent = (
   params: AshkenazContentGenerationParams,
-): { page: PDFPage; y: number } => {
+): { page: PDFPage; y: number; pageServiceMap: Map<number, string> } => {
   const {
     pdfDoc,
     page,
@@ -42,6 +42,10 @@ export const generateAshkenazContent = (
     },
   };
 
+  // Track which service is on which page
+  const pageServiceMap = new Map<number, string>();
+  let currentPageIndex = 0;
+
   const allServices = [
     ashPrayerInfo.services['waking-prayers'],
     ashPrayerInfo.services.shacharis,
@@ -50,6 +54,9 @@ export const generateAshkenazContent = (
   for (const [serviceIndex, service] of allServices.entries()) {
     if (!service || !Array.isArray(service.sections)) continue;
 
+    // Track the current service for page mapping
+    const currentServiceName = service['display-name'];
+    
     // This line creates the title string.
     // It combines the text "Service: " with the value of "display-name" from your JSON file.
     const serviceTitle = `Service: ${service['display-name']}`;
@@ -61,6 +68,8 @@ export const generateAshkenazContent = (
       siddurConfig.lineSpacing.service,
     );
 
+    // Track page changes during service title drawing
+    const beforePage = context.page;
     ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
       context,
       lines.map((l) => ({
@@ -71,6 +80,13 @@ export const generateAshkenazContent = (
       })),
       serviceTitle,
     ));
+    
+    // If a new page was created, map it to the current service
+    if (context.page !== beforePage) {
+      const newPageIndex = pdfDoc.getPages().indexOf(context.page);
+      pageServiceMap.set(newPageIndex, currentServiceName);
+    }
+    
     context.y -= siddurConfig.verticalSpacing.afterSiddurTitle; // Re-use spacing
 
     for (const section of service.sections) {
@@ -83,6 +99,10 @@ export const generateAshkenazContent = (
       if (context.y < pageBreakThreshold) {
         context.page = context.pdfDoc.addPage();
         context.y = context.height - siddurConfig.pdfMargins.top;
+        
+        // Map the new page to the current service
+        const newPageIndex = pdfDoc.getPages().indexOf(context.page);
+        pageServiceMap.set(newPageIndex, currentServiceName);
       }
 
       // Draw Section Title
@@ -145,5 +165,5 @@ export const generateAshkenazContent = (
     }
   }
 
-  return { page: context.page, y: context.y };
+  return { page: context.page, y: context.y, pageServiceMap };
 };

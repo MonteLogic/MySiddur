@@ -169,8 +169,9 @@ export const generateSiddurPDF = async ({
   // ... (header code remains the same)
 
   // --- Content Generation ---
+  let pageServiceMap = new Map<number, string>();
   if (siddurFormat === SiddurFormat.NusachAshkenaz) {
-    const { page: updatedPage, y: updatedY } = generateAshkenazContent({
+    const { page: updatedPage, y: updatedY, pageServiceMap: contentPageServiceMap } = generateAshkenazContent({
       ...commonPdfParams,
       page,
       y,
@@ -183,13 +184,36 @@ export const generateSiddurPDF = async ({
     });
     page = updatedPage;
     y = updatedY;
+    pageServiceMap = contentPageServiceMap;
   } else {
     // Placeholder for other formats
   }
 
-  // START: Add Page Numbers (Top Right Corner)
+  // START: Add Page Numbers and Service Headings
   const pages = pdfDoc.getPages();
   const totalPages = pages.length;
+  
+  // Ensure the first page is mapped to the first service if not already mapped
+  if (totalPages > 0 && !pageServiceMap.has(0)) {
+    const allServices = [
+      ashPrayerInfo.services['waking-prayers'],
+      ashPrayerInfo.services.shacharis,
+    ];
+    if (allServices[0]) {
+      pageServiceMap.set(0, allServices[0]['display-name']);
+    }
+  }
+  
+  // Fill in any gaps in the page service mapping
+  let lastKnownService = '';
+  for (let i = 0; i < totalPages; i++) {
+    if (pageServiceMap.has(i)) {
+      lastKnownService = pageServiceMap.get(i) || '';
+    } else if (lastKnownService) {
+      pageServiceMap.set(i, lastKnownService);
+    }
+  }
+  
   for (let i = 0; i < totalPages; i++) {
     const page = pages[i];
     const pageNumber = i + 1;
@@ -199,6 +223,7 @@ export const generateSiddurPDF = async ({
     const { width: pageWidth, height: pageHeight } = page.getSize();
     const textWidth = englishFont.widthOfTextAtSize(pageNumberText, fontSize);
 
+    // Draw page number (top right)
     page.drawText(pageNumberText, {
       x: pageWidth - textWidth - margin, // Positioned against the right margin
       y: pageHeight - siddurConfig.pdfMargins.top / 2, // Positioned within the top margin
@@ -206,8 +231,28 @@ export const generateSiddurPDF = async ({
       size: fontSize,
       color: rgb(0, 0, 0),
     });
+    
+    // Draw service heading (top center)
+    const serviceName = pageServiceMap.get(i);
+    if (serviceName) {
+      const serviceHeadingText = serviceName;
+      const serviceHeadingFontSize = siddurConfig.fontSizes.serviceHeading;
+      const serviceHeadingWidth = englishFont.widthOfTextAtSize(serviceHeadingText, serviceHeadingFontSize);
+      
+      page.drawText(serviceHeadingText, {
+        x: (pageWidth - serviceHeadingWidth) / 2, // Centered horizontally
+        y: pageHeight - siddurConfig.pdfMargins.top / 2, // Same vertical position as page number
+        font: englishFont,
+        size: serviceHeadingFontSize,
+        color: rgb(
+          siddurConfig.colors.serviceHeading[0],
+          siddurConfig.colors.serviceHeading[1],
+          siddurConfig.colors.serviceHeading[2]
+        ),
+      });
+    }
   }
-  // END: Add Page Numbers
+  // END: Add Page Numbers and Service Headings
 
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;
