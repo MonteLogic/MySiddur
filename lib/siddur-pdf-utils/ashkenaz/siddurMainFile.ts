@@ -235,7 +235,7 @@ export const generateSiddurPDF = async ({
     // Draw service heading (top center)
     const serviceName = pageServiceMap.get(i);
     if (serviceName) {
-      const serviceHeadingText = serviceName;
+      const serviceHeadingText = "Service: " + serviceName;
       const serviceHeadingFontSize = siddurConfig.fontSizes.serviceHeading;
       const serviceHeadingWidth = englishFont.widthOfTextAtSize(serviceHeadingText, serviceHeadingFontSize);
       
