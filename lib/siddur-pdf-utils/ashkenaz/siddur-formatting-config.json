@@ -38,6 +38,7 @@
   "fontSizes": {
     "siddurTitle": 24,
     "service": 14,
+    "serviceHeading": 10,
     "userName": 12,
     "sectionTitle": 18,
     "sectionDescription": 10,
@@ -59,6 +60,7 @@
     "defaultText": [0, 0, 0],
     "instructions": [0.4, 0.4, 0.4],
     "dividerLine": [0.5, 0.5, 0.5],
+    "serviceHeading": [0.2, 0.2, 0.2],
     "wordMappingColors": {
       "red": [0.8, 0.0, 0.0],
       "green": [0.0, 0.5, 0.0],
