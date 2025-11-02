@@ -1,7 +1,16 @@
-import { routes, workTimeShift, users } from '#/db/schema';
+// Updated types for Clerk metadata-based storage
 
-// WorkTimeShiftData was here.
-export type WorkTimeShiftType = typeof workTimeShift.$inferSelect;
+export interface WorkTimeShiftType {
+  id: string;
+  organizationID: string;
+  occupied: boolean;
+  userId: string;
+  shiftWorked: string;
+  dayScheduled: string;
+  dateAddedToCB: string;
+  routeId: string;
+  summary?: string;
+}
 
 export enum ShiftStatus {
   NOT_WORKED = '',

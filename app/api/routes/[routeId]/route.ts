@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { tursoClient } from '#/db/index';
-import { routes } from '#/db/schema';
-import { eq } from 'drizzle-orm';
+import { ClerkMetadataService } from '#/lib/clerk-metadata-service';
 
 export async function DELETE(
   request: NextRequest,
@@ -15,13 +13,17 @@ export async function DELETE(
   }
 
   try {
-    const db = tursoClient();
-    const deletedRoutes = await db
-      .delete(routes)
-      .where(eq(routes.id, routeId)) // Use the number version
-      .returning();
+    // Get organization ID from the request or headers
+    // You may need to adjust this based on how you pass the organization ID
+    const organizationID = request.headers.get('x-organization-id');
+    
+    if (!organizationID) {
+      return NextResponse.json({ error: 'Organization ID not provided' }, { status: 400 });
+    }
 
-    if (deletedRoutes.length === 0) {
+    const success = await ClerkMetadataService.deleteRoute(organizationID, routeId);
+
+    if (!success) {
       return NextResponse.json({ error: 'Route not found' }, { status: 404 });
     }
 

@@ -1,3 +1,11 @@
-import { routeShiftInfo } from '#/db/schema';
+// Updated types for Clerk metadata-based storage
 
-export type RouteShiftInfoType = typeof routeShiftInfo.$inferSelect;
+export interface RouteShiftInfoType {
+  id: string;
+  organizationID: string;
+  routeId: string;
+  shiftName: string;
+  startTime: string;
+  endTime: string;
+  dateAddedToCB: string;
+}
