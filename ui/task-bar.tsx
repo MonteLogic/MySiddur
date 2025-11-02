@@ -48,6 +48,8 @@ interface PaymentStatusSwitcherProps {
   onManageSubscription?: () => void;
   /** Optional class name for additional styling */
   className?: string;
+  /** If true, renders only the content without the button (for embedded use) */
+  embedded?: boolean;
 }
 
 /**
@@ -87,6 +89,7 @@ const TaskBar: React.FC<PaymentStatusSwitcherProps> = ({
   paymentInfo,
   onManageSubscription,
   className = '',
+  embedded = false,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -120,6 +123,107 @@ const TaskBar: React.FC<PaymentStatusSwitcherProps> = ({
   };
   const { count } = useTimecardsMetadata();
 
+  // Content component that can be reused
+  const TaskBarContent = () => (
+    <>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300">Plan Details</h3>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Current Plan:</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <Link className='text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300' href="/docs/plans" >
+              {paymentInfo?.status.planName || 'No Plan'}
+            </Link>
+          </p>
+        </div>
+        <div>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Subscription Active: {paymentInfo?.status?.isActive ? 'Yes' : 'No'}
+          </p>
+        </div>
+
+        <div>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Expires:{' '}
+            {paymentInfo?.status.expiresAt
+              ? new Date(paymentInfo.status.expiresAt)
+                  .toISOString()
+                  .split('T')[0]
+              : 'N/A'}
+          </p>
+        </div>
+
+        <Suspense>
+          {/* toDo: make this have role: on it without pre-loading a role: which will get in the way of "Loading..." */}
+          <h2 className="text-xl font-medium text-gray-300 dark:text-gray-500">{userRole}</h2>
+        </Suspense>
+        <div>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            Payment Method
+          </p>
+          <p className="mt-1 flex items-center text-sm">
+            <CreditCard className="mr-2 h-4 w-4" aria-hidden="true" />
+          </p>
+        </div>
+
+        <div>
+          <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+            Timecards Generated: {count ?? 'Loading...'}
+          </p>
+          <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+            Timecards Left: 2
+          </p>
+          <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+            Employees: X
+          </p>
+          <Link href="/settings" className="block">
+            <div className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+              View Organization
+            </div>
+          </Link>
+          <div className="space-y-2">
+            {paymentInfo?.status.recentTransactions.map((transaction) => (
+              <div
+                key={transaction.id}
+                className="flex justify-between text-sm"
+              >
+                <span className="font-medium">
+                  ${transaction.amount.toFixed(2)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 border-t border-gray-700 pt-4">
+        <button
+          onClick={() => {
+            onManageSubscription?.();
+            if (!embedded) setIsOpen(false);
+            router.push('/settings');
+          }}
+          className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Manage Subscription
+        </button>
+      </div>
+    </>
+  );
+
+  // If embedded, just render the content without button/dialog
+  if (embedded) {
+    return (
+      <div className={className}>
+        <TaskBarContent />
+      </div>
+    );
+  }
+
+  // Full component with button and dialog
   return (
     <div className={`relative ${className}`}>
       <button
@@ -154,91 +258,7 @@ const TaskBar: React.FC<PaymentStatusSwitcherProps> = ({
         </button>
 
         <div className="p-4" onClick={(e) => e.stopPropagation()}>
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-600">Plan Details</h3>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Current Plan:</p>
-              <p className="mt-1 text-sm text-gray-500">
-                <Link className='text-blue-600 hover:text-blue-800' href="/docs/plans" >
-                  {paymentInfo?.status.planName || 'No Plan'}
-                </Link>
-              </p>
-            </div>
-            <div>
-              <p className="mt-1 text-sm text-gray-500">
-                Subscription Active: {paymentInfo?.status?.isActive ? 'Yes' : 'No'}
-              </p>
-            </div>
-
-            <div>
-              <p className="mt-1 text-sm text-gray-500">
-                Expires:{' '}
-                {paymentInfo?.status.expiresAt
-                  ? new Date(paymentInfo.status.expiresAt)
-                      .toISOString()
-                      .split('T')[0]
-                  : 'N/A'}
-              </p>
-            </div>
-
-            <Suspense>
-              {/* toDo: make this have role: on it without pre-loading a role: which will get in the way of "Loading..." */}
-              <h2 className="text-xl font-medium text-gray-300">{userRole}</h2>
-            </Suspense>
-            <div>
-              <p className="text-sm font-medium text-gray-500">
-                Payment Method
-              </p>
-              <p className="mt-1 flex items-center text-sm">
-                <CreditCard className="mr-2 h-4 w-4" aria-hidden="true" />
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm font-medium text-gray-500">
-                Timecards Generated: {count ?? 'Loading...'}
-              </p>
-              <p className="mb-2 text-sm font-medium text-gray-500">
-                Timecards Left: 2
-              </p>
-              <p className="mb-2 text-sm font-medium text-gray-500">
-                Employees: X
-              </p>
-              <Link href="/settings" className="block">
-                <div className="mb-2 text-sm font-medium text-gray-500">
-                  View Organization
-                </div>
-              </Link>
-              <div className="space-y-2">
-                {paymentInfo?.status.recentTransactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="flex justify-between text-sm"
-                  >
-                    <span className="font-medium">
-                      ${transaction.amount.toFixed(2)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 border-t pt-4">
-            <button
-              onClick={() => {
-                onManageSubscription?.();
-                setIsOpen(false);
-                router.push('/settings');
-              }}
-              className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Manage Subscription
-            </button>
-          </div>
+          <TaskBarContent />
         </div>
       </dialog>
     </div>

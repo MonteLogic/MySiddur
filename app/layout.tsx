@@ -1,5 +1,4 @@
 import '#/styles/globals.css';
-import { AddressBar } from '#/ui/address-bar';
 import Byline from '#/ui/byline';
 import { GlobalNav } from '#/ui/global-nav';
 import { Metadata } from 'next';
@@ -28,9 +27,19 @@ export const metadata: Metadata = {
 };
 
 const getUserData = cache(async () => {
-  const { userId: clerkUserId } = auth();
+  try {
+    const { userId: clerkUserId } = auth();
 
-  if (!clerkUserId) {
+    if (!clerkUserId) {
+      return {
+        title: 'No user logged in',
+        description: 'This description comes from the server',
+        userID: '',
+        dbUserId: null,
+      };
+    }
+  } catch (error) {
+    // Clerk not configured or failed to load
     return {
       title: 'No user logged in',
       description: 'This description comes from the server',
@@ -47,29 +56,36 @@ export default async function RootLayout({
 }>) {
   const userData = await getUserData();
 
-  return (
-    <ClerkProvider>
-      <html lang="en" className="dark [color-scheme:dark]">
-        <body className="bg-gray-1100 overflow-y-scroll bg-[url('/grid.svg')] pb-36">
-          <GlobalNav userData={userData} />
-          <div className="lg:pl-72">
-            <div className="mx-auto max-w-4xl space-y-8 px-2 pt-20 lg:px-8 lg:py-8">
-              <div className="bg-vc-border-gradient rounded-lg p-px shadow-lg shadow-black/20">
-                <div className="rounded-lg bg-black">
-                  <AddressBar />
-                </div>
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+  const content = (
+    <html lang="en" className="dark [color-scheme:dark]">
+      <body className="bg-gray-1100 overflow-y-scroll bg-[url('/grid.svg')] pb-36">
+        <GlobalNav userData={userData} />
+        <div className="pt-14 lg:pl-72">
+          <div className="mx-auto max-w-4xl space-y-8 px-2 pt-6 lg:px-8 lg:py-8">
+            <div className="bg-vc-border-gradient rounded-lg p-px shadow-lg shadow-black/20">
+              <div className="rounded-lg bg-black p-3.5 lg:p-6">
+                {children}
+                <Analytics />
               </div>
-              <div className="bg-vc-border-gradient rounded-lg p-px shadow-lg shadow-black/20">
-                <div className="rounded-lg bg-black p-3.5 lg:p-6">
-                  {children}
-                  <Analytics />
-                </div>
-              </div>
-              <Byline className="fixed sm:hidden" />
             </div>
+            <Byline className="fixed sm:hidden" />
           </div>
-        </body>
-      </html>
+        </div>
+      </body>
+    </html>
+  );
+
+  // Only wrap with ClerkProvider if we have a publishable key
+  if (!publishableKey) {
+    console.warn('NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is not set in environment variables. Clerk features will be disabled.');
+    return content;
+  }
+
+  return (
+    <ClerkProvider publishableKey={publishableKey}>
+      {content}
     </ClerkProvider>
   );
 }
