@@ -75,6 +75,7 @@ export default function MyProfilePage() {
 
       if (response.ok) {
         // Reload user data to get updated publicMetadata
+        if (!user) return;
         await user.reload();
         const publicMetadata = user.publicMetadata as any || {};
         setProfile({
