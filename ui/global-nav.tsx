@@ -2,7 +2,7 @@
 import { getSecondMenu, useResolveSlug, type Item } from '#/lib/second-menu';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { MenuAlt2Icon, XIcon } from '@heroicons/react/solid';
+import { XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import { useState, useRef, useEffect } from 'react';
 import Byline from './byline';
@@ -20,43 +20,266 @@ interface GlobalNavProps {
   subscriptionData?: any;
 }
 
-export function GlobalNav({ userData, subscriptionData }: GlobalNavProps): JSX.Element {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const profileMenuRef = useRef<HTMLDivElement>(null);
-  const { session, isLoaded } = useSession();
+interface ProfileMenuProps {
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  subscriptionData?: any;
+}
+
+interface SearchBarProps {
+  className?: string;
+}
+
+interface IconButtonProps {
+  onClick?: () => void;
+  'aria-label': string;
+  icon: React.ReactNode;
+  className?: string;
+}
+
+// Reusable Icon Button Component
+function IconButton({ onClick, 'aria-label': ariaLabel, icon, className = '' }: IconButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={clsx(
+        'h-9 w-9 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors',
+        className
+      )}
+      aria-label={ariaLabel}
+    >
+      {icon}
+    </button>
+  );
+}
+
+// Search Bar Component
+function SearchBar({ className = '' }: SearchBarProps) {
+  return (
+    <div className={clsx('relative w-full', className)}>
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+      <input
+        type="text"
+        placeholder="Search"
+        className="w-full pl-10 pr-4 py-2 rounded-full bg-gray-800 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  );
+}
+
+// Profile Avatar Component
+function ProfileAvatar({ size = 36 }: { size?: number }) {
   const { user, isLoaded: isUserLoaded } = useUser();
-  const close = () => setIsOpen(false);
 
-  const secondMenu = getSecondMenu(userData?.userID || '');
-  const resolveSlug = useResolveSlug();
+  if (!isUserLoaded) {
+    return <div className="h-full w-full bg-gray-600 animate-pulse" />;
+  }
 
-  // Close profile menu when clicking outside
+  if (user?.imageUrl) {
+    return (
+      <Image
+        src={user.imageUrl}
+        alt={user.fullName || 'User avatar'}
+        width={size}
+        height={size}
+        className="rounded-full"
+      />
+    );
+  }
+
+  if (user) {
+    const initial = user?.firstName?.[0] || 
+                   user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 
+                   'U';
+    return (
+      <div className="h-full w-full bg-gray-600 flex items-center justify-center text-white text-sm font-medium">
+        {initial}
+      </div>
+    );
+  }
+
+  return <div className="h-full w-full bg-gray-600 animate-pulse" />;
+}
+
+// Profile Menu Dropdown Content
+function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
+  const { user, isLoaded: isUserLoaded } = useUser();
+
+  return (
+    <div className="p-4">
+      {isUserLoaded && user && (
+        <div className="mb-4 pb-4 border-b border-gray-700 flex items-center gap-x-3">
+          {user?.imageUrl ? (
+            <Image
+              src={user.imageUrl}
+              alt={user.fullName || 'User avatar'}
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          ) : (
+            <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-white text-sm font-medium">
+              {user?.firstName?.[0] || user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 'U'}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-200 truncate">
+              {user?.fullName || user?.firstName || 'User'}
+            </p>
+            <p className="text-xs text-gray-400 truncate">
+              {user?.emailAddresses[0]?.emailAddress}
+            </p>
+          </div>
+          <UserButton 
+            afterSignOutUrl="/" 
+            appearance={{
+              elements: {
+                avatarBox: "h-8 w-8"
+              }
+            }} 
+          />
+        </div>
+      )}
+      <ClerkLoading>Loading ...</ClerkLoading>
+      <TaskBar
+        embedded={true}
+        paymentInfo={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
+          status: {
+            isActive: subscriptionData.status.isActive,
+            planId: subscriptionData.status.planId,
+            expiresAt: subscriptionData.status.expiresAt,
+            planName: subscriptionData.status.planName,
+            recentTransactions: [],
+          },
+        } : undefined}
+      />
+    </div>
+  );
+}
+
+// Profile Menu Component
+function ProfileMenu({ isOpen, onToggle, onClose, subscriptionData }: ProfileMenuProps) {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const { session, isLoaded } = useSession();
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
-        setIsProfileMenuOpen(false);
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        onClose();
       }
     };
-    
-    if (isProfileMenuOpen) {
+
+    if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isProfileMenuOpen]);
+  }, [isOpen, onClose]);
+
+  if (!isLoaded) {
+    return <div className="h-9 w-9 rounded-full bg-gray-800 animate-pulse" />;
+  }
+
+  if (!session) {
+    return (
+      <Link 
+        href={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? '/sign-in'} 
+        className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+      >
+        Sign In
+      </Link>
+    );
+  }
 
   return (
-    <div className="fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 bg-black lg:bottom-0 lg:z-auto lg:w-72 lg:border-b-0 lg:border-r lg:border-gray-800">
-      {/* Top Bar - Facebook mobile style */}
-      <div className="flex h-14 items-center justify-between px-4 bg-black border-b border-gray-800 lg:border-b-0">
-        {/* Left: Logo */}
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onToggle();
+        }}
+        className="flex items-center gap-x-1 h-9 px-1 rounded-lg hover:bg-gray-800 transition-colors"
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        type="button"
+      >
+        <div className="h-9 w-9 rounded-full overflow-hidden border-2 border-transparent hover:border-blue-500 transition-colors bg-gray-700 flex items-center justify-center">
+          <ProfileAvatar size={36} />
+        </div>
+        <ChevronDown 
+          className={clsx(
+            'h-4 w-4 text-gray-300 transition-transform',
+            isOpen && 'rotate-180'
+          )}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-80 rounded-lg border border-gray-700 bg-gray-900 shadow-lg z-50 max-h-[80vh] overflow-y-auto">
+          <ProfileMenuContent subscriptionData={subscriptionData} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Navigation Menu Component
+function NavigationMenu({ 
+  menu, 
+  onClose, 
+  resolveSlug 
+}: { 
+  menu: ReturnType<typeof getSecondMenu>;
+  onClose: () => void;
+  resolveSlug: ReturnType<typeof useResolveSlug>;
+}) {
+  return (
+    <nav className="space-y-6 px-2 pb-24 pt-5">
+      {menu.map((section) => (
+        <div key={section.name}>
+          <div className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-400/80">
+            {section.name}
+          </div>
+          <div className="space-y-1">
+            {section.items.map((item) => (
+              <GlobalNavItem
+                key={item.slug}
+                item={item}
+                close={onClose}
+                resolveSlug={resolveSlug}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+export function GlobalNav({ userData, subscriptionData }: GlobalNavProps): JSX.Element {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  
+  const secondMenu = getSecondMenu(userData?.userID || '');
+  const resolveSlug = useResolveSlug();
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
+  const closeProfileMenu = () => setIsProfileMenuOpen(false);
+
+  return (
+    <>
+      {/* Top Navigation Bar - Always horizontal, fixed at top */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex h-14 items-center justify-between px-4 bg-black border-b border-gray-800">
+        {/* Logo */}
         <Link
           href="/"
           className="group flex items-center gap-x-2.5"
-          onClick={close}
+          onClick={closeMobileMenu}
         >
           <div className="h-8 w-8 rounded-full border border-white/30 group-hover:border-white/50 flex items-center justify-center bg-blue-600">
             <CBudLogo />
@@ -66,192 +289,85 @@ export function GlobalNav({ userData, subscriptionData }: GlobalNavProps): JSX.E
           </h3>
         </Link>
 
-        {/* Right: Icon Buttons - Only show on mobile, hide on desktop where sidebar exists */}
-        <div className="flex items-center gap-x-2 lg:hidden">
-          {/* Search Icon */}
-          <button 
-            className="h-9 w-9 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors"
-            aria-label="Search"
-          >
-            <Search className="h-5 w-5 text-gray-300" />
-          </button>
-
-          {/* Grid/Menu Icon - Toggles navigation menu */}
-          <button 
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="h-9 w-9 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors"
-            aria-label="Menu"
-          >
-            {isOpen ? (
-              <XIcon className="h-5 w-5 text-gray-300" />
-            ) : (
-              <Grid3x3 className="h-5 w-5 text-gray-300" />
-            )}
-          </button>
-
-          {/* Notifications Icon */}
-          <button 
-            className="h-9 w-9 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors relative"
-            aria-label="Notifications"
-          >
-            <Bell className="h-5 w-5 text-gray-300" />
-            {/* Optional: Add notification badge */}
-          </button>
-
-          {/* Profile Button with Popout Menu */}
-          {isLoaded && session ? (
-            <div className="relative" ref={profileMenuRef}>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsProfileMenuOpen(!isProfileMenuOpen);
-                }}
-                className="flex items-center gap-x-1 h-9 px-1 rounded-lg hover:bg-gray-800 transition-colors"
-                aria-expanded={isProfileMenuOpen}
-                aria-haspopup="dialog"
-                type="button"
-              >
-                <div className="h-9 w-9 rounded-full overflow-hidden border-2 border-transparent hover:border-blue-500 transition-colors bg-gray-700 flex items-center justify-center">
-                  {isUserLoaded && user?.imageUrl ? (
-                    <Image
-                      src={user.imageUrl}
-                      alt={user.fullName || 'User avatar'}
-                      width={36}
-                      height={36}
-                      className="rounded-full"
-                    />
-                  ) : isUserLoaded && user ? (
-                    <div className="h-full w-full bg-gray-600 flex items-center justify-center text-white text-sm font-medium">
-                      {user?.firstName?.[0] || user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 'U'}
-                    </div>
-                  ) : (
-                    <div className="h-full w-full bg-gray-600 animate-pulse"></div>
-                  )}
-                </div>
-                <ChevronDown 
-                  className={`h-4 w-4 text-gray-300 transition-transform ${
-                    isProfileMenuOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {/* Popout Menu with Business Logic */}
-              {isProfileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-80 rounded-lg border border-gray-700 bg-gray-900 shadow-lg z-50 max-h-[80vh] overflow-y-auto">
-                  <div className="p-4">
-                    {isUserLoaded && user && (
-                      <div className="mb-4 pb-4 border-b border-gray-700 flex items-center gap-x-3">
-                        {user?.imageUrl ? (
-                          <Image
-                            src={user.imageUrl}
-                            alt={user.fullName || 'User avatar'}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
-                          />
-                        ) : (
-                          <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-white text-sm font-medium">
-                            {user?.firstName?.[0] || user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 'U'}
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-200 truncate">
-                            {user?.fullName || user?.firstName || 'User'}
-                          </p>
-                          <p className="text-xs text-gray-400 truncate">
-                            {user?.emailAddresses[0]?.emailAddress}
-                          </p>
-                        </div>
-                        <UserButton afterSignOutUrl="/" appearance={{
-                          elements: {
-                            avatarBox: "h-8 w-8"
-                          }
-                        }} />
-                      </div>
-                    )}
-                    <ClerkLoading>Loading ...</ClerkLoading>
-                    <TaskBar
-                      embedded={true}
-                      paymentInfo={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
-                        status: {
-                          isActive: subscriptionData.status.isActive,
-                          planId: subscriptionData.status.planId,
-                          expiresAt: subscriptionData.status.expiresAt,
-                          planName: subscriptionData.status.planName,
-                          recentTransactions: [],
-                        },
-                      } : undefined}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : isLoaded && !session ? (
-            <Link 
-              href={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? '/sign-in'} 
-              className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              Sign In
-            </Link>
-          ) : (
-            <div className="h-9 w-9 rounded-full bg-gray-800 animate-pulse"></div>
-          )}
+        {/* Center: Search Bar - Desktop only */}
+        <div className="hidden lg:flex lg:flex-1 lg:max-w-md lg:mx-4">
+          <SearchBar />
         </div>
 
-        {/* Desktop: Show UserButton and TaskBar in sidebar header */}
-        <div className="hidden lg:flex lg:items-center lg:gap-x-2 lg:ml-auto lg:pr-4">
-          {isLoaded && session && (
-            <>
-              <UserButton afterSignOutUrl="/" />
-              <div className="text-white">
-                <TaskBar
-                  paymentInfo={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
-                    status: {
-                      isActive: subscriptionData.status.isActive,
-                      planId: subscriptionData.status.planId,
-                      expiresAt: subscriptionData.status.expiresAt,
-                      planName: subscriptionData.status.planName,
-                      recentTransactions: [],
-                    },
-                  } : undefined}
-                />
-              </div>
-            </>
-          )}
+        {/* Right Actions */}
+        <div className="flex items-center gap-x-2">
+          {/* Mobile Actions */}
+          <div className="flex items-center gap-x-2 lg:hidden">
+            <IconButton
+              onClick={() => {}}
+              aria-label="Search"
+              icon={<Search className="h-5 w-5 text-gray-300" />}
+            />
+            <IconButton
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Menu"
+              icon={
+                isMobileMenuOpen ? (
+                  <XIcon className="h-5 w-5 text-gray-300" />
+                ) : (
+                  <Grid3x3 className="h-5 w-5 text-gray-300" />
+                )
+              }
+            />
+            <IconButton
+              onClick={() => {}}
+              aria-label="Notifications"
+              icon={<Bell className="h-5 w-5 text-gray-300" />}
+            />
+            <ProfileMenu
+              isOpen={isProfileMenuOpen}
+              onToggle={toggleProfileMenu}
+              onClose={closeProfileMenu}
+              subscriptionData={subscriptionData}
+            />
+          </div>
+
+          {/* Desktop Actions */}
+          <div className="hidden lg:flex lg:items-center lg:gap-x-2">
+            <IconButton
+              onClick={() => {}}
+              aria-label="Notifications"
+              icon={<Bell className="h-5 w-5 text-gray-300" />}
+            />
+            <ProfileMenu
+              isOpen={isProfileMenuOpen}
+              onToggle={toggleProfileMenu}
+              onClose={closeProfileMenu}
+              subscriptionData={subscriptionData}
+            />
+          </div>
         </div>
       </div>
-      <div
-        className={clsx('overflow-y-auto lg:static lg:block', {
-          'fixed inset-x-0 bottom-0 top-14 mt-px bg-black': isOpen,
-          hidden: !isOpen,
-        })}
-      >
-        <nav className="space-y-6 px-2 pb-24 pt-5">
-          {secondMenu.map((section) => {
-            return (
-              <div key={section.name}>
-                <div className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-400/80">
-                  <div>{section.name}</div>
-                </div>
-                <div className="space-y-1">
-                  {section.items.map((item) => (
-                    <GlobalNavItem
-                      key={item.slug}
-                      item={item}
-                      close={close}
-                      resolveSlug={resolveSlug}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </nav>
+
+      {/* Left Sidebar - Desktop only, fixed below top bar */}
+      <div className="hidden lg:block lg:fixed lg:top-14 lg:left-0 lg:bottom-0 lg:z-40 lg:w-72 lg:border-r lg:border-gray-800 lg:bg-black lg:overflow-y-auto">
+        <NavigationMenu
+          menu={secondMenu}
+          onClose={closeMobileMenu}
+          resolveSlug={resolveSlug}
+        />
         <Byline className="absolute hidden sm:block" />
       </div>
-    </div>
+
+      {/* Mobile Navigation Overlay */}
+      <div
+        className={clsx('lg:hidden overflow-y-auto', {
+          'fixed inset-x-0 bottom-0 top-14 mt-px bg-black z-40': isMobileMenuOpen,
+          hidden: !isMobileMenuOpen,
+        })}
+      >
+        <NavigationMenu
+          menu={secondMenu}
+          onClose={closeMobileMenu}
+          resolveSlug={resolveSlug}
+        />
+      </div>
+    </>
   );
 }
 
