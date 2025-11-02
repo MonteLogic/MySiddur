@@ -15,6 +15,14 @@ interface ProfileUpdateData {
   includeEnglishTranslation?: boolean;
   customPrayers?: string[];
   notes?: string;
+  // Siddur Generation Settings
+  wordMappingInterval?: number;
+  wordMappingStartIndex?: number;
+  showWordMappingSubscripts?: boolean;
+  includeIntroduction?: boolean;
+  includeInstructions?: boolean;
+  fontSizeMultiplier?: number;
+  pageMargins?: 'tight' | 'normal' | 'wide';
 }
 
 export async function PATCH(request: NextRequest) {
@@ -29,7 +37,7 @@ export async function PATCH(request: NextRequest) {
 
     // Get current user to access existing metadata
     const user = await clerkClient.users.getUser(userId);
-    const currentMetadata = user.privateMetadata || {};
+    const currentMetadata = user.publicMetadata || {};
 
     // Prepare the updated metadata
     const updatedMetadata = {
@@ -40,7 +48,7 @@ export async function PATCH(request: NextRequest) {
 
     // Update user with new metadata
     await clerkClient.users.updateUser(userId, {
-      privateMetadata: updatedMetadata,
+      publicMetadata: updatedMetadata,
     });
 
     // Also update basic user info if provided

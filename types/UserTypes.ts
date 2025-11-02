@@ -56,6 +56,14 @@ export interface JewishLearningProfile {
   customPrayers?: string[];
   notes?: string;
   updatedAt?: string;
+  // Siddur Generation Settings
+  wordMappingInterval?: number; // Every N words to map (default 1 = every word)
+  wordMappingStartIndex?: number; // Starting from which word index (default 0)
+  showWordMappingSubscripts?: boolean; // Show subscripts on mapped words (default true)
+  includeIntroduction?: boolean; // Include introduction text (default true)
+  includeInstructions?: boolean; // Include instruction text (default true)
+  fontSizeMultiplier?: number; // Multiplier for all font sizes (default 1.0)
+  pageMargins?: 'tight' | 'normal' | 'wide'; // Page margin preset (default 'normal')
 }
 
 export interface UserProfile extends User {
