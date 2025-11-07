@@ -537,7 +537,7 @@ const drawThreeColumnColorMappedPrayer = (
   let colorIndex = 0;
   let cycleCount = 1;
   // This flag tracks if we've shown the ONE subscript for the English column in this cycle
-  let hasShownEnglishSubscriptThisCycle = false; // <-- MODIFIED LOGIC
+  let hasShownEnglishSubscriptThisCycle = false;
   // --- END: CYCLE SUBSCRIPT LOGIC ---
 
   const showSubscripts = (_params as any).showWordMappingSubscripts !== false;
@@ -577,18 +577,25 @@ const drawThreeColumnColorMappedPrayer = (
     // --- START: NEW SUBSCRIPT LOGIC ---
     const colorData = MAPPED_COLORS_DATA[colorIndex];
     const color = colorData.color;
-    const fullSubscript = `${colorData.id}${cycleCount}`;
+
+    // --- MODIFICATION: Add asterisk to the first pairing of EACH cycle ---
+    // Add an asterisk to the first subscript of *every* cycle (e.g., r1*, r2*, etc.)
+    const isFirstOfCycle = colorIndex === 0;
+    const asterisk = isFirstOfCycle && showSubscripts ? '*' : '';
+    const fullSubscript = `${colorData.id}${cycleCount}${asterisk}`;
+    // --- END MODIFICATION ---
 
     // 2. Determine subscript for English (only show once per *cycle*)
     let englishSubscript: string | undefined = undefined;
     // We only show the subscript if subscripts are enabled AND
     // we have NOT shown a subscript for this cycle yet.
-    if (showSubscripts && !hasShownEnglishSubscriptThisCycle) { // <-- MODIFIED LOGIC
-      englishSubscript = fullSubscript;
+    if (showSubscripts && !hasShownEnglishSubscriptThisCycle) {
+      englishSubscript = fullSubscript; // This will be "r1*", "r2*", etc.
       hasShownEnglishSubscriptThisCycle = true; // Set the flag for the rest of this cycle
     }
 
     // 3. Transliteration & Hebrew always get the full subscript
+    // This will be "r1*", "g1", "b1" ... "r2*", "g2", "b2" ...
     const fullColumnSubscript = showSubscripts ? fullSubscript : undefined;
 
     // 4. Increment cycler state
@@ -644,7 +651,7 @@ const drawThreeColumnColorMappedPrayer = (
       const enSubscriptSize = englishFontSize * 0.6;
       const enSubscriptFont = fonts.english;
       const enSubscriptWidth = enSubscriptFont.widthOfTextAtSize(
-        englishSubscript,
+        englishSubscript, // This will be "r1*", "r2*", etc.
         enSubscriptSize,
       );
       if (
@@ -702,7 +709,7 @@ const drawThreeColumnColorMappedPrayer = (
       const trSubscriptSize = translitFontSize * 0.6;
       const trSubscriptFont = fonts.english;
       const trSubscriptWidth = trSubscriptFont.widthOfTextAtSize(
-        fullColumnSubscript,
+        fullColumnSubscript, // This will be "r1*", "g1", "r2*", etc.
         trSubscriptSize,
       );
       if (
@@ -757,7 +764,7 @@ const drawThreeColumnColorMappedPrayer = (
       const heSubscriptSize = hebrewFontSize * 0.6;
       const heSubscriptFont = fonts.english;
       const heSubscriptWidth = heSubscriptFont.widthOfTextAtSize(
-        fullColumnSubscript,
+        fullColumnSubscript, // This will be "r1*", "g1", "r2*", etc.
         heSubscriptSize,
       );
       if (currentHebrewX - heSubscriptWidth < hebrewColumnStart) {
