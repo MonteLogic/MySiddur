@@ -81,6 +81,10 @@ export const drawIntroductionInstruction = (
   // Use a mutable context object for clearer state management
   let currentContext = { ...context };
 
+  // Check user settings for including introduction and instructions
+  const includeIntroduction = (params as any).includeIntroduction !== false;
+  const includeInstructions = (params as any).includeInstructions !== false;
+
   const instructionStyles = {
     fontSize: 10,
     lineHeight: 13,
@@ -120,11 +124,15 @@ export const drawIntroductionInstruction = (
     currentContext.y -= siddurConfig.verticalSpacing.betweenInstructions;
   };
 
-  drawLabeledText('Introduction', prayerData.Introduction);
-  drawLabeledText('Instruction', prayerData.Instruction);
+  if (includeIntroduction) {
+    drawLabeledText('Introduction', prayerData.Introduction);
+  }
+  if (includeInstructions) {
+    drawLabeledText('Instruction', prayerData.Instruction);
+  }
 
   // This space will now apply after both instructions and their spacing are drawn.
-  if (prayerData.Introduction || prayerData.Instruction) {
+  if ((includeIntroduction && prayerData.Introduction) || (includeInstructions && prayerData.Instruction)) {
     currentContext.y += siddurConfig.verticalSpacing.betweenInstructions; // Add back the last space
     currentContext.y -= instructionStyles.verticalSpacingAfter;
   }

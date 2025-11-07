@@ -54,6 +54,20 @@ export interface AshkenazContentGenerationParams {
   hebrewFont: PDFFont;
   /** The selected style for prayer display (Recommended or all-transliterated). */
   style?: string;
+  /** Word mapping interval - map every N words (e.g., 1 = every word, 5 = every 5th word). */
+  wordMappingInterval?: number;
+  /** Word mapping start index - start mapping from which word index (0 = first word). */
+  wordMappingStartIndex?: number;
+  /** Whether to show word mapping subscripts. */
+  showWordMappingSubscripts?: boolean;
+  /** Whether to include introduction text. */
+  includeIntroduction?: boolean;
+  /** Whether to include instruction text. */
+  includeInstructions?: boolean;
+  /** Font size multiplier (e.g., 1.0 = normal, 1.2 = 20% larger). */
+  fontSizeMultiplier?: number;
+  /** Page margins setting. */
+  pageMargins?: 'tight' | 'normal' | 'wide';
   /** Calculates how to break a string into multiple lines based on width. */
 
   calculateTextLines: (

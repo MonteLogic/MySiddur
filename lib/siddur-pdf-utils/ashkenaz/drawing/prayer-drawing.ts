@@ -344,10 +344,16 @@ const drawTwoColumnColorMappedPrayer = (
     rgb(c[0], c[1], c[2]),
   );
 
-  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
-  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
-  const englishFontSize = siddurConfig.fontSizes.blessingEnglish;
-  const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
+  // Get user settings
+  const wordMappingInterval = (params as any).wordMappingInterval ?? 1;
+  const wordMappingStartIndex = (params as any).wordMappingStartIndex ?? 0;
+  const showSubscripts = (params as any).showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
+
+  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew * fontSizeMultiplier;
+  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer * fontSizeMultiplier;
+  const englishFontSize = siddurConfig.fontSizes.blessingEnglish * fontSizeMultiplier;
+  const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer * fontSizeMultiplier;
   
   const hebrewColumnStart = width / 2 + siddurConfig.layout.hebrewColumnXOffset;
   const hebrewColumnEnd = width - margin;
@@ -359,9 +365,29 @@ const drawTwoColumnColorMappedPrayer = (
   let currentHebrewX = hebrewColumnEnd;
   let currentEnglishX = englishColumnStart;
 
-  Object.values(wordMappings).forEach((mapping: any, index) => {
-    const color = colors[index % colors.length];
-    const subscriptText = `${index + 1}`;
+  // Process all mappings - all words get colors, but only matching ones get subscripts
+  const allMappings = Object.entries(wordMappings).sort(([a], [b]) => parseInt(a) - parseInt(b));
+  let colorIndex = 0; // Index for cycling through colors (all words get colors)
+
+  allMappings.forEach(([key, mapping]: [string, any]) => {
+    const numericKey = parseInt(key);
+    
+    // Check if this mapping should have a subscript based on interval
+    const shouldMap = numericKey >= wordMappingStartIndex && 
+                      (numericKey - wordMappingStartIndex) % wordMappingInterval === 0;
+    
+    // Subscript shows the word number - user wants it to match the actual word position
+    // With startIndex=0, interval=5: we get words at indices 0, 5, 10, 15...
+    // User wants subscripts: 1, 5, 10, 15... (1-indexed word positions)
+    // But indices 0, 5, 10, 15 correspond to positions 1, 6, 11, 16...
+    // So the user wants: index 0 → "1", index 5 → "5", index 10 → "10"
+    // Special case: if numericKey is 0, show 1; otherwise show numericKey
+    const subscriptValue = numericKey === 0 ? 1 : numericKey;
+    const subscriptText = showSubscripts && shouldMap ? `${subscriptValue}` : undefined;
+    
+    // All words get colors, cycling through the color array
+    const color = colors[colorIndex % colors.length];
+    colorIndex++;
     
     const checkAndHandlePageBreak = () => {
       if (
@@ -396,25 +422,27 @@ const drawTwoColumnColorMappedPrayer = (
       currentEnglishX += wordWidth;
     });
 
-    const enSubscriptSize = englishFontSize * 0.6;
-    const enSubscriptFont = fonts.english;
-    const enSubscriptWidth = enSubscriptFont.widthOfTextAtSize(
-      subscriptText,
-      enSubscriptSize,
-    );
-    if (currentEnglishX + enSubscriptWidth > englishColumnEnd) {
-      currentEnglishX = englishColumnStart;
-      englishY -= englishLineHeight;
-      checkAndHandlePageBreak();
+    if (showSubscripts && subscriptText) {
+      const enSubscriptSize = englishFontSize * 0.6;
+      const enSubscriptFont = fonts.english;
+      const enSubscriptWidth = enSubscriptFont.widthOfTextAtSize(
+        subscriptText,
+        enSubscriptSize,
+      );
+      if (currentEnglishX + enSubscriptWidth > englishColumnEnd) {
+        currentEnglishX = englishColumnStart;
+        englishY -= englishLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(subscriptText, {
+        x: currentEnglishX,
+        y: englishY - (englishFontSize - enSubscriptSize) * 0.5,
+        font: enSubscriptFont,
+        size: enSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
+      currentEnglishX += enSubscriptWidth;
     }
-    page.drawText(subscriptText, {
-      x: currentEnglishX,
-      y: englishY - (englishFontSize - enSubscriptSize) * 0.5,
-      font: enSubscriptFont,
-      size: enSubscriptSize,
-      color: rgb(0, 0, 0),
-    });
-    currentEnglishX += enSubscriptWidth;
 
     const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
     if (currentEnglishX + enSpaceWidth > englishColumnEnd) {
@@ -443,25 +471,27 @@ const drawTwoColumnColorMappedPrayer = (
       });
     });
 
-    const heSubscriptSize = hebrewFontSize * 0.6;
-    const heSubscriptFont = fonts.english;
-    const heSubscriptWidth = heSubscriptFont.widthOfTextAtSize(
-      subscriptText,
-      heSubscriptSize,
-    );
-    if (currentHebrewX - heSubscriptWidth < hebrewColumnStart) {
-      currentHebrewX = hebrewColumnEnd;
-      hebrewY -= hebrewLineHeight;
-      checkAndHandlePageBreak();
+    if (showSubscripts && subscriptText) {
+      const heSubscriptSize = hebrewFontSize * 0.6;
+      const heSubscriptFont = fonts.english;
+      const heSubscriptWidth = heSubscriptFont.widthOfTextAtSize(
+        subscriptText,
+        heSubscriptSize,
+      );
+      if (currentHebrewX - heSubscriptWidth < hebrewColumnStart) {
+        currentHebrewX = hebrewColumnEnd;
+        hebrewY -= hebrewLineHeight;
+        checkAndHandlePageBreak();
+      }
+      currentHebrewX -= heSubscriptWidth;
+      page.drawText(subscriptText, {
+        x: currentHebrewX,
+        y: hebrewY - (hebrewFontSize - heSubscriptSize) * 0.5,
+        font: heSubscriptFont,
+        size: heSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
     }
-    currentHebrewX -= heSubscriptWidth;
-    page.drawText(subscriptText, {
-      x: currentHebrewX,
-      y: hebrewY - (hebrewFontSize - heSubscriptSize) * 0.5,
-      font: heSubscriptFont,
-      size: heSubscriptSize,
-      color: rgb(0, 0, 0),
-    });
 
     const heSpaceWidth = fonts.hebrew.widthOfTextAtSize(' ', hebrewFontSize);
     if (currentHebrewX - heSpaceWidth < hebrewColumnStart) {
@@ -488,18 +518,6 @@ const drawTwoColumnColorMappedPrayer = (
   return updatedContext;
 };
 
-/**
- * Draws a prayer with color-mapped words in a three-column layout (English, Transliteration, and Hebrew).
- * Each corresponding word/phrase across the three columns is drawn in the same color and
- * appended with a continuously incrementing subscript number.
- *
- * @param context - The current PDF drawing context.
- * @param prayer - The prayer object, used for metadata like the source.
- * @param wordMappings - An object containing word-by-word mappings.
- * @param _params - The content generation parameters (unused in this function).
- * @returns The updated PDF drawing context.
- * @internal
- */
 const drawThreeColumnColorMappedPrayer = (
   context: PdfDrawingContext,
   prayer: Prayer,
@@ -507,9 +525,23 @@ const drawThreeColumnColorMappedPrayer = (
   _params: AshkenazContentGenerationParams,
 ): PdfDrawingContext => {
   let { page, y, margin, fonts, width, pdfDoc, height } = context;
-  const colors = Object.values(siddurConfig.colors.wordMappingColors).map((c) =>
-    rgb(c[0], c[1], c[2]),
-  );
+
+  // --- START: CYCLE SUBSCRIPT LOGIC ---
+  const MAPPED_COLORS_DATA = Object.entries(
+    siddurConfig.colors.wordMappingColors,
+  ).map(([key, value]) => ({
+    id: key.charAt(0),
+    color: rgb(value[0], value[1], value[2]),
+  }));
+  const numColors = MAPPED_COLORS_DATA.length;
+  let colorIndex = 0;
+  let cycleCount = 1;
+  // This flag tracks if we've shown the ONE subscript for the English column in this cycle
+  let hasShownEnglishSubscriptThisCycle = false;
+  // --- END: CYCLE SUBSCRIPT LOGIC ---
+
+  const showSubscripts = (_params as any).showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = (_params as any).fontSizeMultiplier ?? 1.0;
 
   const columnGutter = 15;
   const totalContentWidth = width - margin * 2;
@@ -518,12 +550,18 @@ const drawThreeColumnColorMappedPrayer = (
   const transliterationColumnStart = margin + columnWidth + columnGutter;
   const hebrewColumnStart = margin + 2 * columnWidth + 2 * columnGutter;
   const hebrewColumnEnd = width - margin;
-  const englishFontSize = siddurConfig.fontSizes.blessingEnglish;
-  const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
-  const translitFontSize = siddurConfig.fontSizes.blessingEnglish;
-  const translitLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer;
-  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew;
-  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer;
+  const englishFontSize =
+    siddurConfig.fontSizes.blessingEnglish * fontSizeMultiplier;
+  const englishLineHeight =
+    siddurConfig.lineSpacing.defaultEnglishPrayer * fontSizeMultiplier;
+  const translitFontSize =
+    siddurConfig.fontSizes.blessingEnglish * fontSizeMultiplier;
+  const translitLineHeight =
+    siddurConfig.lineSpacing.defaultEnglishPrayer * fontSizeMultiplier;
+  const hebrewFontSize =
+    siddurConfig.fontSizes.blessingHebrew * fontSizeMultiplier;
+  const hebrewLineHeight =
+    siddurConfig.lineSpacing.defaultHebrewPrayer * fontSizeMultiplier;
   let englishY = y,
     translitY = y,
     hebrewY = y;
@@ -531,8 +569,44 @@ const drawThreeColumnColorMappedPrayer = (
   let currentTranslitX = transliterationColumnStart;
   let currentHebrewX = hebrewColumnEnd;
 
-  Object.values(wordMappings).forEach((mapping: any, index) => {
-    const color = colors[index % colors.length];
+  const allMappings = Object.entries(wordMappings).sort(
+    ([a], [b]) => parseInt(a) - parseInt(b),
+  );
+
+  allMappings.forEach(([key, mapping]: [string, any]) => {
+    // --- START: NEW SUBSCRIPT LOGIC ---
+    const colorData = MAPPED_COLORS_DATA[colorIndex];
+    const color = colorData.color;
+
+    // --- MODIFICATION: Add asterisk to the first pairing of EACH cycle ---
+    // Add an asterisk to the first subscript of *every* cycle (e.g., r1*, r2*, etc.)
+    const isFirstOfCycle = colorIndex === 0;
+    const asterisk = isFirstOfCycle && showSubscripts ? '*' : '';
+    const fullSubscript = `${colorData.id}${cycleCount}${asterisk}`;
+    // --- END MODIFICATION ---
+
+    // 2. Determine subscript for English (only show once per *cycle*)
+    let englishSubscript: string | undefined = undefined;
+    // We only show the subscript if subscripts are enabled AND
+    // we have NOT shown a subscript for this cycle yet.
+    if (showSubscripts && !hasShownEnglishSubscriptThisCycle) {
+      englishSubscript = fullSubscript; // This will be "r1*", "r2*", etc.
+      hasShownEnglishSubscriptThisCycle = true; // Set the flag for the rest of this cycle
+    }
+
+    // 3. Transliteration & Hebrew always get the full subscript
+    // This will be "r1*", "g1", "b1" ... "r2*", "g2", "b2" ...
+    const fullColumnSubscript = showSubscripts ? fullSubscript : undefined;
+
+    // 4. Increment cycler state
+    colorIndex++;
+    if (colorIndex >= numColors) {
+      colorIndex = 0;
+      cycleCount++;
+      hasShownEnglishSubscriptThisCycle = false; // Reset the flag for the new cycle
+    }
+    // --- END: NEW SUBSCRIPT LOGIC ---
+
     const checkAndHandlePageBreak = () => {
       if (
         englishY < siddurConfig.pdfMargins.bottom ||
@@ -540,6 +614,9 @@ const drawThreeColumnColorMappedPrayer = (
         hebrewY < siddurConfig.pdfMargins.bottom
       ) {
         page = pdfDoc.addPage();
+        // --- ADD STYLE NOTE ON NEW PAGE ---
+        // drawStyleOnPage(page, _params.style || 'Recommended', fonts, margin);
+        // ---
         const topY = height - siddurConfig.pdfMargins.top;
         englishY = topY;
         translitY = topY;
@@ -568,26 +645,33 @@ const drawThreeColumnColorMappedPrayer = (
       currentEnglishX += wordWidth;
     });
 
-    const subscriptText = `${index + 1}`;
-    const enSubscriptSize = englishFontSize * 0.6;
-    const enSubscriptFont = fonts.english;
-    const enSubscriptWidth = enSubscriptFont.widthOfTextAtSize(
-      subscriptText,
-      enSubscriptSize,
-    );
-    if (currentEnglishX + enSubscriptWidth > englishColumnStart + columnWidth) {
-      currentEnglishX = englishColumnStart;
-      englishY -= englishLineHeight;
-      checkAndHandlePageBreak();
+    // --- English subscript block (ACTIVE) ---
+    // This 'if (englishSubscript)' will now only be true for the first word of the cycle.
+    if (englishSubscript) {
+      const enSubscriptSize = englishFontSize * 0.6;
+      const enSubscriptFont = fonts.english;
+      const enSubscriptWidth = enSubscriptFont.widthOfTextAtSize(
+        englishSubscript, // This will be "r1*", "r2*", etc.
+        enSubscriptSize,
+      );
+      if (
+        currentEnglishX + enSubscriptWidth >
+        englishColumnStart + columnWidth
+      ) {
+        currentEnglishX = englishColumnStart;
+        englishY -= englishLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(englishSubscript, {
+        x: currentEnglishX,
+        y: englishY - (englishFontSize - enSubscriptSize) * 0.5,
+        font: enSubscriptFont,
+        size: enSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
+      currentEnglishX += enSubscriptWidth;
     }
-    page.drawText(subscriptText, {
-      x: currentEnglishX,
-      y: englishY - (englishFontSize - enSubscriptSize) * 0.5,
-      font: enSubscriptFont,
-      size: enSubscriptSize,
-      color: rgb(0, 0, 0),
-    });
-    currentEnglishX += enSubscriptWidth;
+    // --- END OF English subscript block ---
 
     const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
     if (currentEnglishX + enSpaceWidth > englishColumnStart + columnWidth) {
@@ -620,28 +704,31 @@ const drawThreeColumnColorMappedPrayer = (
       currentTranslitX += wordWidth;
     });
 
-    const trSubscriptSize = translitFontSize * 0.6;
-    const trSubscriptFont = fonts.english;
-    const trSubscriptWidth = trSubscriptFont.widthOfTextAtSize(
-      subscriptText,
-      trSubscriptSize,
-    );
-    if (
-      currentTranslitX + trSubscriptWidth >
-      transliterationColumnStart + columnWidth
-    ) {
-      currentTranslitX = transliterationColumnStart;
-      translitY -= translitLineHeight;
-      checkAndHandlePageBreak();
+    // Use the fullColumnSubscript for Transliteration (THIS IS ACTIVE)
+    if (fullColumnSubscript) {
+      const trSubscriptSize = translitFontSize * 0.6;
+      const trSubscriptFont = fonts.english;
+      const trSubscriptWidth = trSubscriptFont.widthOfTextAtSize(
+        fullColumnSubscript, // This will be "r1*", "g1", "r2*", etc.
+        trSubscriptSize,
+      );
+      if (
+        currentTranslitX + trSubscriptWidth >
+        transliterationColumnStart + columnWidth
+      ) {
+        currentTranslitX = transliterationColumnStart;
+        translitY -= translitLineHeight;
+        checkAndHandlePageBreak();
+      }
+      page.drawText(fullColumnSubscript, {
+        x: currentTranslitX,
+        y: translitY - (translitFontSize - trSubscriptSize) * 0.5,
+        font: trSubscriptFont,
+        size: trSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
+      currentTranslitX += trSubscriptWidth;
     }
-    page.drawText(subscriptText, {
-      x: currentTranslitX,
-      y: translitY - (translitFontSize - trSubscriptSize) * 0.5,
-      font: trSubscriptFont,
-      size: trSubscriptSize,
-      color: rgb(0, 0, 0),
-    });
-    currentTranslitX += trSubscriptWidth;
 
     const trSpaceWidth = fonts.english.widthOfTextAtSize(' ', translitFontSize);
     if (
@@ -672,25 +759,28 @@ const drawThreeColumnColorMappedPrayer = (
       });
     });
 
-    const heSubscriptSize = hebrewFontSize * 0.6;
-    const heSubscriptFont = fonts.english;
-    const heSubscriptWidth = heSubscriptFont.widthOfTextAtSize(
-      subscriptText,
-      heSubscriptSize,
-    );
-    if (currentHebrewX - heSubscriptWidth < hebrewColumnStart) {
-      currentHebrewX = hebrewColumnEnd;
-      hebrewY -= hebrewLineHeight;
-      checkAndHandlePageBreak();
+    // Use the fullColumnSubscript for Hebrew (THIS IS ACTIVE)
+    if (fullColumnSubscript) {
+      const heSubscriptSize = hebrewFontSize * 0.6;
+      const heSubscriptFont = fonts.english;
+      const heSubscriptWidth = heSubscriptFont.widthOfTextAtSize(
+        fullColumnSubscript, // This will be "r1*", "g1", "r2*", etc.
+        heSubscriptSize,
+      );
+      if (currentHebrewX - heSubscriptWidth < hebrewColumnStart) {
+        currentHebrewX = hebrewColumnEnd;
+        hebrewY -= hebrewLineHeight;
+        checkAndHandlePageBreak();
+      }
+      currentHebrewX -= heSubscriptWidth;
+      page.drawText(fullColumnSubscript, {
+        x: currentHebrewX,
+        y: hebrewY - (hebrewFontSize - heSubscriptSize) * 0.5,
+        font: heSubscriptFont,
+        size: heSubscriptSize,
+        color: rgb(0, 0, 0),
+      });
     }
-    currentHebrewX -= heSubscriptWidth;
-    page.drawText(subscriptText, {
-      x: currentHebrewX,
-      y: hebrewY - (hebrewFontSize - heSubscriptSize) * 0.5,
-      font: heSubscriptFont,
-      size: heSubscriptSize,
-      color: rgb(0, 0, 0),
-    });
 
     const heSpaceWidth = fonts.hebrew.widthOfTextAtSize(' ', hebrewFontSize);
     if (currentHebrewX - heSpaceWidth < hebrewColumnStart) {

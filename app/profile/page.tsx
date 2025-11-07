@@ -23,8 +23,8 @@ export default function MyProfilePage() {
 
   useEffect(() => {
     if (isLoaded && user) {
-      const userWithMetadata = user as any; // Type assertion for privateMetadata
-      const privateMetadata = userWithMetadata.privateMetadata;
+      // publicMetadata is accessible from client-side useUser() hook
+      const publicMetadata = user.publicMetadata as any || {};
       const userProfile: UserProfile = {
         id: user.id,
         firstName: user.firstName || '',
@@ -32,15 +32,22 @@ export default function MyProfilePage() {
         email: user.emailAddresses[0]?.emailAddress || '',
         imageUrl: user.imageUrl,
         jewishLearningProfile: {
-          gender: privateMetadata?.gender || undefined,
-          nusach: privateMetadata?.nusach || 'Ashkenaz',
-          hebrewName: privateMetadata?.hebrewName || '',
-          learningLevel: privateMetadata?.learningLevel || 'beginner',
-          preferredLanguage: privateMetadata?.preferredLanguage || 'both',
-          includeTransliteration: privateMetadata?.includeTransliteration ?? true,
-          includeEnglishTranslation: privateMetadata?.includeEnglishTranslation ?? true,
-          customPrayers: privateMetadata?.customPrayers || [],
-          notes: privateMetadata?.notes || '',
+          gender: publicMetadata?.gender || undefined,
+          nusach: publicMetadata?.nusach || 'Ashkenaz',
+          hebrewName: publicMetadata?.hebrewName || '',
+          learningLevel: publicMetadata?.learningLevel || 'beginner',
+          preferredLanguage: publicMetadata?.preferredLanguage || 'both',
+          includeTransliteration: publicMetadata?.includeTransliteration ?? true,
+          includeEnglishTranslation: publicMetadata?.includeEnglishTranslation ?? true,
+          customPrayers: publicMetadata?.customPrayers || [],
+          notes: publicMetadata?.notes || '',
+          wordMappingInterval: publicMetadata?.wordMappingInterval ?? 1,
+          wordMappingStartIndex: publicMetadata?.wordMappingStartIndex ?? 0,
+          showWordMappingSubscripts: publicMetadata?.showWordMappingSubscripts ?? true,
+          includeIntroduction: publicMetadata?.includeIntroduction ?? true,
+          includeInstructions: publicMetadata?.includeInstructions ?? true,
+          fontSizeMultiplier: publicMetadata?.fontSizeMultiplier ?? 1.0,
+          pageMargins: publicMetadata?.pageMargins || 'normal',
         },
       };
       setProfile(userProfile);
@@ -67,6 +74,31 @@ export default function MyProfilePage() {
       });
 
       if (response.ok) {
+        // Reload user data to get updated publicMetadata
+        if (!user) return;
+        await user.reload();
+        const publicMetadata = user.publicMetadata as any || {};
+        setProfile({
+          ...profile!,
+          jewishLearningProfile: {
+            gender: publicMetadata?.gender || undefined,
+            nusach: publicMetadata?.nusach || 'Ashkenaz',
+            hebrewName: publicMetadata?.hebrewName || '',
+            learningLevel: publicMetadata?.learningLevel || 'beginner',
+            preferredLanguage: publicMetadata?.preferredLanguage || 'both',
+            includeTransliteration: publicMetadata?.includeTransliteration ?? true,
+            includeEnglishTranslation: publicMetadata?.includeEnglishTranslation ?? true,
+            customPrayers: publicMetadata?.customPrayers || [],
+            notes: publicMetadata?.notes || '',
+            wordMappingInterval: publicMetadata?.wordMappingInterval ?? 1,
+            wordMappingStartIndex: publicMetadata?.wordMappingStartIndex ?? 0,
+            showWordMappingSubscripts: publicMetadata?.showWordMappingSubscripts ?? true,
+            includeIntroduction: publicMetadata?.includeIntroduction ?? true,
+            includeInstructions: publicMetadata?.includeInstructions ?? true,
+            fontSizeMultiplier: publicMetadata?.fontSizeMultiplier ?? 1.0,
+            pageMargins: publicMetadata?.pageMargins || 'normal',
+          },
+        });
         setIsEditing(false);
         // Show success message
         alert('Profile updated successfully!');
@@ -318,12 +350,134 @@ export default function MyProfilePage() {
                 {isEditing ? (
                   <input
                     type="checkbox"
-                    checked={profile.jewishLearningProfile?.includeEnglishTranslation || false}
+                    checked={profile.jewishLearningProfile?.includeEnglishTranslation ?? true}
                     onChange={(e) => handleJewishLearningChange('includeEnglishTranslation', e.target.checked)}
                     className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                   />
                 ) : (
-                  <span className="text-white">{profile.jewishLearningProfile?.includeEnglishTranslation ? 'Yes' : 'No'}</span>
+                  <span className="text-white">{profile.jewishLearningProfile?.includeEnglishTranslation !== false ? 'Yes' : 'No'}</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Siddur Generation Settings */}
+          <div className="bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4 text-indigo-400">Siddur Generation Settings</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Word Mapping Interval
+                  <span className="text-xs text-gray-500 ml-2">(Map every N words, e.g., 1 = every word, 5 = every 5th word)</span>
+                </label>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    min="1"
+                    value={profile.jewishLearningProfile?.wordMappingInterval || 1}
+                    onChange={(e) => handleJewishLearningChange('wordMappingInterval', parseInt(e.target.value) || 1)}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                ) : (
+                  <p className="text-white">{profile.jewishLearningProfile?.wordMappingInterval || 1}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Word Mapping Start Index
+                  <span className="text-xs text-gray-500 ml-2">(Start mapping from which word index, 0 = first word)</span>
+                </label>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    min="0"
+                    value={profile.jewishLearningProfile?.wordMappingStartIndex || 0}
+                    onChange={(e) => handleJewishLearningChange('wordMappingStartIndex', parseInt(e.target.value) || 0)}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                ) : (
+                  <p className="text-white">{profile.jewishLearningProfile?.wordMappingStartIndex || 0}</p>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-300">Show Word Mapping Subscripts</label>
+                {isEditing ? (
+                  <input
+                    type="checkbox"
+                    checked={profile.jewishLearningProfile?.showWordMappingSubscripts !== false}
+                    onChange={(e) => handleJewishLearningChange('showWordMappingSubscripts', e.target.checked)}
+                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                  />
+                ) : (
+                  <span className="text-white">{profile.jewishLearningProfile?.showWordMappingSubscripts !== false ? 'Yes' : 'No'}</span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-300">Include Introduction Text</label>
+                {isEditing ? (
+                  <input
+                    type="checkbox"
+                    checked={profile.jewishLearningProfile?.includeIntroduction !== false}
+                    onChange={(e) => handleJewishLearningChange('includeIntroduction', e.target.checked)}
+                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                  />
+                ) : (
+                  <span className="text-white">{profile.jewishLearningProfile?.includeIntroduction !== false ? 'Yes' : 'No'}</span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-300">Include Instruction Text</label>
+                {isEditing ? (
+                  <input
+                    type="checkbox"
+                    checked={profile.jewishLearningProfile?.includeInstructions !== false}
+                    onChange={(e) => handleJewishLearningChange('includeInstructions', e.target.checked)}
+                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                  />
+                ) : (
+                  <span className="text-white">{profile.jewishLearningProfile?.includeInstructions !== false ? 'Yes' : 'No'}</span>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Font Size Multiplier
+                  <span className="text-xs text-gray-500 ml-2">(Scale all fonts, e.g., 1.0 = normal, 1.2 = 20% larger)</span>
+                </label>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    min="0.5"
+                    max="2.0"
+                    step="0.1"
+                    value={profile.jewishLearningProfile?.fontSizeMultiplier || 1.0}
+                    onChange={(e) => handleJewishLearningChange('fontSizeMultiplier', parseFloat(e.target.value) || 1.0)}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                ) : (
+                  <p className="text-white">{profile.jewishLearningProfile?.fontSizeMultiplier || 1.0}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Page Margins</label>
+                {isEditing ? (
+                  <select
+                    value={profile.jewishLearningProfile?.pageMargins || 'normal'}
+                    onChange={(e) => handleJewishLearningChange('pageMargins', e.target.value as 'tight' | 'normal' | 'wide')}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="tight">Tight</option>
+                    <option value="normal">Normal</option>
+                    <option value="wide">Wide</option>
+                  </select>
+                ) : (
+                  <p className="text-white capitalize">{profile.jewishLearningProfile?.pageMargins || 'Normal'}</p>
                 )}
               </div>
             </div>

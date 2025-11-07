@@ -32,6 +32,14 @@ interface GenerateSiddurPDFParams {
   siddurFormat: SiddurFormat;
   userName?: string;
   style?: string;
+  // User settings for Siddur generation
+  wordMappingInterval?: number;
+  wordMappingStartIndex?: number;
+  showWordMappingSubscripts?: boolean;
+  includeIntroduction?: boolean;
+  includeInstructions?: boolean;
+  fontSizeMultiplier?: number;
+  pageMargins?: 'tight' | 'normal' | 'wide';
 }
 
 const calculateTextLines = (
@@ -133,6 +141,13 @@ export const generateSiddurPDF = async ({
   siddurFormat,
   userName,
   style = 'Recommended',
+  wordMappingInterval,
+  wordMappingStartIndex,
+  showWordMappingSubscripts,
+  includeIntroduction,
+  includeInstructions,
+  fontSizeMultiplier,
+  pageMargins,
 }: GenerateSiddurPDFParams): Promise<Uint8Array> => {
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);
@@ -150,8 +165,25 @@ export const generateSiddurPDF = async ({
 
   let page = pdfDoc.addPage();
   const { width, height } = page.getSize();
-  const margin = siddurConfig.pdfMargins.left;
-  let y = height - siddurConfig.pdfMargins.top;
+  
+  // Apply page margins based on user setting
+  let margin: number;
+  switch (pageMargins) {
+    case 'tight':
+      margin = siddurConfig.pdfMargins.left * 0.5;
+      break;
+    case 'wide':
+      margin = siddurConfig.pdfMargins.left * 1.5;
+      break;
+    case 'normal':
+    default:
+      margin = siddurConfig.pdfMargins.left;
+      break;
+  }
+  
+  // Apply top margin based on user setting
+  const topMargin = pageMargins === 'tight' ? margin : pageMargins === 'wide' ? margin : siddurConfig.pdfMargins.top;
+  let y = height - topMargin;
 
   let commonPdfParams = {
     pdfDoc,
@@ -176,6 +208,13 @@ export const generateSiddurPDF = async ({
       page,
       y,
       style,
+      wordMappingInterval,
+      wordMappingStartIndex,
+      showWordMappingSubscripts,
+      includeIntroduction,
+      includeInstructions,
+      fontSizeMultiplier,
+      pageMargins,
       calculateTextLines,
       ensureSpaceAndDraw: (drawingContext, textLines, label) => {
         const completeContext = { ...commonPdfParams, ...drawingContext };
