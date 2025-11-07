@@ -40,6 +40,7 @@ interface GenerateSiddurPDFParams {
   includeInstructions?: boolean;
   fontSizeMultiplier?: number;
   pageMargins?: 'tight' | 'normal' | 'wide';
+  printBlackAndWhite?: boolean;
 }
 
 const calculateTextLines = (
@@ -148,6 +149,7 @@ export const generateSiddurPDF = async ({
   includeInstructions,
   fontSizeMultiplier,
   pageMargins,
+  printBlackAndWhite,
 }: GenerateSiddurPDFParams): Promise<Uint8Array> => {
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);
@@ -215,6 +217,7 @@ export const generateSiddurPDF = async ({
       includeInstructions,
       fontSizeMultiplier,
       pageMargins,
+      printBlackAndWhite,
       calculateTextLines,
       ensureSpaceAndDraw: (drawingContext, textLines, label) => {
         const completeContext = { ...commonPdfParams, ...drawingContext };
