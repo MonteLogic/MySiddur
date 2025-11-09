@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
           includeInstructions: metadata.includeInstructions ?? true,
           fontSizeMultiplier: metadata.fontSizeMultiplier ?? 1.0,
           pageMargins: metadata.pageMargins || 'normal',
+          printBlackAndWhite: metadata.printBlackAndWhite ?? false,
         };
       }
     }

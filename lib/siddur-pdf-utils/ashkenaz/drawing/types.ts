@@ -68,6 +68,8 @@ export interface AshkenazContentGenerationParams {
   fontSizeMultiplier?: number;
   /** Page margins setting. */
   pageMargins?: 'tight' | 'normal' | 'wide';
+  /** Whether to print in black and white (no colors). */
+  printBlackAndWhite?: boolean;
   /** Calculates how to break a string into multiple lines based on width. */
 
   calculateTextLines: (

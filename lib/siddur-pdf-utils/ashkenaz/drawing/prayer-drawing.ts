@@ -349,6 +349,7 @@ const drawTwoColumnColorMappedPrayer = (
   const wordMappingStartIndex = (params as any).wordMappingStartIndex ?? 0;
   const showSubscripts = (params as any).showWordMappingSubscripts !== false;
   const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
+  const printBlackAndWhite = (params as any).printBlackAndWhite ?? false;
 
   const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew * fontSizeMultiplier;
   const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer * fontSizeMultiplier;
@@ -386,7 +387,8 @@ const drawTwoColumnColorMappedPrayer = (
     const subscriptText = showSubscripts && shouldMap ? `${subscriptValue}` : undefined;
     
     // All words get colors, cycling through the color array
-    const color = colors[colorIndex % colors.length];
+    // Use black if printBlackAndWhite is enabled, otherwise use the color from the array
+    const color = printBlackAndWhite ? rgb(0, 0, 0) : colors[colorIndex % colors.length];
     colorIndex++;
     
     const checkAndHandlePageBreak = () => {
@@ -542,6 +544,7 @@ const drawThreeColumnColorMappedPrayer = (
 
   const showSubscripts = (_params as any).showWordMappingSubscripts !== false;
   const fontSizeMultiplier = (_params as any).fontSizeMultiplier ?? 1.0;
+  const printBlackAndWhite = (_params as any).printBlackAndWhite ?? false;
 
   const columnGutter = 15;
   const totalContentWidth = width - margin * 2;
@@ -576,7 +579,8 @@ const drawThreeColumnColorMappedPrayer = (
   allMappings.forEach(([key, mapping]: [string, any]) => {
     // --- START: NEW SUBSCRIPT LOGIC ---
     const colorData = MAPPED_COLORS_DATA[colorIndex];
-    const color = colorData.color;
+    // Use black if printBlackAndWhite is enabled, otherwise use the color from the array
+    const color = printBlackAndWhite ? rgb(0, 0, 0) : colorData.color;
 
     // --- MODIFICATION: Add asterisk to the first pairing of EACH cycle ---
     // Add an asterisk to the first subscript of *every* cycle (e.g., r1*, r2*, etc.)
