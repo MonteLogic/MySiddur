@@ -124,6 +124,7 @@ export default function LandingPage() {
                 >
                   <option value="Recommended">Recommended</option>
                   <option value="all-transliterated">All Transliterated</option>
+                  <option value="sentence based mapping">Sentence Based Mapping</option>
                 </select>
               </div>
 

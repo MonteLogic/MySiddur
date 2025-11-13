@@ -97,6 +97,92 @@ const drawWordWithSubscript = (
 
 // --- END: COLOR CYCLER & SUBSCRIPT LOGIC ---
 
+// --- START: SENTENCE-BASED MAPPING HELPERS ---
+
+/**
+ * Converts a number to Unicode subscript notation
+ */
+const toSubscript = (num: number): string => {
+  const subscriptMap: { [key: string]: string } = {
+    '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
+    '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
+  };
+  return num.toString().split('').map(digit => subscriptMap[digit] || digit).join('');
+};
+
+/**
+ * Converts a number to Unicode superscript notation (for parentheses)
+ */
+const toSuperscript = (num: number): string => {
+  const superscriptMap: { [key: string]: string } = {
+    '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+    '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+  };
+  return num.toString().split('').map(digit => superscriptMap[digit] || digit).join('');
+};
+
+/**
+ * Extracts sentence number from detailed-array
+ * Returns the primary sentence index (first entry's sentence, or max if multiple)
+ * For phrases that span sentences, we use the first sentence they appear in
+ */
+const extractSentenceNumber = (detailedArray: any[]): number => {
+  if (!detailedArray || detailedArray.length === 0) return 0;
+  // Use the first entry's sentence number as the primary sentence
+  // This handles cases where a phrase spans multiple sentences
+  const firstEntry = detailedArray[0];
+  if (Array.isArray(firstEntry) && firstEntry.length > 0 && typeof firstEntry[0] === 'number') {
+    return firstEntry[0];
+  }
+  return 0;
+};
+
+/**
+ * Groups word mappings by sentence and assigns phrase numbers
+ * For the first phrase of the first sentence, it includes the start of the prayer
+ */
+const groupMappingsBySentence = (wordMappings: WordMapping): Map<number, Array<{ key: string; mapping: any; phraseIndex: number }>> => {
+  const sentenceMap = new Map<number, Array<{ key: string; mapping: any; phraseIndex: number }>>();
+  
+  const allMappings = Object.entries(wordMappings).sort(
+    ([a], [b]) => parseInt(a) - parseInt(b)
+  );
+  
+  // First pass: group by sentence
+  // Use the minimum sentence number found in the detailed-array to handle phrases that span sentences
+  allMappings.forEach(([key, mapping]: [string, any]) => {
+    const detailedArray = mapping['detailed-array'] || [];
+    let sentenceNum = 0;
+    
+    if (detailedArray.length > 0) {
+      // Find the minimum sentence number in the array
+      let minSentence = Infinity;
+      for (const entry of detailedArray) {
+        if (Array.isArray(entry) && entry.length > 0 && typeof entry[0] === 'number') {
+          minSentence = Math.min(minSentence, entry[0]);
+        }
+      }
+      sentenceNum = minSentence === Infinity ? 0 : minSentence;
+    }
+    
+    if (!sentenceMap.has(sentenceNum)) {
+      sentenceMap.set(sentenceNum, []);
+    }
+    sentenceMap.get(sentenceNum)!.push({ key, mapping, phraseIndex: 0 });
+  });
+  
+  // Second pass: assign phrase indices within each sentence
+  sentenceMap.forEach((phrases, sentenceNum) => {
+    phrases.forEach((phrase, index) => {
+      phrase.phraseIndex = index + 1; // 1-indexed
+    });
+  });
+  
+  return sentenceMap;
+};
+
+// --- END: SENTENCE-BASED MAPPING HELPERS ---
+
 /**
  * A dynamically loaded index of prayer data.
  * @internal
@@ -811,6 +897,195 @@ const drawThreeColumnColorMappedPrayer = (
 };
 
 /**
+ * Draws a prayer with sentence-based mapping notation.
+ * Each phrase is grouped by sentence and numbered within the sentence.
+ * Notation format: {color}{sentenceNumber}⁽{phraseNumber}⁾
+ * @internal
+ */
+const drawSentenceBasedMappingPrayer = (
+  context: PdfDrawingContext,
+  prayer: Prayer,
+  wordMappings: WordMapping,
+  params: AshkenazContentGenerationParams,
+  columnWidth: number,
+): PdfDrawingContext => {
+  let { page, y, margin, fonts, width, pdfDoc, height } = context;
+  
+  // Prepare color data
+  const MAPPED_COLORS_DATA = Object.entries(
+    siddurConfig.colors.wordMappingColors,
+  ).map(([key, value]) => ({
+    id: key.charAt(0), // 'r', 'g', 'b', 'o', 'p', 't'
+    color: rgb(value[0], value[1], value[2]),
+  }));
+  
+  const showSubscripts = (params as any).showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
+  const printBlackAndWhite = (params as any).printBlackAndWhite ?? false;
+  
+  const hebrewFontSize = siddurConfig.fontSizes.blessingHebrew * fontSizeMultiplier;
+  const hebrewLineHeight = siddurConfig.lineSpacing.defaultHebrewPrayer * fontSizeMultiplier;
+  const englishFontSize = siddurConfig.fontSizes.blessingEnglish * fontSizeMultiplier;
+  const englishLineHeight = siddurConfig.lineSpacing.defaultEnglishPrayer * fontSizeMultiplier;
+  
+  const hebrewColumnStart = width / 2 + siddurConfig.layout.hebrewColumnXOffset;
+  const hebrewColumnEnd = width - margin;
+  const englishColumnStart = margin;
+  const englishColumnEnd = margin + columnWidth;
+  
+  let hebrewY = y;
+  let englishY = y;
+  let currentHebrewX = hebrewColumnEnd;
+  let currentEnglishX = englishColumnStart;
+  
+  // Group mappings by sentence
+  const sentenceMap = groupMappingsBySentence(wordMappings);
+  
+  // Process all sentences in order
+  const sortedSentences = Array.from(sentenceMap.keys()).sort((a, b) => a - b);
+  let colorIndex = 0;
+  
+  sortedSentences.forEach((sentenceNum) => {
+    const phrases = sentenceMap.get(sentenceNum)!;
+    
+    phrases.forEach(({ mapping, phraseIndex }) => {
+      // Get color for this phrase (cycle through colors)
+      const colorData = MAPPED_COLORS_DATA[colorIndex % MAPPED_COLORS_DATA.length];
+      const color = printBlackAndWhite ? rgb(0, 0, 0) : colorData.color;
+      colorIndex++;
+      
+      // Create notation: {color}{sentenceNumber}⁽{phraseNumber}⁾
+      // Sentence numbers are 1-indexed for display
+      const displaySentenceNum = sentenceNum + 1;
+      const notation = showSubscripts 
+        ? `${colorData.id}${toSubscript(displaySentenceNum)}⁽${toSuperscript(phraseIndex)}⁾`
+        : undefined;
+      
+      const checkAndHandlePageBreak = () => {
+        if (
+          englishY < siddurConfig.pdfMargins.bottom ||
+          hebrewY < siddurConfig.pdfMargins.bottom
+        ) {
+          page = pdfDoc.addPage();
+          const topY = height - siddurConfig.pdfMargins.top;
+          englishY = topY;
+          hebrewY = topY;
+          currentEnglishX = englishColumnStart;
+          currentHebrewX = hebrewColumnEnd;
+        }
+      };
+      
+      // --- English Column ---
+      mapping.english.split(/( )/).forEach((word: string) => {
+        if (word === '') return;
+        const wordWidth = fonts.english.widthOfTextAtSize(word, englishFontSize);
+        if (currentEnglishX + wordWidth > englishColumnEnd) {
+          currentEnglishX = englishColumnStart;
+          englishY -= englishLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(word, {
+          x: currentEnglishX,
+          y: englishY,
+          font: fonts.english,
+          size: englishFontSize,
+          color,
+        });
+        currentEnglishX += wordWidth;
+      });
+      
+      // Add notation after English text (right corner)
+      if (notation) {
+        const notationSize = englishFontSize * 0.6; // Subscript size
+        const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
+        if (currentEnglishX + notationWidth > englishColumnEnd) {
+          currentEnglishX = englishColumnStart;
+          englishY -= englishLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(notation, {
+          x: currentEnglishX,
+          y: englishY - (englishFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentEnglishX += notationWidth;
+      }
+      
+      const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
+      if (currentEnglishX + enSpaceWidth > englishColumnEnd) {
+        currentEnglishX = englishColumnStart;
+        englishY -= englishLineHeight;
+        checkAndHandlePageBreak();
+      }
+      currentEnglishX += enSpaceWidth;
+      
+      // --- Hebrew Column ---
+      mapping.hebrew.split(/( )/).forEach((word: string) => {
+        if (word === '') return;
+        const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
+        if (currentHebrewX - wordWidth < hebrewColumnStart) {
+          currentHebrewX = hebrewColumnEnd;
+          hebrewY -= hebrewLineHeight;
+          checkAndHandlePageBreak();
+        }
+        currentHebrewX -= wordWidth;
+        page.drawText(word, {
+          x: currentHebrewX,
+          y: hebrewY,
+          font: fonts.hebrew,
+          size: hebrewFontSize,
+          color,
+        });
+      });
+      
+      // Add notation before Hebrew text (left side, since Hebrew is RTL)
+      if (notation) {
+        const notationSize = hebrewFontSize * 0.6; // Subscript size
+        const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
+        if (currentHebrewX - notationWidth < hebrewColumnStart) {
+          currentHebrewX = hebrewColumnEnd;
+          hebrewY -= hebrewLineHeight;
+          checkAndHandlePageBreak();
+        }
+        currentHebrewX -= notationWidth;
+        page.drawText(notation, {
+          x: currentHebrewX,
+          y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+      }
+      
+      const heSpaceWidth = fonts.hebrew.widthOfTextAtSize(' ', hebrewFontSize);
+      if (currentHebrewX - heSpaceWidth < hebrewColumnStart) {
+        currentHebrewX = hebrewColumnEnd;
+        hebrewY -= hebrewLineHeight;
+        checkAndHandlePageBreak();
+      }
+      currentHebrewX -= heSpaceWidth;
+    });
+  });
+  
+  let updatedContext = {
+    ...context,
+    page,
+    y: Math.min(englishY, hebrewY),
+  };
+  updatedContext = drawSourceIfPresent(
+    updatedContext,
+    prayer,
+    params,
+    width - margin * 2,
+  );
+  updatedContext.y -= siddurConfig.verticalSpacing.afterPrayerText;
+  
+  return updatedContext;
+};
+
+/**
  * Iterates through and draws sub-prayers associated with a main prayer.
  * @internal
  */
@@ -862,6 +1137,18 @@ const drawSubPrayers = (
 
       const wordMappings = subPrayer['Word Mappings'];
       if (!wordMappings || Object.keys(wordMappings).length === 0) continue;
+
+      // Check if sentence-based mapping style is selected
+      if (params.style === 'sentence based mapping') {
+        currentContext = drawSentenceBasedMappingPrayer(
+          currentContext,
+          detailedPrayer,
+          wordMappings,
+          params,
+          columnWidth,
+        );
+        continue;
+      }
 
       const firstMapping = Object.values(wordMappings)[0] as any;
       const hasTransliteration =
@@ -1044,6 +1331,18 @@ export const drawPrayer = (
 
       if (prayerData['Word Mappings']) {
         const wordMappings = prayerData['Word Mappings'];
+        
+        // Check if sentence-based mapping style is selected
+        if (style === 'sentence based mapping') {
+          return drawSentenceBasedMappingPrayer(
+            currentContext,
+            prayer,
+            wordMappings,
+            params,
+            columnWidth,
+          );
+        }
+        
         const firstMapping = wordMappings['0'] as any;
         const hasTransliteration =
           firstMapping &&
