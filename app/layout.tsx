@@ -60,7 +60,10 @@ export default async function RootLayout({
 
   const content = (
     <html lang="en" className="dark [color-scheme:dark]">
-      <body className="bg-gray-1100 overflow-y-scroll bg-[url('/grid.svg')] pb-36">
+      <body 
+        className="bg-gray-1100 overflow-y-scroll bg-[url('/grid.svg')] pb-36"
+        suppressHydrationWarning
+      >
         <GlobalNav userData={userData} />
         <div className="pt-14 lg:pl-72">
           <div className="mx-auto max-w-4xl space-y-8 px-2 pt-6 lg:px-8 lg:py-8">
