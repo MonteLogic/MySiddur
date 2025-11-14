@@ -13,6 +13,7 @@ export default defineConfig({
     include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
     css: true,
     exclude: ['**/e2e-tests/**', '**/node_modules/**'],
+    environmentMatchGlobs: [['tests/visual/**', 'node']],
   },
   resolve: {
     alias: {

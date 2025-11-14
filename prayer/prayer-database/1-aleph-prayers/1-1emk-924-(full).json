@@ -8,6 +8,7 @@
     "description-of-prayer": "Eizehu Mekoman (Where is their place?), is a passage from the Mishnah recited in daily morning prayers. It meticulously details the laws and locations for bringing animal sacrifices in the Holy Temple.",
     "Source": "Mishnah Zevachim, Chapter 5",
     "prayer-id": "1-1emk-924-(full)",
+    "link-to-prayer": "https://www.sefaria.org/api/texts/Mishnah_Zevachim.5?lang=bi",
     "styles": {
       "Recommended": ["Hebrew", "English"],
       "all-transliterated": ["Hebrew", "English", "eng-transliteration"]

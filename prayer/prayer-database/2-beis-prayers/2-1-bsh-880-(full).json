@@ -6,6 +6,7 @@
     "Introduction": "A prayer of praise and blessing recited at the start of the Pesukei DeZimra (Verses of Song) section of the Shacharit (morning) service.",
     "Instruction": "Recited as part of the morning service, following the Baruch Atah Ad-nai, Ha-el Ha-gadol, ha-gibor, v'ha-nora.",
     "prayer-id": "1-1rw1",
+    "link-to-prayer": "https://www.sefaria.org/api/texts/Baruch_She'amar?lang=bi",
     "Word Mappings": {
       "0": {
         "hebrew": "בָּרוּךְ",

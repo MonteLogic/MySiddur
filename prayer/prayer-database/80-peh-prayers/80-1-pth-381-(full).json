@@ -10,6 +10,7 @@
     "when-to-recite": "This prayer in this longer form is said during Shacharis morning davening in the Shul. This may only be said at home when certain Shuls are pressed for time.",
     "service": "Shacharis",
     "prayer-id": "80-0rw1",
+    "link-to-prayer": "https://www.sefaria.org/api/texts/Numbers.28.1?lang=bi",
     "Word Mappings": {
       "0": {
         "hebrew": "וַיְדַבֵּר",
