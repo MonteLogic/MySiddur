@@ -53,7 +53,7 @@ const ensurePageCapacity = (
     siddurConfig.verticalSpacing.pageBuffer;
 
   if (y < threshold) {
-    page = pdfDoc.addPage();
+        page = pdfDoc.addPage();
     y = height - siddurConfig.pdfMargins.top;
   }
 
@@ -70,25 +70,25 @@ const drawPrayerTitle = (
 
   const lines = calculateTextLines(
     title,
-    fonts.englishBold,
+        fonts.englishBold,
     siddurConfig.fontSizes.prayerTitle,
-    width - margin * 2,
-    siddurConfig.lineSpacing.prayerTitle,
-  );
+        width - margin * 2,
+        siddurConfig.lineSpacing.prayerTitle,
+      );
 
   const { page, y } = ensureSpaceAndDraw(
     context,
     lines.map((l) => ({
-      ...l,
-      font: fonts.englishBold,
+        ...l,
+        font: fonts.englishBold,
       size: siddurConfig.fontSizes.prayerTitle,
-      lineHeight: siddurConfig.lineSpacing.prayerTitle,
+        lineHeight: siddurConfig.lineSpacing.prayerTitle,
     })),
     `Prayer Title: ${title}`,
-  );
+      );
 
   return { ...context, page, y: y - siddurConfig.verticalSpacing.beforePrayerTitle };
-};
+      };
 
 const hasTransliteration = (mapping: any): boolean =>
   Boolean(mapping && (mapping.transliteration || mapping.Transliteration));
@@ -104,39 +104,39 @@ const handleWordMappings = (
   const { style = 'Recommended' } = params;
   const firstMapping = wordMappings['0'] as any;
   const mappingHasTransliteration = hasTransliteration(firstMapping);
-
+        
   if (style === 'sentence based mapping') {
     if (mappingHasTransliteration) {
       return drawSentenceBasedMappingPrayerThreeColumn(
         context,
         prayer,
-        wordMappings,
-        params,
-      );
+            wordMappings,
+            params,
+          );
     }
     return drawSentenceBasedMappingPrayer(
       context,
       prayer,
-      wordMappings,
-      params,
-      columnWidth,
-    );
-  }
+            wordMappings,
+            params,
+            columnWidth,
+          );
+        }
 
   const displayStyle = resolveDisplayStyle(styleSource ?? prayer, style);
   const shouldShowTransliteration =
     displayStyle === 'all-transliterated' && mappingHasTransliteration;
 
-  if (shouldShowTransliteration) {
+      if (shouldShowTransliteration) {
     return drawThreeColumnColorMappedPrayer(context, prayer, wordMappings, params);
   }
   return drawTwoColumnColorMappedPrayer(
     context,
     prayer,
-    wordMappings,
-    params,
-    columnWidth,
-  );
+          wordMappings,
+          params,
+          columnWidth,
+        );
 };
 
 export const drawPrayer = (
@@ -169,14 +169,14 @@ export const drawPrayer = (
         return drawSubPrayers(currentContext, prayerData, params);
       }
 
-      const wordMappings = prayerData['Word Mappings'];
+        const wordMappings = prayerData['Word Mappings'];
       if (wordMappings) {
         return handleWordMappings(
-          currentContext,
-          prayer,
-          wordMappings,
-          params,
-          columnWidth,
+              currentContext,
+              prayer,
+              wordMappings,
+              params,
+              columnWidth,
           prayerData,
         );
       }

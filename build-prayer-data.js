@@ -24,6 +24,12 @@ const sentenceErrors = [];
 const punctuationRegex = /[.!?]/;
 const containsHebrew = /[\u0590-\u05FF]/;
 
+const splitIntoWords = (text) =>
+  text
+    .replace(/\s+/g, ' ')
+    .split(' ')
+    .filter(Boolean);
+
 const isLikelyEnglish = (text) => {
   if (typeof text !== 'string') return false;
   const letterMatch = text.match(/[A-Za-z]/g);
@@ -61,10 +67,7 @@ const recordSentenceIssue = ({
 const analyzeEnglishText = (text, { prayerId, path }) => {
   if (!isLikelyEnglish(text)) return;
 
-  const words = text
-    .replace(/\s+/g, ' ')
-    .split(' ')
-    .filter(Boolean);
+  const words = splitIntoWords(text);
   if (words.length <= WORD_WARNING_THRESHOLD) return;
 
   let currentRun = 0;
@@ -137,6 +140,96 @@ const traverseForEnglish = (node, { prayerId, path }) => {
 
 const validatePrayerEnglishSentences = (prayerId, prayerData) => {
   traverseForEnglish(prayerData, { prayerId, path: '' });
+
+  if (prayerData['Word Mappings']) {
+    validateWordMappingSequences(prayerId, prayerData['Word Mappings']);
+  }
+};
+
+const createSequenceState = () => ({
+  count: 0,
+  words: [],
+  warningLogged: false,
+  errorLogged: false,
+  startPath: null,
+});
+
+const resetSequenceState = (state) => {
+  state.count = 0;
+  state.words = [];
+  state.warningLogged = false;
+  state.errorLogged = false;
+  state.startPath = null;
+};
+
+const processWordToken = (token, { prayerId, path }, state) => {
+  state.count += 1;
+  state.words.push(token);
+  if (!state.startPath) {
+    state.startPath = path;
+  }
+
+  if (
+    state.count > WORD_WARNING_THRESHOLD &&
+    state.count <= WORD_ERROR_THRESHOLD &&
+    !state.warningLogged
+  ) {
+    recordSentenceIssue({
+      prayerId,
+      path: state.startPath || path,
+      length: state.count,
+      words: [...state.words],
+      type: 'warning',
+    });
+    state.warningLogged = true;
+  }
+
+  if (state.count > WORD_ERROR_THRESHOLD && !state.errorLogged) {
+    recordSentenceIssue({
+      prayerId,
+      path: state.startPath || path,
+      length: state.count,
+      words: [...state.words],
+      type: 'error',
+    });
+    state.errorLogged = true;
+  }
+
+  if (punctuationRegex.test(token.slice(-1))) {
+    resetSequenceState(state);
+  }
+};
+
+const validateWordMappingSequences = (prayerId, wordMappings) => {
+  const sortedKeys = Object.keys(wordMappings).sort(
+    (a, b) => parseInt(a, 10) - parseInt(b, 10),
+  );
+
+  const fieldsToCheck = ['english', 'transliteration', 'Transliteration'];
+  const sequenceStates = fieldsToCheck.reduce((acc, field) => {
+    acc[field] = createSequenceState();
+    return acc;
+  }, {});
+
+  sortedKeys.forEach((key) => {
+    const mapping = wordMappings[key];
+    fieldsToCheck.forEach((field) => {
+      const text = mapping[field];
+      if (!text || !isLikelyEnglish(text)) return;
+
+      const words = splitIntoWords(text);
+      words.forEach((word) =>
+        processWordToken(
+          word,
+          {
+            prayerId,
+            path: `Word Mappings[${key}].${field}`,
+          },
+          sequenceStates[field],
+        ),
+      );
+    });
+  });
 };
 
 // --- NEW --- Step 1: Get the list of required prayer IDs from the liturgy file.
