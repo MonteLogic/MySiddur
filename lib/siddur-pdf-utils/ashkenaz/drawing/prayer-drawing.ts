@@ -953,22 +953,19 @@ const drawSentenceBasedMappingPrayer = (
     const phrases = sentenceMap.get(sentenceNum)!;
     // Reset color index at the start of each sentence
     let colorIndex = 0;
-    
-    // Create notation only for the FIRST phrase of the sentence
     const displaySentenceNum = sentenceNum + 1;
-    const firstPhraseColorData = MAPPED_COLORS_DATA[0]; // Always use first color (red) for sentence notation
-    const sentenceNotation = showSubscripts 
-      ? `${firstPhraseColorData.id}${toSubscript(displaySentenceNum)}⁽${toSuperscript(1)}⁾`
-      : undefined;
     
-    phrases.forEach(({ mapping, phraseIndex }) => {
+    phrases.forEach(({ key, mapping, phraseIndex }) => {
       // Get color for this phrase (cycle through colors)
       const colorData = MAPPED_COLORS_DATA[colorIndex % MAPPED_COLORS_DATA.length];
       const color = printBlackAndWhite ? rgb(0, 0, 0) : colorData.color;
       colorIndex++;
       
-      // Only show notation on the FIRST phrase of the sentence
-      const notation = (phraseIndex === 1) ? sentenceNotation : undefined;
+      const notationValue =
+        showSubscripts && phraseIndex
+          ? `${colorData.id}${toSubscript(phraseIndex)}⁽${toSuperscript(displaySentenceNum)}⁾`
+          : undefined;
+      const englishNotation = phraseIndex === 1 ? notationValue : undefined;
       
       const checkAndHandlePageBreak = () => {
         if (
@@ -1021,11 +1018,11 @@ const drawSentenceBasedMappingPrayer = (
       });
       
       // Add notation after the ENTIRE phrase (for first phrase of sentence only)
-      if (notation) {
+      if (englishNotation) {
         const notationSize = englishFontSize * 0.6; // Subscript size
         // Split notation into color letter and the rest
-        const colorLetter = notation.charAt(0); // 'r', 'g', 'b', etc.
-        const restOfNotation = notation.substring(1); // '₁⁽¹⁾'
+        const colorLetter = englishNotation.charAt(0); // 'r', 'g', 'b', etc.
+        const restOfNotation = englishNotation.substring(1); // '₁⁽¹⁾'
         
         // Render color letter in subscript size
         const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
@@ -1071,6 +1068,7 @@ const drawSentenceBasedMappingPrayer = (
       // --- Hebrew Column ---
       // Notation goes on EVERY word
       const hebrewWords = mapping.hebrew.split(/( )/).filter((w: string) => w !== '');
+      let hasAppliedHebrewNotation = false;
       hebrewWords.forEach((word: string) => {
         if (word === '') return;
         const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
@@ -1088,17 +1086,36 @@ const drawSentenceBasedMappingPrayer = (
           color,
         });
         
-        // Add notation before EVERY Hebrew word
-        if (notation) {
+        // Add notation only once per Hebrew phrase (before first word)
+        if (notationValue && !hasAppliedHebrewNotation) {
+          hasAppliedHebrewNotation = true;
           const notationSize = hebrewFontSize * 0.6; // Subscript size
-          const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
-          if (currentHebrewX - notationWidth < hebrewColumnStart) {
+          const colorLetter = notationValue.charAt(0);
+          const restOfNotation = notationValue.substring(1);
+
+          const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
+          if (currentHebrewX - colorLetterWidth < hebrewColumnStart) {
             currentHebrewX = hebrewColumnEnd;
             hebrewY -= hebrewLineHeight;
             checkAndHandlePageBreak();
           }
-          currentHebrewX -= notationWidth;
-          page.drawText(notation, {
+          currentHebrewX -= colorLetterWidth;
+          page.drawText(colorLetter, {
+            x: currentHebrewX,
+            y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
+            font: fonts.english,
+            size: notationSize,
+            color: rgb(0, 0, 0),
+          });
+
+          const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+          if (currentHebrewX - restWidth < hebrewColumnStart) {
+            currentHebrewX = hebrewColumnEnd;
+            hebrewY -= hebrewLineHeight;
+            checkAndHandlePageBreak();
+          }
+          currentHebrewX -= restWidth;
+          page.drawText(restOfNotation, {
             x: currentHebrewX,
             y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
             font: fonts.english,
@@ -1193,22 +1210,19 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
     const phrases = sentenceMap.get(sentenceNum)!;
     // Reset color index at the start of each sentence
     let colorIndex = 0;
-    
-    // Create notation only for the FIRST phrase of the sentence
     const displaySentenceNum = sentenceNum + 1;
-    const firstPhraseColorData = MAPPED_COLORS_DATA[0]; // Always use first color (red) for sentence notation
-    const sentenceNotation = showSubscripts 
-      ? `${firstPhraseColorData.id}${toSubscript(displaySentenceNum)}⁽${toSuperscript(1)}⁾`
-      : undefined;
     
-    phrases.forEach(({ mapping, phraseIndex }) => {
+    phrases.forEach(({ key, mapping, phraseIndex }) => {
       // Get color for this phrase (cycle through colors)
       const colorData = MAPPED_COLORS_DATA[colorIndex % MAPPED_COLORS_DATA.length];
       const color = printBlackAndWhite ? rgb(0, 0, 0) : colorData.color;
       colorIndex++;
       
-      // Only show notation on the FIRST phrase of the sentence
-      const notation = (phraseIndex === 1) ? sentenceNotation : undefined;
+      const notationValue =
+        showSubscripts && phraseIndex
+          ? `${colorData.id}${toSubscript(phraseIndex)}⁽${toSuperscript(displaySentenceNum)}⁾`
+          : undefined;
+      const englishNotation = phraseIndex === 1 ? notationValue : undefined;
       
       const checkAndHandlePageBreak = () => {
         if (
@@ -1264,11 +1278,11 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
       });
       
       // Add notation after the ENTIRE phrase (for first phrase of sentence only)
-      if (notation) {
+      if (englishNotation) {
         const notationSize = englishFontSize * 0.6; // Subscript size
         // Split notation into color letter and the rest
-        const colorLetter = notation.charAt(0); // 'r', 'g', 'b', etc.
-        const restOfNotation = notation.substring(1); // '₁⁽¹⁾'
+        const colorLetter = englishNotation.charAt(0); // 'r', 'g', 'b', etc.
+        const restOfNotation = englishNotation.substring(1); // '₁⁽¹⁾'
         
         // Render color letter in subscript size
         const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
@@ -1314,16 +1328,26 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
       // --- Transliteration Column ---
       // Notation goes on EVERY word
       const translitText = mapping.transliteration || mapping.Transliteration || '';
-      const translitWords = translitText.split(/( )/).filter((w: string) => w !== '');
-      translitWords.forEach((word: string) => {
-        if (word === '') return;
-        const wordWidth = fonts.english.widthOfTextAtSize(word, translitFontSize);
+      const translitParts = translitText.split(/( )/);
+      translitParts.forEach((part: string) => {
+        if (part === '') return;
+        if (part === ' ') {
+          const spaceWidth = fonts.english.widthOfTextAtSize(' ', translitFontSize);
+          if (currentTranslitX + spaceWidth > transliterationColumnStart + columnWidth) {
+            currentTranslitX = transliterationColumnStart;
+            translitY -= translitLineHeight;
+            checkAndHandlePageBreak();
+          }
+          currentTranslitX += spaceWidth;
+          return;
+        }
+        const wordWidth = fonts.english.widthOfTextAtSize(part, translitFontSize);
         if (currentTranslitX + wordWidth > transliterationColumnStart + columnWidth) {
           currentTranslitX = transliterationColumnStart;
           translitY -= translitLineHeight;
           checkAndHandlePageBreak();
         }
-        page.drawText(word, {
+        page.drawText(part, {
           x: currentTranslitX,
           y: translitY,
           font: fonts.english,
@@ -1331,26 +1355,40 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
           color,
         });
         currentTranslitX += wordWidth;
-        
-        // Add notation after EVERY transliteration word
-        if (notation) {
-          const notationSize = translitFontSize * 0.6; // Subscript size
-          const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
-          if (currentTranslitX + notationWidth > transliterationColumnStart + columnWidth) {
-            currentTranslitX = transliterationColumnStart;
-            translitY -= translitLineHeight;
-            checkAndHandlePageBreak();
-          }
-          page.drawText(notation, {
-            x: currentTranslitX,
-            y: translitY - (translitFontSize - notationSize) * 0.5,
-            font: fonts.english,
-            size: notationSize,
-            color: rgb(0, 0, 0),
-          });
-          currentTranslitX += notationWidth;
-        }
       });
+      if (notationValue) {
+        const notationSize = translitFontSize * 0.6;
+        const colorLetter = notationValue.charAt(0);
+        const restOfNotation = notationValue.substring(1);
+        const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
+        if (currentTranslitX + colorLetterWidth > transliterationColumnStart + columnWidth) {
+          currentTranslitX = transliterationColumnStart;
+          translitY -= translitLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(colorLetter, {
+          x: currentTranslitX,
+          y: translitY - (translitFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentTranslitX += colorLetterWidth;
+        const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+        if (currentTranslitX + restWidth > transliterationColumnStart + columnWidth) {
+          currentTranslitX = transliterationColumnStart;
+          translitY -= translitLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(restOfNotation, {
+          x: currentTranslitX,
+          y: translitY - (translitFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentTranslitX += restWidth;
+      }
       
       const trSpaceWidth = fonts.english.widthOfTextAtSize(' ', translitFontSize);
       if (currentTranslitX + trSpaceWidth > transliterationColumnStart + columnWidth) {
@@ -1363,6 +1401,12 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
       // --- Hebrew Column ---
       // Notation goes on EVERY word
       const hebrewWords = mapping.hebrew.split(/( )/).filter((w: string) => w !== '');
+      const hebrewWordCount = mapping.hebrew?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+      if (hebrewWordCount > 1) {
+        console.warn(
+          `[SentenceMapping Warning] Hebrew phrase for mapping key ${key} contains multiple words: "${mapping.hebrew}"`,
+        );
+      }
       hebrewWords.forEach((word: string) => {
         if (word === '') return;
         const wordWidth = fonts.hebrew.widthOfTextAtSize(word, hebrewFontSize);
@@ -1381,16 +1425,33 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
         });
         
         // Add notation before EVERY Hebrew word
-        if (notation) {
+        if (notationValue) {
           const notationSize = hebrewFontSize * 0.6; // Subscript size
-          const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
-          if (currentHebrewX - notationWidth < hebrewColumnStart) {
+          const colorLetter = notationValue.charAt(0);
+          const restOfNotation = notationValue.substring(1);
+          const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
+          if (currentHebrewX - colorLetterWidth < hebrewColumnStart) {
             currentHebrewX = hebrewColumnEnd;
             hebrewY -= hebrewLineHeight;
             checkAndHandlePageBreak();
           }
-          currentHebrewX -= notationWidth;
-          page.drawText(notation, {
+          currentHebrewX -= colorLetterWidth;
+          page.drawText(colorLetter, {
+            x: currentHebrewX,
+            y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
+            font: fonts.english,
+            size: notationSize,
+            color: rgb(0, 0, 0),
+          });
+
+          const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+          if (currentHebrewX - restWidth < hebrewColumnStart) {
+            currentHebrewX = hebrewColumnEnd;
+            hebrewY -= hebrewLineHeight;
+            checkAndHandlePageBreak();
+          }
+          currentHebrewX -= restWidth;
+          page.drawText(restOfNotation, {
             x: currentHebrewX,
             y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
             font: fonts.english,
