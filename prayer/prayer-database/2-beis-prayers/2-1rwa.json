@@ -6,6 +6,7 @@
     "Introduction": "A series of blessings recited before engaging in the study of Torah, expressing gratitude for the gift of Torah and praying for understanding.",
     "Instruction": "Recited daily as part of the morning blessings (Birchot HaShachar), before studying any Torah.",
     "prayer-id": "1-0rw2",
+    "link-to-prayer": "https://www.sefaria.org/api/texts/Birchot_HaTorah?lang=bi",
     "Word Mappings": {
       "0": {
         "hebrew": "בָּרוּךְ",

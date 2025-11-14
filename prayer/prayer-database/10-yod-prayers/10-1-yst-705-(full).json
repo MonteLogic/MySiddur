@@ -6,6 +6,7 @@
     "Introduction": "Yishtabach is the concluding prayer of Pesukei D'Zimra (Verses of Praise) in the morning service. It enumerates fifteen expressions of praise corresponding to the fifteen 'Songs of Ascents' (Psalms 120-134).",
     "Instruction": "Recited at the conclusion of Pesukei D'Zimra, the introductory psalms of the morning service (Shacharit), immediately before the Barechu.",
     "prayer-id": "10-1-yst-705-(full)",
+    "link-to-prayer": "https://www.sefaria.org/api/texts/Yishtabach?lang=bi",
     "Word Mappings": {
       "0": {
         "hebrew": "יִשְׁתַּבַּח",
