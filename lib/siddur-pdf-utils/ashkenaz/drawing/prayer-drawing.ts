@@ -139,6 +139,7 @@ const extractSentenceNumber = (detailedArray: any[]): number => {
 
 /**
  * Groups word mappings by sentence and assigns phrase numbers
+ * Sentences are detected by punctuation marks (., !, ?) in the English text
  * For the first phrase of the first sentence, it includes the start of the prayer
  */
 const groupMappingsBySentence = (wordMappings: WordMapping): Map<number, Array<{ key: string; mapping: any; phraseIndex: number }>> => {
@@ -148,27 +149,30 @@ const groupMappingsBySentence = (wordMappings: WordMapping): Map<number, Array<{
     ([a], [b]) => parseInt(a) - parseInt(b)
   );
   
-  // First pass: group by sentence
-  // Use the minimum sentence number found in the detailed-array to handle phrases that span sentences
-  allMappings.forEach(([key, mapping]: [string, any]) => {
-    const detailedArray = mapping['detailed-array'] || [];
-    let sentenceNum = 0;
+  // Detect sentence boundaries by punctuation in English text
+  let currentSentenceNum = 0;
+  let previousEndedWithPunctuation = false;
+  
+  allMappings.forEach(([key, mapping]: [string, any], index: number) => {
+    const english = mapping.english || '';
     
-    if (detailedArray.length > 0) {
-      // Find the minimum sentence number in the array
-      let minSentence = Infinity;
-      for (const entry of detailedArray) {
-        if (Array.isArray(entry) && entry.length > 0 && typeof entry[0] === 'number') {
-          minSentence = Math.min(minSentence, entry[0]);
-        }
-      }
-      sentenceNum = minSentence === Infinity ? 0 : minSentence;
+    // Check if this phrase ends with sentence-ending punctuation
+    const endsWithPunctuation = /[.!?]$/.test(english.trim());
+    
+    // If previous phrase ended with punctuation, start a new sentence
+    // (unless this is the very first phrase)
+    if (previousEndedWithPunctuation && index > 0) {
+      currentSentenceNum++;
     }
     
-    if (!sentenceMap.has(sentenceNum)) {
-      sentenceMap.set(sentenceNum, []);
+    // Group by sentence number
+    if (!sentenceMap.has(currentSentenceNum)) {
+      sentenceMap.set(currentSentenceNum, []);
     }
-    sentenceMap.get(sentenceNum)!.push({ key, mapping, phraseIndex: 0 });
+    sentenceMap.get(currentSentenceNum)!.push({ key, mapping, phraseIndex: 0 });
+    
+    // Update flag for next iteration
+    previousEndedWithPunctuation = endsWithPunctuation;
   });
   
   // Second pass: assign phrase indices within each sentence
@@ -981,15 +985,13 @@ const drawSentenceBasedMappingPrayer = (
       };
       
       // --- English Column ---
-      // Notation goes on FIRST word of FIRST phrase only (phrases can be multiple words)
+      // Notation goes after the ENTIRE phrase (for first phrase of sentence only)
       const englishParts = mapping.english.split(/( )/);
-      let isFirstWord = true;
-      let hasAddedNotation = false;
       
+      // Draw the entire English phrase first
       englishParts.forEach((part: string) => {
         if (part === '') return;
         
-        // Skip spaces for notation logic, but still draw them
         if (part === ' ') {
           const spaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
           if (currentEnglishX + spaceWidth > englishColumnEnd) {
@@ -1016,30 +1018,47 @@ const drawSentenceBasedMappingPrayer = (
           color,
         });
         currentEnglishX += wordWidth;
-        
-        // Add notation after FIRST word of FIRST phrase only (skip spaces)
-        if (isFirstWord && notation && !hasAddedNotation) {
-          isFirstWord = false; // Mark that we've processed the first word
-          hasAddedNotation = true; // Mark that we've added notation
-          const notationSize = englishFontSize * 0.6; // Subscript size
-          const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
-          if (currentEnglishX + notationWidth > englishColumnEnd) {
-            currentEnglishX = englishColumnStart;
-            englishY -= englishLineHeight;
-            checkAndHandlePageBreak();
-          }
-          page.drawText(notation, {
-            x: currentEnglishX,
-            y: englishY - (englishFontSize - notationSize) * 0.5,
-            font: fonts.english,
-            size: notationSize,
-            color: rgb(0, 0, 0),
-          });
-          currentEnglishX += notationWidth;
-        } else if (isFirstWord) {
-          isFirstWord = false; // Still mark as processed even if no notation
-        }
       });
+      
+      // Add notation after the ENTIRE phrase (for first phrase of sentence only)
+      if (notation) {
+        const notationSize = englishFontSize * 0.6; // Subscript size
+        // Split notation into color letter and the rest
+        const colorLetter = notation.charAt(0); // 'r', 'g', 'b', etc.
+        const restOfNotation = notation.substring(1); // '₁⁽¹⁾'
+        
+        // Render color letter in subscript size
+        const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
+        if (currentEnglishX + colorLetterWidth > englishColumnEnd) {
+          currentEnglishX = englishColumnStart;
+          englishY -= englishLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(colorLetter, {
+          x: currentEnglishX,
+          y: englishY - (englishFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentEnglishX += colorLetterWidth;
+        
+        // Render the rest (subscript number and superscript) in subscript size
+        const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+        if (currentEnglishX + restWidth > englishColumnEnd) {
+          currentEnglishX = englishColumnStart;
+          englishY -= englishLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(restOfNotation, {
+          x: currentEnglishX,
+          y: englishY - (englishFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentEnglishX += restWidth;
+      }
       
       const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
       if (currentEnglishX + enSpaceWidth > englishColumnEnd) {
@@ -1209,15 +1228,13 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
       };
       
       // --- English Column ---
-      // Notation goes on FIRST word of FIRST phrase only (phrases can be multiple words)
+      // Notation goes after the ENTIRE phrase (for first phrase of sentence only)
       const englishParts = mapping.english.split(/( )/);
-      let isFirstWord = true;
-      let hasAddedNotation = false;
       
+      // Draw the entire English phrase first
       englishParts.forEach((part: string) => {
         if (part === '') return;
         
-        // Skip spaces for notation logic, but still draw them
         if (part === ' ') {
           const spaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
           if (currentEnglishX + spaceWidth > englishColumnStart + columnWidth) {
@@ -1244,30 +1261,47 @@ const drawSentenceBasedMappingPrayerThreeColumn = (
           color,
         });
         currentEnglishX += wordWidth;
-        
-        // Add notation after FIRST word of FIRST phrase only (skip spaces)
-        if (isFirstWord && notation && !hasAddedNotation) {
-          isFirstWord = false; // Mark that we've processed the first word
-          hasAddedNotation = true; // Mark that we've added notation
-          const notationSize = englishFontSize * 0.6; // Subscript size
-          const notationWidth = fonts.english.widthOfTextAtSize(notation, notationSize);
-          if (currentEnglishX + notationWidth > englishColumnStart + columnWidth) {
-            currentEnglishX = englishColumnStart;
-            englishY -= englishLineHeight;
-            checkAndHandlePageBreak();
-          }
-          page.drawText(notation, {
-            x: currentEnglishX,
-            y: englishY - (englishFontSize - notationSize) * 0.5,
-            font: fonts.english,
-            size: notationSize,
-            color: rgb(0, 0, 0),
-          });
-          currentEnglishX += notationWidth;
-        } else if (isFirstWord) {
-          isFirstWord = false; // Still mark as processed even if no notation
-        }
       });
+      
+      // Add notation after the ENTIRE phrase (for first phrase of sentence only)
+      if (notation) {
+        const notationSize = englishFontSize * 0.6; // Subscript size
+        // Split notation into color letter and the rest
+        const colorLetter = notation.charAt(0); // 'r', 'g', 'b', etc.
+        const restOfNotation = notation.substring(1); // '₁⁽¹⁾'
+        
+        // Render color letter in subscript size
+        const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
+        if (currentEnglishX + colorLetterWidth > englishColumnStart + columnWidth) {
+          currentEnglishX = englishColumnStart;
+          englishY -= englishLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(colorLetter, {
+          x: currentEnglishX,
+          y: englishY - (englishFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentEnglishX += colorLetterWidth;
+        
+        // Render the rest (subscript number and superscript) in subscript size
+        const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+        if (currentEnglishX + restWidth > englishColumnStart + columnWidth) {
+          currentEnglishX = englishColumnStart;
+          englishY -= englishLineHeight;
+          checkAndHandlePageBreak();
+        }
+        page.drawText(restOfNotation, {
+          x: currentEnglishX,
+          y: englishY - (englishFontSize - notationSize) * 0.5,
+          font: fonts.english,
+          size: notationSize,
+          color: rgb(0, 0, 0),
+        });
+        currentEnglishX += restWidth;
+      }
       
       const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', englishFontSize);
       if (currentEnglishX + enSpaceWidth > englishColumnStart + columnWidth) {
