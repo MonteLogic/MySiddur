@@ -5,11 +5,139 @@ const path = require('path');
 
 // --- Define Paths ---
 const prayersDir = path.join(__dirname, 'prayer/prayer-database');
-const liturgyFile = path.join(__dirname, 'prayer/prayer-content/ashkenazi-prayer-info.json');
+const liturgyFile = path.join(
+  __dirname,
+  'prayer/prayer-content/ashkenazi-prayer-info.json',
+);
 
 // --- MODIFIED --- Output paths are now cleaner
 const outputDataDir = path.join(__dirname, 'prayer-data-private');
 const outputIndexFile = path.join(__dirname, 'generated/prayer-index.ts'); // Moved to a dedicated 'generated' folder
+
+// --- NEW --- Sentence length guardrails
+const WORD_WARNING_THRESHOLD = 18;
+const WORD_ERROR_THRESHOLD = 30;
+
+const sentenceWarnings = [];
+const sentenceErrors = [];
+
+const punctuationRegex = /[.!?]/;
+const containsHebrew = /[\u0590-\u05FF]/;
+
+const isLikelyEnglish = (text) => {
+  if (typeof text !== 'string') return false;
+  const letterMatch = text.match(/[A-Za-z]/g);
+  if (!letterMatch || letterMatch.length < 5) return false;
+  return !containsHebrew.test(text);
+};
+
+const formatSnippet = (words) => {
+  if (!words || words.length === 0) return '';
+  const snippet = words.join(' ');
+  return snippet.length > 160 ? `${snippet.slice(0, 157)}...` : snippet;
+};
+
+const recordSentenceIssue = ({
+  prayerId,
+  path,
+  length,
+  words,
+  type,
+}) => {
+  const payload = {
+    prayerId,
+    path,
+    length,
+    snippet: formatSnippet(words),
+  };
+
+  if (type === 'warning') {
+    sentenceWarnings.push(payload);
+  } else {
+    sentenceErrors.push(payload);
+  }
+};
+
+const analyzeEnglishText = (text, { prayerId, path }) => {
+  if (!isLikelyEnglish(text)) return;
+
+  const words = text
+    .replace(/\s+/g, ' ')
+    .split(' ')
+    .filter(Boolean);
+  if (words.length <= WORD_WARNING_THRESHOLD) return;
+
+  let currentRun = 0;
+  let runWarningIssued = false;
+  let currentRunWords = [];
+
+  words.forEach((word) => {
+    currentRun++;
+    currentRunWords.push(word);
+
+    if (
+      currentRun > WORD_WARNING_THRESHOLD &&
+      !runWarningIssued &&
+      currentRun <= WORD_ERROR_THRESHOLD
+    ) {
+      recordSentenceIssue({
+        prayerId,
+        path,
+        length: currentRun,
+        words: [...currentRunWords],
+        type: 'warning',
+      });
+      runWarningIssued = true;
+    }
+
+    if (currentRun > WORD_ERROR_THRESHOLD) {
+      recordSentenceIssue({
+        prayerId,
+        path,
+        length: currentRun,
+        words: [...currentRunWords],
+        type: 'error',
+      });
+      runWarningIssued = true;
+    }
+
+    if (punctuationRegex.test(word.slice(-1))) {
+      currentRun = 0;
+      currentRunWords = [];
+      runWarningIssued = false;
+    }
+  });
+};
+
+const traverseForEnglish = (node, { prayerId, path }) => {
+  if (node == null) return;
+
+  if (typeof node === 'string') {
+    analyzeEnglishText(node, { prayerId, path });
+    return;
+  }
+
+  if (Array.isArray(node)) {
+    node.forEach((item, index) => {
+      traverseForEnglish(item, {
+        prayerId,
+        path: `${path}[${index}]`,
+      });
+    });
+    return;
+  }
+
+  if (typeof node === 'object') {
+    Object.entries(node).forEach(([key, value]) => {
+      const nextPath = path ? `${path}.${key}` : key;
+      traverseForEnglish(value, { prayerId, path: nextPath });
+    });
+  }
+};
+
+const validatePrayerEnglishSentences = (prayerId, prayerData) => {
+  traverseForEnglish(prayerData, { prayerId, path: '' });
+};
 
 // --- NEW --- Step 1: Get the list of required prayer IDs from the liturgy file.
 const getRequiredPrayerIds = () => {
@@ -58,22 +186,50 @@ fs.readdirSync(prayersDir).forEach(subDir => {
         const prayerId = Object.keys(jsonData)[0];
 
         // --- MODIFIED --- Only process the prayer if it's on our "shopping list".
-        if (prayerId && requiredPrayerIds.has(prayerId)) {
-          console.log(`✅ Processing required prayer: ${prayerId}`);
+        if (prayerId) {
           const prayerData = jsonData[prayerId];
+          validatePrayerEnglishSentences(prayerId, prayerData);
 
-          prayerIndex[prayerId] = {
-            id: prayerId,
-            title: prayerData['prayer-title'],
-          };
+          if (requiredPrayerIds.has(prayerId)) {
+            console.log(`✅ Processing required prayer: ${prayerId}`);
 
-          const individualOutputFile = path.join(outputDataDir, `${prayerId}.json`);
-          fs.writeFileSync(individualOutputFile, JSON.stringify(prayerData));
+            prayerIndex[prayerId] = {
+              id: prayerId,
+              title: prayerData['prayer-title'],
+            };
+
+            const individualOutputFile = path.join(
+              outputDataDir,
+              `${prayerId}.json`,
+            );
+            fs.writeFileSync(individualOutputFile, JSON.stringify(prayerData));
+          }
         }
       }
     });
   }
 });
+
+if (sentenceWarnings.length > 0) {
+  console.warn('\n⚠️  Sentence length warnings detected:');
+  sentenceWarnings.forEach((warning) => {
+    console.warn(
+      `  • [${warning.prayerId}] ${warning.path || '<root>'} has ${warning.length} words without punctuation.\n    ↳ ${warning.snippet}`,
+    );
+  });
+}
+
+if (sentenceErrors.length > 0) {
+  console.error('\n⛔ Sentence length errors detected (build aborted):');
+  sentenceErrors.forEach((error) => {
+    console.error(
+      `  • [${error.prayerId}] ${error.path || '<root>'} reached ${error.length} words without punctuation.\n    ↳ ${error.snippet}`,
+    );
+  });
+  throw new Error(
+    `Found ${sentenceErrors.length} sentence(s) exceeding ${WORD_ERROR_THRESHOLD} words without punctuation.`,
+  );
+}
 
 const indexFileContent = `// This file is auto-generated by build-prayer-data.js. Do not edit manually.
 
