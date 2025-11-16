@@ -85,20 +85,19 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-black p-4 md:p-6 text-white">
-      <div className="w-full max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="mb-4 text-4xl font-bold">{strings['title']}</h1>
-          <p className="mb-8 text-lg text-gray-300">
-            Customize your settings and generate your Siddur PDF.
-          </p>
-        </div>
+    <div className="w-full text-white">
+      <div className="text-center mb-8">
+        <h1 className="mb-4 text-4xl font-bold">{strings['title']}</h1>
+        <p className="mb-8 text-lg text-gray-300">
+          Customize your settings and generate your Siddur PDF.
+        </p>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-            <h2 className="text-lg font-semibold mb-3 text-cyan-400">Settings</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
+            <h2 className="text-lg font-semibold mb-6 text-cyan-400">Settings</h2>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               <label className="flex items-center justify-between cursor-pointer">
                 <div className="flex-1 pr-4">
                   <span className="text-sm font-medium text-gray-300 block">Black & White</span>
@@ -113,25 +112,25 @@ export default function LandingPage() {
                 />
               </label>
 
-              <div className="pt-2 border-t border-gray-700">
-                <div className="flex flex-col md:flex-row md:items-end gap-4 mb-2">
+              <div className="pt-4 border-t border-gray-700">
+                <div className="flex flex-col md:flex-row md:items-end gap-5 mb-3">
                   <div className="flex-1 w-full">
-                    <label htmlFor="style-select" className="block text-sm font-medium text-gray-300 mb-2">
-                      Prayer Style
-                    </label>
-                    <select
-                      id="style-select"
-                      value={selectedStyle}
-                      onChange={(e) => setSelectedStyle(e.target.value)}
-                      className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
-                    >
-                      <option value="Recommended">Recommended</option>
-                      <option value="all-transliterated">All Transliterated</option>
-                      <option value="sentence based mapping">Sentence Based Mapping</option>
-                    </select>
+                <label htmlFor="style-select" className="block text-sm font-medium text-gray-300 mb-3">
+                  Prayer Style
+                </label>
+                <select
+                  id="style-select"
+                  value={selectedStyle}
+                  onChange={(e) => setSelectedStyle(e.target.value)}
+                  className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                >
+                  <option value="Recommended">Recommended</option>
+                  <option value="all-transliterated">All Transliterated</option>
+                  <option value="sentence based mapping">Sentence Based Mapping</option>
+                </select>
                   </div>
                   <div className="flex-1 w-full">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <label htmlFor="order-select" className="block text-sm font-medium text-gray-300">
                         Prayer Order
                       </label>
@@ -143,7 +142,7 @@ export default function LandingPage() {
                       id="order-select"
                       value={selectedOrder}
                       onChange={(e) => setSelectedOrder(e.target.value)}
-                      className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                      className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                     >
                       <option value="Recommended">Recommended</option>
                       <option value="Ashkenazi">Ashkenazi</option>
@@ -274,7 +273,6 @@ export default function LandingPage() {
             )}
           </button>
         </div>
-      </div>
     </div>
   );
 }
