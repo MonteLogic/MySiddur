@@ -4,6 +4,7 @@
   "scripts": {
     "setup": "git submodule update --init --recursive && cd MySiddur-blog-content && pnpm i",
     "postinstall": "cd MySiddur-blog-content && pnpm install",
+    "prebuild": "node scripts/check-clerk-env.js",
     "build": "pnpm run generate-markdown-paths && node build-prayer-data.js && next build",
     "dev": "next dev",
     "lint": "next lint",
