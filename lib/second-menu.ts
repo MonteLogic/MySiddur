@@ -1,5 +1,3 @@
-import { useUser } from '@clerk/nextjs';
-
 export type Item = {
   name: string;
   slug: string;
@@ -26,6 +24,11 @@ export const getSecondMenu = (
         name: 'Customize Siddur',
         slug: 'customize-siddur',
         description: 'Print Custom Siddur',
+      },
+      {
+        name: 'Nusach',
+        slug: 'nusach-viz',
+        description: 'Prayer Order (Nusach) Information',
       },
       {
         name: 'Team Schedule',

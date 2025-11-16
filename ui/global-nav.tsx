@@ -9,8 +9,8 @@ import Byline from './byline';
 import { UserData } from '#/app/utils/getUserID';
 import { CBudLogo } from './cbud-logo';
 import titles from '#/strings.json';
-import { ClerkLoading, useSession, useUser } from '@clerk/nextjs';
-import { UserButton } from '@clerk/nextjs';
+import { ClerkLoading, UserButton } from '@clerk/nextjs';
+import { useSession, useUser } from '#/lib/safe-clerk-hooks';
 import { Search, Grid3x3, Bell, ChevronDown } from 'lucide-react';
 import TaskBar from './task-bar';
 import Image from 'next/image';
@@ -71,9 +71,18 @@ function SearchBar({ className = '' }: SearchBarProps) {
 // Profile Avatar Component
 function ProfileAvatar({ size = 36 }: { size?: number }) {
   const { user, isLoaded: isUserLoaded } = useUser();
+  const isClerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
 
   if (!isUserLoaded) {
     return <div className="h-full w-full bg-gray-600 animate-pulse" />;
+  }
+
+  if (isClerkDisabled || !user) {
+    return (
+      <div className="h-full w-full bg-gray-600 flex items-center justify-center text-white text-sm font-medium">
+        U
+      </div>
+    );
   }
 
   if (user?.imageUrl) {
@@ -88,7 +97,6 @@ function ProfileAvatar({ size = 36 }: { size?: number }) {
     );
   }
 
-  if (user) {
     const initial = user?.firstName?.[0] || 
                    user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 
                    'U';
@@ -97,18 +105,16 @@ function ProfileAvatar({ size = 36 }: { size?: number }) {
         {initial}
       </div>
     );
-  }
-
-  return <div className="h-full w-full bg-gray-600 animate-pulse" />;
 }
 
 // Profile Menu Dropdown Content
 function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
   const { user, isLoaded: isUserLoaded } = useUser();
+  const isClerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
 
   return (
     <div className="p-4">
-      {isUserLoaded && user && (
+      {!isClerkDisabled && isUserLoaded && user && (
         <div className="mb-4 pb-4 border-b border-gray-700 flex items-center gap-x-3">
           {user?.imageUrl ? (
             <Image
@@ -131,6 +137,7 @@ function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
               {user?.emailAddresses[0]?.emailAddress}
             </p>
           </div>
+          {!isClerkDisabled && (
           <UserButton 
             afterSignOutUrl="/" 
             appearance={{
@@ -139,12 +146,13 @@ function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
               }
             }} 
           />
+          )}
         </div>
       )}
-      <ClerkLoading>Loading ...</ClerkLoading>
+      {!isClerkDisabled && <ClerkLoading>Loading ...</ClerkLoading>}
       <TaskBar
         embedded={true}
-        paymentInfo={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
+        paymentInfo={!isClerkDisabled && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
           status: {
             isActive: subscriptionData.status.isActive,
             planId: subscriptionData.status.planId,
