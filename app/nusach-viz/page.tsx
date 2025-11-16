@@ -27,22 +27,7 @@ export default async function Page() {
         <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
             <h2 className="text-2xl font-semibold mb-4 text-cyan-400">Ashkenazi Nusach</h2>
             
-            <div className="mb-6">
-              <FAQAccordion question="What is a Nusach?">
-                <p>
-                  A nusach (נוסח) is a traditional prayer order and liturgical text 
-                  that determines the sequence, wording, and structure of prayers. Different Jewish communities have developed their own 
-                  nusach over centuries, each reflecting their unique historical and cultural traditions.
-                </p>
-                <p>
-                  The <strong className="text-white">Recommended</strong> prayer order is <strong className="text-white">Ashkenazi order</strong> (nusach), 
-                  which is the traditional prayer order used by Ashkenazi Jews, originating from Central and Eastern Europe. 
-                  This is the nusach we currently offer in our system.
-                </p>
-              </FAQAccordion>
-            </div>
-
-            <div className="mt-6">
+            <div>
               <h3 className="text-xl font-semibold mb-4 text-green-400">Prayer Order in Your PDF</h3>
               <p className="text-gray-300 text-sm mb-4">
                 The following is the order of prayers that are compiled into the PDF generated on the home page:
@@ -86,6 +71,22 @@ export default async function Page() {
         {/* Other Versions Section */}
         <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
           <h2 className="text-xl font-semibold mb-4 text-yellow-400">Other Versions (Nusachs)</h2>
+          
+          <div className="mb-6">
+            <FAQAccordion question="What is a Nusach?">
+              <p>
+                A nusach (נוסח) is a traditional prayer order and liturgical text 
+                that determines the sequence, wording, and structure of prayers. Different Jewish communities have developed their own 
+                nusach over centuries, each reflecting their unique historical and cultural traditions.
+              </p>
+              <p>
+                The <strong className="text-white">Recommended</strong> prayer order is <strong className="text-white">Ashkenazi order</strong> (nusach), 
+                which is the traditional prayer order used by Ashkenazi Jews, originating from Central and Eastern Europe. 
+                This is the nusach we currently offer in our system.
+              </p>
+            </FAQAccordion>
+          </div>
+
           <p className="text-gray-300 text-sm mb-4">
             Currently, we only offer Ashkenazi order (nusach) in our system. The following are other nusachs that exist:
           </p>
