@@ -8,6 +8,7 @@ import strings from '#/strings.json';
 export default function LandingPage() {
   const { user, isLoaded } = useUser();
   const [selectedStyle, setSelectedStyle] = useState('Recommended');
+  const [selectedOrder, setSelectedOrder] = useState('Recommended');
   const [printBlackAndWhite, setPrintBlackAndWhite] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -84,7 +85,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-black p-6 text-white">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-black p-4 md:p-6 text-white">
       <div className="w-full max-w-6xl">
         <div className="text-center mb-8">
           <h1 className="mb-4 text-4xl font-bold">{strings['title']}</h1>
@@ -113,19 +114,46 @@ export default function LandingPage() {
               </label>
 
               <div className="pt-2 border-t border-gray-700">
-                <label htmlFor="style-select" className="block text-sm font-medium text-gray-300 mb-2">
-                  Prayer Style
-                </label>
-                <select
-                  id="style-select"
-                  value={selectedStyle}
-                  onChange={(e) => setSelectedStyle(e.target.value)}
-                  className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
-                >
-                  <option value="Recommended">Recommended</option>
-                  <option value="all-transliterated">All Transliterated</option>
-                  <option value="sentence based mapping">Sentence Based Mapping</option>
-                </select>
+                <div className="flex flex-col md:flex-row md:items-end gap-4 mb-2">
+                  <div className="flex-1 w-full">
+                    <label htmlFor="style-select" className="block text-sm font-medium text-gray-300 mb-2">
+                      Prayer Style
+                    </label>
+                    <select
+                      id="style-select"
+                      value={selectedStyle}
+                      onChange={(e) => setSelectedStyle(e.target.value)}
+                      className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                    >
+                      <option value="Recommended">Recommended</option>
+                      <option value="all-transliterated">All Transliterated</option>
+                      <option value="sentence based mapping">Sentence Based Mapping</option>
+                    </select>
+                  </div>
+                  <div className="flex-1 w-full">
+                    <div className="flex items-center gap-2 mb-2">
+                      <label htmlFor="order-select" className="block text-sm font-medium text-gray-300">
+                        Prayer Order
+                      </label>
+                      <Link href="/nusach-viz" className="text-xs text-blue-400 hover:text-blue-300 underline whitespace-nowrap">
+                        Learn More
+                      </Link>
+                    </div>
+                    <select
+                      id="order-select"
+                      value={selectedOrder}
+                      onChange={(e) => setSelectedOrder(e.target.value)}
+                      className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                    >
+                      <option value="Recommended">Recommended</option>
+                      <option value="Ashkenazi">Ashkenazi</option>
+                      <option value="Sephardic">Sephardic</option>
+                      <option value="Chassidic">Chassidic</option>
+                      <option value="Yemenite">Yemenite</option>
+                      <option value="Italian">Italian</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               {isSaving && <p className="text-xs text-gray-500">Saving...</p>}
@@ -140,7 +168,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-2 bg-gray-800 rounded-lg p-5 border border-gray-700">
+          <div className="lg:col-span-2 bg-gray-800 rounded-lg p-5 md:p-6 border border-gray-700">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-green-400">Preview</h2>
               <span className="text-xs px-2 py-1 bg-yellow-900/30 text-yellow-400 rounded border border-yellow-800">
@@ -151,8 +179,8 @@ export default function LandingPage() {
               This is a preview of how your PDF will look. The actual PDF will contain your full Siddur content.
             </p>
             
-            <div className="bg-white rounded p-4 shadow-lg">
-              <div className="grid grid-cols-3 gap-4 text-sm">
+            <div className="bg-white rounded p-4 md:p-6 shadow-lg">
+              <div className="grid grid-cols-3 gap-3 md:gap-4 text-sm">
                 <div className="flex flex-col overflow-hidden">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">English</div>
                   <div className="flex flex-wrap gap-x-1 leading-relaxed">

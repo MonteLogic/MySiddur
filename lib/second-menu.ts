@@ -28,6 +28,11 @@ export const getSecondMenu = (
         description: 'Print Custom Siddur',
       },
       {
+        name: 'Nusach',
+        slug: 'nusach-viz',
+        description: 'Prayer Order (Nusach) Information',
+      },
+      {
         name: 'Team Schedule',
         slug: 'main/schedule',
         description: 'Schedule page.',
