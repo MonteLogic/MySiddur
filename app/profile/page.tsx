@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useUser } from '#/lib/safe-clerk-hooks';
 import { UserButton } from '@clerk/nextjs';
 import { Nusach } from '#/lib/siddur/types/siddurTypes';
 import { JewishLearningProfile } from '#/types/UserTypes';

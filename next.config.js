@@ -1,6 +1,26 @@
 const path = require('path');
 const webpack = require('webpack');
 
+// Check if Clerk is disabled and show notice
+const isClerkDisabled = process.env.DISABLE_CLERK === 'true' || process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
+
+if (isClerkDisabled) {
+  console.log('\n');
+  console.log('╔════════════════════════════════════════════════════════════════════════════╗');
+  console.log('║                                                                            ║');
+  console.log('║                        ⚠️  CLERK IS DISABLED  ⚠️                          ║');
+  console.log('║                                                                            ║');
+  console.log('║  Clerk authentication has been disabled via environment variable.         ║');
+  console.log('║  All routes will be accessible without authentication.                     ║');
+  console.log('║                                                                            ║');
+  console.log('║  To re-enable Clerk:                                                       ║');
+  console.log('║    1. Remove DISABLE_CLERK=true from your .env.local file                 ║');
+  console.log('║    2. Restart the dev server                                               ║');
+  console.log('║                                                                            ║');
+  console.log('╚════════════════════════════════════════════════════════════════════════════╝');
+  console.log('\n');
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,

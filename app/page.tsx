@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useUser } from '#/lib/safe-clerk-hooks';
 import Link from 'next/link';
 import strings from '#/strings.json';
 

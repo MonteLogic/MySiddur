@@ -1,5 +1,3 @@
-import { useUser } from '@clerk/nextjs';
-
 export type Item = {
   name: string;
   slug: string;
