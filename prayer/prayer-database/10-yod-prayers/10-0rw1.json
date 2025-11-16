@@ -1,12 +1,13 @@
 {
   "10-0rw1": {
     "prayer-title": "Yehi Ratzon (Daily Guidance)",
+    "prayer-title-hebrew": "יְהִי רָצוֹן",
     "version": "1.0.1",
     "date_modified": "2025-11-16T11:31:00-06:00",
     "Introduction": "A prayer for divine guidance, requesting to be aligned with the Torah and commandments, and to be protected from negative influences.",
     "Instruction": "Recited daily, commonly as part of the morning blessings (Birkat HaShachar).",
     "prayer-id": "10-0rw1",
-    "link-to-prayer": "https://www.sefaria.org/api/texts/Yehi_Ratzon?lang=bi",
+    "link-to-pdf-page": "Where in Ha-Siddur",
     "Word Mappings": {
       "0": {
         "hebrew": "יְהִי",
