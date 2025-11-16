@@ -57,6 +57,7 @@ export default async function RootLayout({
   const userData = await getUserData();
 
   const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const isClerkDisabled = process.env.DISABLE_CLERK === 'true' || process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
 
   const content = (
     <html lang="en" className="dark [color-scheme:dark]">
@@ -80,7 +81,12 @@ export default async function RootLayout({
     </html>
   );
 
-  // Only wrap with ClerkProvider if we have a publishable key
+  // Only wrap with ClerkProvider if Clerk is enabled and we have a publishable key
+  if (isClerkDisabled) {
+    console.warn('Clerk is disabled via DISABLE_CLERK environment variable. Clerk features will be disabled.');
+    return content;
+  }
+
   if (!publishableKey) {
     console.warn('NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is not set in environment variables. Clerk features will be disabled.');
     return content;
