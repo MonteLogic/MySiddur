@@ -14,24 +14,32 @@ export function FAQAccordion({ question, children, defaultOpen = false, variant 
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [contentHeight, setContentHeight] = useState<number | 'auto'>('auto');
   const contentRef = useRef<HTMLDivElement>(null);
+  const innerContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!contentRef.current) return;
-    
     const updateHeight = () => {
-      if (contentRef.current) {
-        const height = contentRef.current.scrollHeight;
-        setContentHeight(isOpen ? height : 0);
+      // Measure the inner content div for accurate height
+      if (innerContentRef.current) {
+        // Use requestAnimationFrame to ensure DOM is fully updated
+        requestAnimationFrame(() => {
+          if (innerContentRef.current) {
+            const height = innerContentRef.current.scrollHeight;
+            setContentHeight(isOpen ? height : 0);
+          }
+        });
       }
     };
 
     if (isOpen) {
-      // For opening, set height immediately
+      // For opening, set height with a small delay to ensure content is rendered
       updateHeight();
+      // Also update after a brief delay to catch any dynamic content
+      const timeout = setTimeout(updateHeight, 50);
+      return () => clearTimeout(timeout);
     } else {
       // For closing, set to current height first, then animate to 0
-      if (contentRef.current) {
-        setContentHeight(contentRef.current.scrollHeight);
+      if (innerContentRef.current) {
+        setContentHeight(innerContentRef.current.scrollHeight);
         requestAnimationFrame(() => {
           setContentHeight(0);
         });
@@ -41,13 +49,13 @@ export function FAQAccordion({ question, children, defaultOpen = false, variant 
 
   // Update height when content changes (e.g., nested accordions)
   useEffect(() => {
-    if (isOpen && contentRef.current) {
+    if (isOpen && innerContentRef.current) {
       const resizeObserver = new ResizeObserver(() => {
-        if (contentRef.current) {
-          setContentHeight(contentRef.current.scrollHeight);
+        if (innerContentRef.current) {
+          setContentHeight(innerContentRef.current.scrollHeight);
         }
       });
-      resizeObserver.observe(contentRef.current);
+      resizeObserver.observe(innerContentRef.current);
       return () => resizeObserver.disconnect();
     }
   }, [isOpen, children]);
@@ -83,7 +91,7 @@ export function FAQAccordion({ question, children, defaultOpen = false, variant 
               : 'border-gray-500 hover:border-gray-400 hover:bg-gray-700/50'
           )}>
             <span className={clsx(
-              'text-xl font-light leading-none transition-transform duration-200 text-gray-300',
+              'text-xl font-light leading-none transition-transform duration-200 text-gray-300 flex items-center justify-center',
               isOpen ? 'rotate-45' : ''
             )}>
               +
@@ -99,14 +107,17 @@ export function FAQAccordion({ question, children, defaultOpen = false, variant 
           isOpen ? 'opacity-100' : 'opacity-0'
         )}
         style={{
-          maxHeight: typeof contentHeight === 'number' ? `${contentHeight}px` : contentHeight,
+          maxHeight: typeof contentHeight === 'number' ? `${contentHeight}px` : 'none',
         }}
         aria-hidden={!isOpen}
       >
-        <div className={clsx(
-          'text-gray-300',
-          isNested ? 'py-3 px-3 space-y-2' : 'py-4 px-2 space-y-3'
-        )}>
+        <div 
+          ref={innerContentRef}
+          className={clsx(
+            'text-gray-300',
+            isNested ? 'py-3 px-3 space-y-2' : 'py-4 px-2 space-y-3'
+          )}
+        >
           {children}
         </div>
       </div>
