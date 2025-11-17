@@ -6,7 +6,7 @@
 'use client';
 
 import { ClerkProvider } from '@clerk/nextjs';
-import { ReactNode, createContext, useContext } from 'react';
+import { ReactNode } from 'react';
 
 // Check if Clerk is disabled
 const isClerkDisabled = () => {

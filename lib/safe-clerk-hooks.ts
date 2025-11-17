@@ -1,12 +1,14 @@
 /**
  * Safe Clerk hooks that handle the case when Clerk is disabled
- * These hooks return safe fallback values when DISABLE_CLERK is set to 'true'
  * 
- * IMPORTANT: When Clerk is disabled, ClerkProvider won't be rendered.
- * React hooks must be called unconditionally, so we always call the Clerk hooks.
- * If ClerkProvider is missing, the hooks will throw errors that need to be
- * caught by error boundaries. Components should check isClerkDisabled() and
- * conditionally render Clerk-dependent UI.
+ * IMPORTANT: These hooks must always call the underlying Clerk hooks (React rules).
+ * When Clerk is disabled, ClerkProvider won't be rendered, so calling these hooks
+ * will throw errors. Components using these hooks should check isClerkDisabled()
+ * and conditionally render, or wrap the component tree in an error boundary.
+ * 
+ * For now, we check isClerkDisabled() and return safe defaults without calling
+ * the Clerk hooks. This violates React's rules of hooks but is necessary when
+ * ClerkProvider isn't available. Components should handle this gracefully.
  */
 
 'use client';
@@ -24,60 +26,44 @@ const isClerkDisabled = () => {
 /**
  * Safe wrapper for useSession hook
  * Returns null session and isLoaded=true when Clerk is disabled
- * Note: If ClerkProvider isn't rendered, this will throw an error
- * that should be caught by an error boundary or handled by conditional rendering
+ * 
+ * WARNING: This hook conditionally calls useClerkSession, which violates
+ * React's rules of hooks. This is necessary when ClerkProvider isn't rendered.
+ * Components should check isClerkDisabled() before rendering components that use this hook.
  */
 export function useSession() {
   const isDisabled = isClerkDisabled();
   
-  // Always call the hook - React requires this
-  // If ClerkProvider isn't rendered and Clerk is disabled, components should
-  // check isClerkDisabled() before using Clerk hooks, or use error boundaries
-  let clerkSession: ReturnType<typeof useClerkSession>;
-  
-  // Check if Clerk is disabled first - if so, return safe defaults
-  // However, we still need to call the hook due to React rules
-  // Components using this should check isClerkDisabled() and conditionally render
+  // When Clerk is disabled, ClerkProvider won't be rendered, so we can't call the hook
+  // Return safe defaults instead. This violates React's rules but is necessary.
   if (isDisabled) {
-    // When disabled, we can't call the hook safely, so we'll return a safe default
-    // The component should handle this case via conditional rendering
     return useMemo(() => ({ session: null, isLoaded: true }), []);
   }
   
-  clerkSession = useClerkSession();
-  
-  return useMemo(() => {
-    return clerkSession;
-  }, [clerkSession]);
+  // When enabled, always call the hook
+  const clerkSession = useClerkSession();
+  return useMemo(() => clerkSession, [clerkSession]);
 }
 
 /**
  * Safe wrapper for useUser hook
  * Returns null user and isLoaded=true when Clerk is disabled
- * Note: If ClerkProvider isn't rendered, this will throw an error
- * that should be caught by an error boundary or handled by conditional rendering
+ * 
+ * WARNING: This hook conditionally calls useClerkUser, which violates
+ * React's rules of hooks. This is necessary when ClerkProvider isn't rendered.
+ * Components should check isClerkDisabled() before rendering components that use this hook.
  */
 export function useUser() {
   const isDisabled = isClerkDisabled();
   
-  // Always call the hook - React requires this
-  // If ClerkProvider isn't rendered and Clerk is disabled, components should
-  // check isClerkDisabled() before using Clerk hooks, or use error boundaries
-  let clerkUser: ReturnType<typeof useClerkUser>;
-  
-  // Check if Clerk is disabled first - if so, return safe defaults
-  // However, we still need to call the hook due to React rules
-  // Components using this should check isClerkDisabled() and conditionally render
+  // When Clerk is disabled, ClerkProvider won't be rendered, so we can't call the hook
+  // Return safe defaults instead. This violates React's rules but is necessary.
   if (isDisabled) {
-    // When disabled, we can't call the hook safely, so we'll return a safe default
-    // The component should handle this case via conditional rendering
     return useMemo(() => ({ user: null, isLoaded: true }), []);
   }
   
-  clerkUser = useClerkUser();
-  
-  return useMemo(() => {
-    return clerkUser;
-  }, [clerkUser]);
+  // When enabled, always call the hook
+  const clerkUser = useClerkUser();
+  return useMemo(() => clerkUser, [clerkUser]);
 }
 
