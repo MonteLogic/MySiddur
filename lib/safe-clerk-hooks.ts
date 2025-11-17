@@ -2,17 +2,17 @@
  * Safe Clerk hooks that handle the case when Clerk is disabled
  * These hooks return safe fallback values when DISABLE_CLERK is set to 'true'
  * 
- * IMPORTANT: When Clerk is disabled, ClerkProvider won't be rendered, so
- * calling Clerk hooks will throw errors. We check if Clerk is disabled first
- * and return safe defaults, but we still need to call the hooks conditionally.
- * However, React requires hooks to be called unconditionally, so we use a
- * try-catch pattern with useState to handle errors gracefully.
+ * IMPORTANT: When Clerk is disabled, ClerkProvider won't be rendered.
+ * React hooks must be called unconditionally, so we always call the Clerk hooks.
+ * If ClerkProvider is missing, the hooks will throw errors that need to be
+ * caught by error boundaries. Components should check isClerkDisabled() and
+ * conditionally render Clerk-dependent UI.
  */
 
 'use client';
 
 import { useSession as useClerkSession, useUser as useClerkUser } from '@clerk/nextjs';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo } from 'react';
 
 const isClerkDisabled = () => {
   if (typeof window !== 'undefined') {
@@ -24,74 +24,60 @@ const isClerkDisabled = () => {
 /**
  * Safe wrapper for useSession hook
  * Returns null session and isLoaded=true when Clerk is disabled
- * Uses error handling to gracefully handle missing ClerkProvider
+ * Note: If ClerkProvider isn't rendered, this will throw an error
+ * that should be caught by an error boundary or handled by conditional rendering
  */
 export function useSession() {
   const isDisabled = isClerkDisabled();
-  const [error, setError] = useState<Error | null>(null);
-  const [sessionData, setSessionData] = useState<any>(null);
   
-  // Try to call the hook, but catch errors if ClerkProvider isn't available
-  let clerkSession: any = null;
-  try {
-    clerkSession = useClerkSession();
-  } catch (err) {
-    // If ClerkProvider isn't rendered, the hook will throw
-    // We'll handle this by returning safe defaults
-    if (!error && err instanceof Error) {
-      setError(err);
-    }
+  // Always call the hook - React requires this
+  // If ClerkProvider isn't rendered and Clerk is disabled, components should
+  // check isClerkDisabled() before using Clerk hooks, or use error boundaries
+  let clerkSession: ReturnType<typeof useClerkSession>;
+  
+  // Check if Clerk is disabled first - if so, return safe defaults
+  // However, we still need to call the hook due to React rules
+  // Components using this should check isClerkDisabled() and conditionally render
+  if (isDisabled) {
+    // When disabled, we can't call the hook safely, so we'll return a safe default
+    // The component should handle this case via conditional rendering
+    return useMemo(() => ({ session: null, isLoaded: true }), []);
   }
   
-  useEffect(() => {
-    if (clerkSession) {
-      setSessionData(clerkSession);
-      setError(null);
-    }
-  }, [clerkSession]);
+  clerkSession = useClerkSession();
   
   return useMemo(() => {
-    if (isDisabled || error || !clerkSession) {
-      return { session: null, isLoaded: true };
-    }
     return clerkSession;
-  }, [isDisabled, error, clerkSession]);
+  }, [clerkSession]);
 }
 
 /**
  * Safe wrapper for useUser hook
  * Returns null user and isLoaded=true when Clerk is disabled
- * Uses error handling to gracefully handle missing ClerkProvider
+ * Note: If ClerkProvider isn't rendered, this will throw an error
+ * that should be caught by an error boundary or handled by conditional rendering
  */
 export function useUser() {
   const isDisabled = isClerkDisabled();
-  const [error, setError] = useState<Error | null>(null);
-  const [userData, setUserData] = useState<any>(null);
   
-  // Try to call the hook, but catch errors if ClerkProvider isn't available
-  let clerkUser: any = null;
-  try {
-    clerkUser = useClerkUser();
-  } catch (err) {
-    // If ClerkProvider isn't rendered, the hook will throw
-    // We'll handle this by returning safe defaults
-    if (!error && err instanceof Error) {
-      setError(err);
-    }
+  // Always call the hook - React requires this
+  // If ClerkProvider isn't rendered and Clerk is disabled, components should
+  // check isClerkDisabled() before using Clerk hooks, or use error boundaries
+  let clerkUser: ReturnType<typeof useClerkUser>;
+  
+  // Check if Clerk is disabled first - if so, return safe defaults
+  // However, we still need to call the hook due to React rules
+  // Components using this should check isClerkDisabled() and conditionally render
+  if (isDisabled) {
+    // When disabled, we can't call the hook safely, so we'll return a safe default
+    // The component should handle this case via conditional rendering
+    return useMemo(() => ({ user: null, isLoaded: true }), []);
   }
   
-  useEffect(() => {
-    if (clerkUser) {
-      setUserData(clerkUser);
-      setError(null);
-    }
-  }, [clerkUser]);
+  clerkUser = useClerkUser();
   
   return useMemo(() => {
-    if (isDisabled || error || !clerkUser) {
-      return { user: null, isLoaded: true };
-    }
     return clerkUser;
-  }, [isDisabled, error, clerkUser]);
+  }, [clerkUser]);
 }
 
