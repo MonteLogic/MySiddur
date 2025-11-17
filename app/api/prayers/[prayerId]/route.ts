@@ -27,8 +27,9 @@ export async function GET(
 
     // Prayer files are stored directly as the prayer data object
     // Return it wrapped in the prayer-id key for consistency
-    const prayerId = jsonData['prayer-id'] || params.prayerId;
-    return NextResponse.json({ [prayerId]: jsonData }, { status: 200 });
+    // Use the prayer-id from the JSON if available, otherwise use the route param
+    const responsePrayerId = jsonData['prayer-id'] || prayerId;
+    return NextResponse.json({ [responsePrayerId]: jsonData }, { status: 200 });
   } catch (error) {
     console.error('Error fetching prayer:', error);
     return NextResponse.json(
