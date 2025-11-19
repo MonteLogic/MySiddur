@@ -11,6 +11,7 @@ async function testUpload() {
 
         const blob = await put('test-upload.txt', 'Hello Vercel Blob!', {
             access: 'public',
+            token: process.env.my_siddur_1_READ_WRITE_TOKEN,
         });
 
         console.log('✅ Upload successful!');

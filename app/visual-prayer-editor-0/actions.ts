@@ -114,6 +114,7 @@ export async function savePrayerData(prayerId: string, prayerData: PrayerData): 
     const filename = `${prayerId}-${prayerData.edit_id}.json`;
     const { url } = await put(filename, JSON.stringify(prayerData, null, 2), {
       access: 'public',
+      token: process.env.my_siddur_1_READ_WRITE_TOKEN,
       addRandomSuffix: false, // We already have a unique ID
     });
 
