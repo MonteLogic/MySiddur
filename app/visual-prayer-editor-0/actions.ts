@@ -3,6 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { put } from '@vercel/blob';
+
 export interface Prayer {
   id: string;
   title: string;
@@ -23,6 +25,7 @@ export interface PrayerData {
   Instruction?: string;
   'prayer-id': string;
   'link-to-prayer'?: string;
+  edit_id?: string;
   'Word Mappings': {
     [key: string]: WordMapping;
   };
@@ -94,7 +97,7 @@ export async function getPrayerData(prayerId: string): Promise<PrayerData | null
 /**
  * Save prayer data
  */
-export async function savePrayerData(prayerId: string, prayerData: PrayerData): Promise<{ success: boolean; error?: string }> {
+export async function savePrayerData(prayerId: string, prayerData: PrayerData): Promise<{ success: boolean; error?: string; url?: string }> {
   try {
     // Validate prayer-id matches
     if (prayerData['prayer-id'] !== prayerId) {
@@ -103,13 +106,20 @@ export async function savePrayerData(prayerId: string, prayerData: PrayerData): 
 
     // Update the date_modified field
     prayerData.date_modified = new Date().toISOString();
-
-    const filePath = path.join(process.cwd(), 'prayer-data-private', `${prayerId}.json`);
     
-    // Write the prayer data directly
-    fs.writeFileSync(filePath, JSON.stringify(prayerData, null, 2), 'utf-8');
+    // Generate a random edit_id
+    prayerData.edit_id = crypto.randomUUID();
 
-    return { success: true };
+    // Upload to Vercel Blob
+    const filename = `${prayerId}-${prayerData.edit_id}.json`;
+    const { url } = await put(filename, JSON.stringify(prayerData, null, 2), {
+      access: 'public',
+      addRandomSuffix: false, // We already have a unique ID
+    });
+
+    console.log(`Prayer saved to Blob: ${url}`);
+
+    return { success: true, url };
   } catch (error) {
     console.error('Error updating prayer:', error);
     return { success: false, error: 'Failed to update prayer' };
