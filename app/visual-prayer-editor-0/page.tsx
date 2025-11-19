@@ -186,11 +186,12 @@ export default function VisualPrayerEditor() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      Object.entries(dropdownRefs.current).forEach(([key, ref]) => {
+      if (openDropdown && dropdownRefs.current[openDropdown]) {
+        const ref = dropdownRefs.current[openDropdown];
         if (ref && !ref.contains(event.target as Node)) {
           setOpenDropdown(null);
         }
-      });
+      }
     };
 
     if (openDropdown) {
@@ -441,12 +442,12 @@ export default function VisualPrayerEditor() {
               <div className="grid grid-cols-3 gap-3 md:gap-4 text-sm">
                 <div className="flex flex-col overflow-hidden">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">English</div>
-                  <div className="flex flex-wrap gap-x-1 leading-relaxed">
+                  <div className="flex flex-wrap leading-relaxed">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
                       .map(([key, mapping]) => (
-                        mapping.english && mapping.english.split(/( )/).map((word, idx) => (
-                          word.trim() && (
+                        <span key={key}>
+                          {mapping.english && mapping.english.split(/( )/).map((word, idx) => (
                             <span
                               key={`${key}-${idx}`}
                               style={{ color: getPDFColor(key) }}
@@ -454,20 +455,21 @@ export default function VisualPrayerEditor() {
                             >
                               {word}
                             </span>
-                          )
-                        ))
+                          ))}
+                          {' '}
+                        </span>
                       ))}
                   </div>
                 </div>
                 
                 <div className="flex flex-col overflow-hidden">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">Transliteration</div>
-                  <div className="flex flex-wrap gap-x-1 leading-relaxed">
+                  <div className="flex flex-wrap leading-relaxed">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
                       .map(([key, mapping]) => (
-                        (mapping.transliteration || '').split(/( )/).map((word, idx) => (
-                          word.trim() && (
+                        <span key={key}>
+                          {(mapping.transliteration || '').split(/( )/).map((word, idx) => (
                             <span
                               key={`${key}-${idx}`}
                               style={{ color: getPDFColor(key) }}
@@ -475,24 +477,27 @@ export default function VisualPrayerEditor() {
                             >
                               {word}
                             </span>
-                          )
-                        ))
+                          ))}
+                          {' '}
+                        </span>
                       ))}
                   </div>
                 </div>
                 
                 <div className="flex flex-col overflow-hidden text-right">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">Hebrew</div>
-                  <div className="flex flex-wrap gap-x-1 leading-relaxed justify-end" dir="rtl">
+                  <div className="flex flex-wrap leading-relaxed justify-end" dir="rtl">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
                       .map(([key, mapping]) => (
-                        <span
-                          key={key}
-                          style={{ color: getPDFColor(key) }}
-                          className="font-medium"
-                        >
-                          {mapping.hebrew || ''}
+                        <span key={key}>
+                          <span
+                            style={{ color: getPDFColor(key) }}
+                            className="font-medium"
+                          >
+                            {mapping.hebrew || ''}
+                          </span>
+                          {' '}
                         </span>
                       ))}
                   </div>
@@ -530,31 +535,33 @@ export default function VisualPrayerEditor() {
               <div className="grid grid-cols-3 gap-3 md:gap-4 text-sm">
                 <div className="flex flex-col overflow-hidden">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">English</div>
-                  <div className="flex flex-wrap gap-x-1 leading-relaxed">
+                  <div className="flex flex-wrap leading-relaxed">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
                       .map(([key, mapping]) => {
                         const isSelected = key === viewingMapping.key;
                         return (
-                          <span
-                            key={key}
-                            style={{ 
-                              color: getPDFColor(key),
-                              backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
-                              padding: isSelected ? '2px 4px' : '0',
-                              borderRadius: isSelected ? '3px' : '0',
-                              border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
-                            }}
-                            className="font-medium"
-                            title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
-                          >
-                            {mapping.english ? (
-                              mapping.english.split(/( )/).map((word, idx) => (
-                                word.trim() && <span key={idx}>{word}</span>
-                              ))
-                            ) : (
-                              <span className="text-gray-400 italic">(empty)</span>
-                            )}
+                          <span key={key}>
+                            <span
+                              style={{ 
+                                color: getPDFColor(key),
+                                backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
+                                padding: isSelected ? '2px 4px' : '0',
+                                borderRadius: isSelected ? '3px' : '0',
+                                border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
+                              }}
+                              className="font-medium"
+                              title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
+                            >
+                              {mapping.english ? (
+                                mapping.english.split(/( )/).map((word, idx) => (
+                                  <span key={idx}>{word}</span>
+                                ))
+                              ) : (
+                                <span className="text-gray-400 italic">(empty)</span>
+                              )}
+                            </span>
+                            {' '}
                           </span>
                         );
                       })}
@@ -563,31 +570,33 @@ export default function VisualPrayerEditor() {
                 
                 <div className="flex flex-col overflow-hidden">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">Transliteration</div>
-                  <div className="flex flex-wrap gap-x-1 leading-relaxed">
+                  <div className="flex flex-wrap leading-relaxed">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
                       .map(([key, mapping]) => {
                         const isSelected = key === viewingMapping.key;
                         return (
-                          <span
-                            key={key}
-                            style={{ 
-                              color: getPDFColor(key),
-                              backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
-                              padding: isSelected ? '2px 4px' : '0',
-                              borderRadius: isSelected ? '3px' : '0',
-                              border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
-                            }}
-                            className="font-medium"
-                            title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
-                          >
-                            {mapping.transliteration ? (
-                              mapping.transliteration.split(/( )/).map((word, idx) => (
-                                word.trim() && <span key={idx}>{word}</span>
-                              ))
-                            ) : (
-                              <span className="text-gray-400 italic">(empty)</span>
-                            )}
+                          <span key={key}>
+                            <span
+                              style={{ 
+                                color: getPDFColor(key),
+                                backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
+                                padding: isSelected ? '2px 4px' : '0',
+                                borderRadius: isSelected ? '3px' : '0',
+                                border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
+                              }}
+                              className="font-medium"
+                              title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
+                            >
+                              {mapping.transliteration ? (
+                                mapping.transliteration.split(/( )/).map((word, idx) => (
+                                  <span key={idx}>{word}</span>
+                                ))
+                              ) : (
+                                <span className="text-gray-400 italic">(empty)</span>
+                              )}
+                            </span>
+                            {' '}
                           </span>
                         );
                       })}
@@ -596,25 +605,27 @@ export default function VisualPrayerEditor() {
                 
                 <div className="flex flex-col overflow-hidden text-right">
                   <div className="text-xs text-gray-600 mb-2 font-semibold">Hebrew</div>
-                  <div className="flex flex-wrap gap-x-1 leading-relaxed justify-end" dir="rtl">
+                  <div className="flex flex-wrap leading-relaxed justify-end" dir="rtl">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
                       .map(([key, mapping]) => {
                         const isSelected = key === viewingMapping.key;
                         return (
-                          <span
-                            key={key}
-                            style={{ 
-                              color: getPDFColor(key),
-                              backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
-                              padding: isSelected ? '2px 4px' : '0',
-                              borderRadius: isSelected ? '3px' : '0',
-                              border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
-                            }}
-                            className="font-medium"
-                            title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
-                          >
-                            {mapping.hebrew || <span className="text-gray-400 italic">(empty)</span>}
+                          <span key={key}>
+                            <span
+                              style={{ 
+                                color: getPDFColor(key),
+                                backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
+                                padding: isSelected ? '2px 4px' : '0',
+                                borderRadius: isSelected ? '3px' : '0',
+                                border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
+                              }}
+                              className="font-medium"
+                              title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
+                            >
+                              {mapping.hebrew || <span className="text-gray-400 italic">(empty)</span>}
+                            </span>
+                            {' '}
                           </span>
                         );
                       })}

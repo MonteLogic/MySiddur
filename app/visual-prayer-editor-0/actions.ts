@@ -41,6 +41,7 @@ export async function getPrayersList(): Promise<Prayer[]> {
 
     const files = fs.readdirSync(prayersDir);
     const prayers: Prayer[] = [];
+    const seenIds = new Set<string>();
 
     for (const file of files) {
       if (file.endsWith('.json') && !file.includes('prayers.json')) {
@@ -49,7 +50,8 @@ export async function getPrayersList(): Promise<Prayer[]> {
           const fileContent = fs.readFileSync(filePath, 'utf-8');
           const jsonData = JSON.parse(fileContent);
           
-          if (jsonData['prayer-id']) {
+          if (jsonData['prayer-id'] && !seenIds.has(jsonData['prayer-id'])) {
+            seenIds.add(jsonData['prayer-id']);
             prayers.push({
               id: jsonData['prayer-id'],
               title: jsonData['prayer-title'] || jsonData['prayer-id'],
