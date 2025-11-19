@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Button from '#/ui/button';
+import Modal from '#/ui/modal';
 import { ChevronDown } from 'lucide-react';
 import { getPrayersList, getPrayerData, savePrayerData, type Prayer, type PrayerData, type WordMapping } from './actions';
 
@@ -145,25 +146,6 @@ export default function VisualPrayerEditor() {
     });
   };
 
-  const addWordMapping = () => {
-    if (!prayerData) return;
-    const keys = Object.keys(prayerData['Word Mappings']);
-    const maxKey = keys.length > 0 ? Math.max(...keys.map(k => parseInt(k) || 0)) : -1;
-    const newKey = (maxKey + 1).toString();
-
-    setPrayerData({
-      ...prayerData,
-      'Word Mappings': {
-        ...prayerData['Word Mappings'],
-        [newKey]: {
-          hebrew: '',
-          english: '',
-          transliteration: '',
-          'detailed-array': [[0, [0, 1]]],
-        },
-      },
-    });
-  };
 
   const deleteWordMapping = (key: string) => {
     if (!prayerData) return;
@@ -379,20 +361,15 @@ export default function VisualPrayerEditor() {
 
           {/* Word Mappings */}
           <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-white">Word Mappings</h2>
-              <Button onClick={addWordMapping}>Add Word Mapping</Button>
-            </div>
+            <h2 className="text-2xl font-bold text-white mb-4">Word Mappings</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-gray-700">
                     <th className="text-left p-2 text-gray-300 font-medium"></th>
-                    <th className="text-left p-2 text-gray-300 font-medium">Hebrew</th>
                     <th className="text-left p-2 text-gray-300 font-medium">English</th>
                     <th className="text-left p-2 text-gray-300 font-medium">Transliteration</th>
-                    <th className="text-left p-2 text-gray-300 font-medium">Detailed Array</th>
-                    <th className="text-left p-2 text-gray-300 font-medium">Actions</th>
+                    <th className="text-left p-2 text-gray-300 font-medium">Hebrew</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -427,15 +404,6 @@ export default function VisualPrayerEditor() {
                         <td className="p-2">
                           <input
                             type="text"
-                            value={mapping.hebrew}
-                            onChange={(e) => updateWordMapping(key, 'hebrew', e.target.value)}
-                            className="w-full rounded border border-gray-600 bg-gray-900 text-white p-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                            dir="rtl"
-                          />
-                        </td>
-                        <td className="p-2">
-                          <input
-                            type="text"
                             value={mapping.english}
                             onChange={(e) => updateWordMapping(key, 'english', e.target.value)}
                             className="w-full rounded border border-gray-600 bg-gray-900 text-white p-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -452,27 +420,12 @@ export default function VisualPrayerEditor() {
                         <td className="p-2">
                           <input
                             type="text"
-                            value={JSON.stringify(mapping['detailed-array'])}
-                            onChange={(e) => {
-                              try {
-                                const parsed = JSON.parse(e.target.value);
-                                updateWordMapping(key, 'detailed-array', parsed);
-                              } catch {
-                                // Invalid JSON, ignore
-                              }
-                            }}
-                            className="w-full rounded border border-gray-600 bg-gray-900 text-white p-1 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
-                            placeholder="[[0,[0,1]]]"
+                            value={mapping.hebrew}
+                            readOnly
+                            disabled
+                            className="w-full rounded border border-gray-600 bg-gray-700 text-gray-400 p-1 text-sm cursor-not-allowed"
+                            dir="rtl"
                           />
-                        </td>
-                        <td className="p-2">
-                          <Button
-                            kind="error"
-                            onClick={() => deleteWordMapping(key)}
-                            className="text-xs"
-                          >
-                            Delete
-                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -555,9 +508,14 @@ export default function VisualPrayerEditor() {
       )}
 
       {/* PDF Preview Modal */}
-      {viewingMapping && prayerData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setViewingMapping(null)}>
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-5xl w-full mx-4 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <Modal
+        isOpen={viewingMapping !== null && prayerData !== null}
+        onClose={() => setViewingMapping(null)}
+        maxWidth="max-w-5xl"
+        className="bg-transparent p-0"
+      >
+        {viewingMapping && prayerData && (
+          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-white">PDF Preview - Context around Mapping {viewingMapping.key}</h2>
               <button
@@ -672,8 +630,8 @@ export default function VisualPrayerEditor() {
               <p className="text-yellow-400 mt-3">💡 The highlighted phrase shows how it appears in context with surrounding phrases in the PDF</p>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   );
 }
