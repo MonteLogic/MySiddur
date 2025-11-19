@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '#/ui/button';
+import { ChevronDown } from 'lucide-react';
 import { getPrayersList, getPrayerData, savePrayerData, type Prayer, type PrayerData, type WordMapping } from './actions';
 
 export default function VisualPrayerEditor() {
@@ -12,6 +13,9 @@ export default function VisualPrayerEditor() {
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [showJson, setShowJson] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [viewingMapping, setViewingMapping] = useState<{ key: string; mapping: WordMapping } | null>(null);
+  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Load list of prayers on mount
   useEffect(() => {
@@ -175,6 +179,45 @@ export default function VisualPrayerEditor() {
     if (!prayerData) return '';
     return JSON.stringify(prayerData, null, 2);
   };
+
+  // Calculate color index for a mapping key
+  const getColorIndex = (key: string): number => {
+    if (!prayerData) return 0;
+    const sortedKeys = Object.keys(prayerData['Word Mappings']).sort((a, b) => parseInt(a) - parseInt(b));
+    return sortedKeys.indexOf(key);
+  };
+
+  // Get PDF color for a mapping
+  const getPDFColor = (key: string): string => {
+    const colors = [
+      '#CC0000', // red [0.8, 0.0, 0.0]
+      '#008000', // green [0.0, 0.5, 0.0]
+      '#0000CC', // blue [0.0, 0.0, 0.8]
+      '#CC8000', // orange [0.8, 0.5, 0.0]
+      '#800080', // purple [0.5, 0.0, 0.5]
+      '#008080', // teal [0.0, 0.5, 0.5]
+    ];
+    const index = getColorIndex(key);
+    return colors[index % colors.length];
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      Object.entries(dropdownRefs.current).forEach(([key, ref]) => {
+        if (ref && !ref.contains(event.target as Node)) {
+          setOpenDropdown(null);
+        }
+      });
+    };
+
+    if (openDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [openDropdown]);
 
   return (
     <div className="w-full text-white">
@@ -344,7 +387,7 @@ export default function VisualPrayerEditor() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-gray-700">
-                    <th className="text-left p-2 text-gray-300 font-medium">Key</th>
+                    <th className="text-left p-2 text-gray-300 font-medium"></th>
                     <th className="text-left p-2 text-gray-300 font-medium">Hebrew</th>
                     <th className="text-left p-2 text-gray-300 font-medium">English</th>
                     <th className="text-left p-2 text-gray-300 font-medium">Transliteration</th>
@@ -357,7 +400,30 @@ export default function VisualPrayerEditor() {
                     .sort(([a], [b]) => parseInt(a) - parseInt(b))
                     .map(([key, mapping]) => (
                       <tr key={key} className="border-b border-gray-700 hover:bg-gray-750">
-                        <td className="p-2 text-gray-400 font-mono text-sm">{key}</td>
+                        <td className="p-2">
+                          <div className="relative" ref={(el) => { dropdownRefs.current[key] = el; }}>
+                            <button
+                              onClick={() => setOpenDropdown(openDropdown === key ? null : key)}
+                              className="p-1 hover:bg-gray-700 rounded transition-colors"
+                              aria-label="View options"
+                            >
+                              <ChevronDown className="h-4 w-4 text-gray-400" />
+                            </button>
+                            {openDropdown === key && (
+                              <div className="absolute left-0 mt-1 w-32 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-10">
+                                <button
+                                  onClick={() => {
+                                    setViewingMapping({ key, mapping });
+                                    setOpenDropdown(null);
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 rounded-t-md"
+                                >
+                                  View
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </td>
                         <td className="p-2">
                           <input
                             type="text"
@@ -425,13 +491,18 @@ export default function VisualPrayerEditor() {
                   <div className="flex flex-wrap gap-x-1 leading-relaxed">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
-                      .map(([key, mapping], index) => (
-                        <span
-                          key={key}
-                          className="font-medium"
-                        >
-                          {mapping.english || '(empty)'}
-                        </span>
+                      .map(([key, mapping]) => (
+                        mapping.english && mapping.english.split(/( )/).map((word, idx) => (
+                          word.trim() && (
+                            <span
+                              key={`${key}-${idx}`}
+                              style={{ color: getPDFColor(key) }}
+                              className="font-medium"
+                            >
+                              {word}
+                            </span>
+                          )
+                        ))
                       ))}
                   </div>
                 </div>
@@ -441,13 +512,18 @@ export default function VisualPrayerEditor() {
                   <div className="flex flex-wrap gap-x-1 leading-relaxed">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
-                      .map(([key, mapping], index) => (
-                        <span
-                          key={key}
-                          className="font-medium"
-                        >
-                          {mapping.transliteration || '(empty)'}
-                        </span>
+                      .map(([key, mapping]) => (
+                        (mapping.transliteration || '').split(/( )/).map((word, idx) => (
+                          word.trim() && (
+                            <span
+                              key={`${key}-${idx}`}
+                              style={{ color: getPDFColor(key) }}
+                              className="font-medium"
+                            >
+                              {word}
+                            </span>
+                          )
+                        ))
                       ))}
                   </div>
                 </div>
@@ -457,12 +533,13 @@ export default function VisualPrayerEditor() {
                   <div className="flex flex-wrap gap-x-1 leading-relaxed justify-end" dir="rtl">
                     {Object.entries(prayerData['Word Mappings'])
                       .sort(([a], [b]) => parseInt(a) - parseInt(b))
-                      .map(([key, mapping], index) => (
+                      .map(([key, mapping]) => (
                         <span
                           key={key}
+                          style={{ color: getPDFColor(key) }}
                           className="font-medium"
                         >
-                          {mapping.hebrew || '(empty)'}
+                          {mapping.hebrew || ''}
                         </span>
                       ))}
                   </div>
@@ -475,6 +552,127 @@ export default function VisualPrayerEditor() {
 
       {!prayerData && !loading && selectedPrayerId && (
         <div className="text-gray-400">No prayer data available</div>
+      )}
+
+      {/* PDF Preview Modal */}
+      {viewingMapping && prayerData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setViewingMapping(null)}>
+          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-5xl w-full mx-4 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-white">PDF Preview - Context around Mapping {viewingMapping.key}</h2>
+              <button
+                onClick={() => setViewingMapping(null)}
+                className="text-gray-400 hover:text-white text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="bg-white rounded p-4 md:p-6 shadow-lg mb-4">
+              <div className="grid grid-cols-3 gap-3 md:gap-4 text-sm">
+                <div className="flex flex-col overflow-hidden">
+                  <div className="text-xs text-gray-600 mb-2 font-semibold">English</div>
+                  <div className="flex flex-wrap gap-x-1 leading-relaxed">
+                    {Object.entries(prayerData['Word Mappings'])
+                      .sort(([a], [b]) => parseInt(a) - parseInt(b))
+                      .map(([key, mapping]) => {
+                        const isSelected = key === viewingMapping.key;
+                        return (
+                          <span
+                            key={key}
+                            style={{ 
+                              color: getPDFColor(key),
+                              backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
+                              padding: isSelected ? '2px 4px' : '0',
+                              borderRadius: isSelected ? '3px' : '0',
+                              border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
+                            }}
+                            className="font-medium"
+                            title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
+                          >
+                            {mapping.english ? (
+                              mapping.english.split(/( )/).map((word, idx) => (
+                                word.trim() && <span key={idx}>{word}</span>
+                              ))
+                            ) : (
+                              <span className="text-gray-400 italic">(empty)</span>
+                            )}
+                          </span>
+                        );
+                      })}
+                  </div>
+                </div>
+                
+                <div className="flex flex-col overflow-hidden">
+                  <div className="text-xs text-gray-600 mb-2 font-semibold">Transliteration</div>
+                  <div className="flex flex-wrap gap-x-1 leading-relaxed">
+                    {Object.entries(prayerData['Word Mappings'])
+                      .sort(([a], [b]) => parseInt(a) - parseInt(b))
+                      .map(([key, mapping]) => {
+                        const isSelected = key === viewingMapping.key;
+                        return (
+                          <span
+                            key={key}
+                            style={{ 
+                              color: getPDFColor(key),
+                              backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
+                              padding: isSelected ? '2px 4px' : '0',
+                              borderRadius: isSelected ? '3px' : '0',
+                              border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
+                            }}
+                            className="font-medium"
+                            title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
+                          >
+                            {mapping.transliteration ? (
+                              mapping.transliteration.split(/( )/).map((word, idx) => (
+                                word.trim() && <span key={idx}>{word}</span>
+                              ))
+                            ) : (
+                              <span className="text-gray-400 italic">(empty)</span>
+                            )}
+                          </span>
+                        );
+                      })}
+                  </div>
+                </div>
+                
+                <div className="flex flex-col overflow-hidden text-right">
+                  <div className="text-xs text-gray-600 mb-2 font-semibold">Hebrew</div>
+                  <div className="flex flex-wrap gap-x-1 leading-relaxed justify-end" dir="rtl">
+                    {Object.entries(prayerData['Word Mappings'])
+                      .sort(([a], [b]) => parseInt(a) - parseInt(b))
+                      .map(([key, mapping]) => {
+                        const isSelected = key === viewingMapping.key;
+                        return (
+                          <span
+                            key={key}
+                            style={{ 
+                              color: getPDFColor(key),
+                              backgroundColor: isSelected ? 'rgba(255, 255, 0, 0.2)' : 'transparent',
+                              padding: isSelected ? '2px 4px' : '0',
+                              borderRadius: isSelected ? '3px' : '0',
+                              border: isSelected ? '1px solid rgba(255, 255, 0, 0.5)' : 'none'
+                            }}
+                            className="font-medium"
+                            title={isSelected ? `Selected: Key ${key}` : `Key ${key}`}
+                          >
+                            {mapping.hebrew || <span className="text-gray-400 italic">(empty)</span>}
+                          </span>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-sm text-gray-400 space-y-2">
+              <p><strong>Selected Mapping Key:</strong> {viewingMapping.key}</p>
+              <p><strong>Color:</strong> <span style={{ color: getPDFColor(viewingMapping.key) }}>●</span> {getPDFColor(viewingMapping.key)}</p>
+              <p><strong>Detailed Array:</strong> {JSON.stringify(viewingMapping.mapping['detailed-array'])}</p>
+              <p className="text-yellow-400 mt-3">💡 The highlighted phrase shows how it appears in context with surrounding phrases in the PDF</p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
