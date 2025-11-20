@@ -26,6 +26,11 @@ export const getSecondMenu = (
         description: 'Print Custom Siddur',
       },
       {
+        name: 'Visual Prayer Editor',
+        slug: 'visual-prayer-editor-0',
+        description: 'Edit and upload prayer JSONs',
+      },
+      {
         name: 'Nusach',
         slug: 'nusach-viz',
         description: 'Prayer Order (Nusach) Information',

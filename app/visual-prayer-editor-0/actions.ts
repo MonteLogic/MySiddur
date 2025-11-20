@@ -26,6 +26,7 @@ export interface PrayerData {
   'prayer-id': string;
   'link-to-prayer'?: string;
   edit_id?: string;
+  user_id?: string;
   'Word Mappings': {
     [key: string]: WordMapping;
   };
@@ -97,7 +98,7 @@ export async function getPrayerData(prayerId: string): Promise<PrayerData | null
 /**
  * Save prayer data
  */
-export async function savePrayerData(prayerId: string, prayerData: PrayerData): Promise<{ success: boolean; error?: string; url?: string }> {
+export async function savePrayerData(prayerId: string, prayerData: PrayerData, userId?: string): Promise<{ success: boolean; error?: string; url?: string }> {
   try {
     // Validate prayer-id matches
     if (prayerData['prayer-id'] !== prayerId) {
@@ -109,6 +110,11 @@ export async function savePrayerData(prayerId: string, prayerData: PrayerData): 
     
     // Generate a random edit_id
     prayerData.edit_id = crypto.randomUUID();
+    
+    // Add user_id if provided
+    if (userId) {
+      prayerData.user_id = userId;
+    }
 
     // Upload to Vercel Blob
     const filename = `${prayerId}-${prayerData.edit_id}.json`;

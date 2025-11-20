@@ -5,8 +5,10 @@ import Button from '#/ui/button';
 import Modal from '#/ui/modal';
 import { ChevronDown } from 'lucide-react';
 import { getPrayersList, getPrayerData, savePrayerData, type Prayer, type PrayerData, type WordMapping } from './actions';
+import { useUser } from '#/lib/safe-clerk-hooks';
 
 export default function VisualPrayerEditor() {
+  const { user } = useUser();
   const [prayers, setPrayers] = useState<Prayer[]>([]);
   const [selectedPrayerId, setSelectedPrayerId] = useState<string>('');
   const [prayerData, setPrayerData] = useState<PrayerData | null>(null);
@@ -61,7 +63,8 @@ export default function VisualPrayerEditor() {
     setSaveStatus('idle');
 
     try {
-      const result = await savePrayerData(selectedPrayerId, prayerData);
+      const userId = user?.id;
+      const result = await savePrayerData(selectedPrayerId, prayerData, userId);
       
       if (result.success) {
         setSaveStatus('success');
