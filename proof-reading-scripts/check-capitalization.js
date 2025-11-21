@@ -137,23 +137,21 @@ async function processFile(filePath, interactive) {
     }
 }
 
-async function checkCapitalization(directory, interactive) {
-    if (!fs.existsSync(directory)) {
-        console.error(`Directory not found: ${directory}`);
+async function checkCapitalization(target, interactive) {
+    if (!fs.existsSync(target)) {
+        console.error(`Path not found: ${target}`);
         return;
     }
 
-    const files = fs.readdirSync(directory);
+    const stat = fs.statSync(target);
 
-    for (const file of files) {
-        const fullPath = path.join(directory, file);
-        const stat = fs.statSync(fullPath);
-
-        if (stat.isDirectory()) {
-            await checkCapitalization(fullPath, interactive);
-        } else if (file.endsWith('.json') || file.endsWith('.txt')) {
-            await processFile(fullPath, interactive);
+    if (stat.isDirectory()) {
+        const files = fs.readdirSync(target);
+        for (const file of files) {
+            await checkCapitalization(path.join(target, file), interactive);
         }
+    } else if (target.endsWith('.json') || target.endsWith('.txt')) {
+        await processFile(target, interactive);
     }
 }
 
@@ -161,13 +159,21 @@ if (require.main === module) {
     const args = process.argv.slice(2);
     const interactive = args.includes('--interactive');
     const targetDir = path.join(__dirname, '../prayer/prayer-database');
+    const extraFile = path.join(__dirname, '../prayer/prayer-content/ashkenazi-prayer-info.json');
 
     console.log(`Scanning directory: ${targetDir}`);
     if (interactive) {
         console.log("Interactive mode enabled.");
     }
 
-    checkCapitalization(targetDir, interactive);
+    (async () => {
+        await checkCapitalization(targetDir, interactive);
+
+        if (fs.existsSync(extraFile)) {
+            console.log(`Scanning file: ${extraFile}`);
+            await checkCapitalization(extraFile, interactive);
+        }
+    })();
 }
 
 module.exports = { checkCapitalization };

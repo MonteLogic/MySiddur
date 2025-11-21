@@ -7,45 +7,50 @@ const replacements = {
     '\\bAdonai\\b': 'Ad-nai'
 };
 
-function fixGodNames(directory) {
-    if (!fs.existsSync(directory)) {
-        console.error(`Directory not found: ${directory}`);
+function fixGodNames(target) {
+    if (!fs.existsSync(target)) {
+        console.error(`Path not found: ${target}`);
         return;
     }
 
-    const files = fs.readdirSync(directory);
+    const stat = fs.statSync(target);
 
-    files.forEach(file => {
-        const fullPath = path.join(directory, file);
-        const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+        const files = fs.readdirSync(target);
+        files.forEach(file => {
+            fixGodNames(path.join(target, file));
+        });
+    } else if (target.endsWith('.json') || target.endsWith('.txt')) {
+        try {
+            let content = fs.readFileSync(target, 'utf8');
+            let newContent = content;
 
-        if (stat.isDirectory()) {
-            fixGodNames(fullPath);
-        } else if (file.endsWith('.json') || file.endsWith('.txt')) {
-            try {
-                let content = fs.readFileSync(fullPath, 'utf8');
-                let newContent = content;
-
-                for (const [pattern, replacement] of Object.entries(replacements)) {
-                    const regex = new RegExp(pattern, 'gi'); // Case insensitive
-                    newContent = newContent.replace(regex, replacement);
-                }
-
-                if (newContent !== content) {
-                    console.log(`Fixing God names in: ${fullPath}`);
-                    fs.writeFileSync(fullPath, newContent, 'utf8');
-                }
-            } catch (err) {
-                console.error(`Error processing ${fullPath}: ${err.message}`);
+            for (const [pattern, replacement] of Object.entries(replacements)) {
+                const regex = new RegExp(pattern, 'gi'); // Case insensitive
+                newContent = newContent.replace(regex, replacement);
             }
+
+            if (newContent !== content) {
+                console.log(`Fixing God names in: ${target}`);
+                fs.writeFileSync(target, newContent, 'utf8');
+            }
+        } catch (err) {
+            console.error(`Error processing ${target}: ${err.message}`);
         }
-    });
+    }
 }
 
 if (require.main === module) {
     const targetDir = path.join(__dirname, '../prayer/prayer-database');
+    const extraFile = path.join(__dirname, '../prayer/prayer-content/ashkenazi-prayer-info.json');
+
     console.log(`Scanning directory: ${targetDir}`);
     fixGodNames(targetDir);
+
+    if (fs.existsSync(extraFile)) {
+        console.log(`Scanning file: ${extraFile}`);
+        fixGodNames(extraFile);
+    }
 }
 
 module.exports = { fixGodNames };
