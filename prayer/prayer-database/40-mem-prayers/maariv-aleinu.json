@@ -1,0 +1,57 @@
+{
+  "maariv-aleinu": {
+    "prayer-title": "Aleinu",
+    "prayer-id": "maariv-aleinu",
+    "link-to-prayer": "https://www.sefaria.org/Siddur_Ashkenaz,_Weekday,_Maariv,_Aleinu",
+    "version": "1.0.0",
+    "date_modified": "2025-11-21T12:12:00-06:00",
+    "Introduction": "A declaration of faith and plea for universal recognition of G-d, recited at the conclusion of prayer services.",
+    "Instruction": "Recited at the end of Maariv and other services. Bow at 'we bend our knees'.",
+    "sub-prayers": {
+      "maariv-aleinu-0": {
+        "prayer-title": "Aleinu - First Paragraph",
+        "Word Mappings": {
+          "0": {"hebrew": "עָלֵֽינוּ", "english": "It is upon us", "transliteration": "Aleinu"},
+          "1": {"hebrew": "לְשַׁבֵּֽחַ", "english": "to praise", "transliteration": "l'shabei'ach"},
+          "2": {"hebrew": "לַאֲדוֹן", "english": "the Master of", "transliteration": "la'Adon"},
+          "3": {"hebrew": "הַכֹּל,", "english": "all,", "transliteration": "hakol,"},
+          "4": {"hebrew": "לָתֵת", "english": "to ascribe greatness", "transliteration": "lateit"},
+          "5": {"hebrew": "גְּדֻלָּה", "english": "to", "transliteration": "gedulah"},
+          "6": {"hebrew": "לְיוֹצֵר", "english": "the Creator of", "transliteration": "l'yotzer"},
+          "7": {"hebrew": "בְּרֵאשִׁית.", "english": "the beginning.", "transliteration": "b'reesheet."}
+        }
+      },
+      "maariv-aleinu-1": {
+        "prayer-title": "We bend our knees",
+        "Word Mappings": {
+          "0": {"hebrew": "וַאֲנַֽחְנוּ", "english": "But we", "transliteration": "Va'anachnu"},
+          "1": {"hebrew": "כּוֹרְעִים", "english": "bend our knees", "transliteration": "kor'im"},
+          "2": {"hebrew": "וּמִשְׁתַּחֲוִים", "english": "and prostrate ourselves", "transliteration": "u'mishtachavim"},
+          "3": {"hebrew": "וּמוֹדִים", "english": "and offer thanks", "transliteration": "u'modim"},
+          "4": {"hebrew": "לִפְנֵי", "english": "before", "transliteration": "lifnei"},
+          "5": {"hebrew": "מֶֽלֶךְ", "english": "the King", "transliteration": "melech"},
+          "6": {"hebrew": "מַלְכֵי", "english": "of Kings of", "transliteration": "malchei"},
+          "7": {"hebrew": "הַמְּלָכִים,", "english": "Kings,", "transliteration": "ham'lachim,"},
+          "8": {"hebrew": "הַקָּדוֹשׁ", "english": "the Holy One,", "transliteration": "HaKadosh"},
+          "9": {"hebrew": "בָּרוּךְ", "english": "blessed", "transliteration": "baruch"},
+          "10": {"hebrew": "הוּא.", "english": "be He.", "transliteration": "Hu."}
+        }
+      },
+      "maariv-aleinu-2": {
+        "prayer-title": "Aleinu - Second Paragraph",
+        "Word Mappings": {
+          "0": {"hebrew": "עַל", "english": "Therefore", "transliteration": "Al"},
+          "1": {"hebrew": "כֵּן", "english": "we", "transliteration": "kein"},
+          "2": {"hebrew": "נְקַוֶּה", "english": "hope", "transliteration": "n'kaveh"},
+          "3": {"hebrew": "לְּךָ", "english": "in You,", "transliteration": "l'cha"},
+          "4": {"hebrew": "יְהֹוָה", "english": "L-RD", "transliteration": "Ad-nai"},
+          "5": {"hebrew": "אֱלֹהֵֽינוּ,", "english": "our G-d,", "transliteration": "Eloheinu,"},
+          "6": {"hebrew": "לִרְאוֹת", "english": "to soon behold", "transliteration": "lir'ot"},
+          "7": {"hebrew": "מְהֵרָה", "english": "swiftly", "transliteration": "m'heirah"},
+          "8": {"hebrew": "בְּתִפְאֶֽרֶת", "english": "the glory of", "transliteration": "b'tiferet"},
+          "9": {"hebrew": "עֻזֶּֽךָ.", "english": "Your might.", "transliteration": "uzecha."}
+        }
+      }
+    }
+  }
+}
