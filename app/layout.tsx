@@ -2,7 +2,7 @@ import '#/styles/globals.css';
 import Byline from '#/ui/byline';
 import { GlobalNav } from '#/ui/global-nav';
 import { Metadata } from 'next';
-import { ConditionalClerkProvider } from '#/lib/conditional-clerk-provider';
+import { ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { cache } from 'react';
 import { Analytics } from '@vercel/analytics/next';
@@ -57,7 +57,7 @@ export default async function RootLayout({
   const userData = await getUserData();
 
   const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  const isClerkDisabled = process.env.DISABLE_CLERK === 'true' || process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
+
 
   const content = (
     <html lang="en" className="dark [color-scheme:dark]">
@@ -81,15 +81,9 @@ export default async function RootLayout({
     </html>
   );
 
-  if (isClerkDisabled) {
-    console.warn('Clerk is disabled via DISABLE_CLERK environment variable. Clerk features will be disabled.');
-  } else if (!publishableKey) {
-    console.warn('NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is not set in environment variables. Clerk features will be disabled.');
-  }
-
   return (
-    <ConditionalClerkProvider publishableKey={publishableKey}>
+    <ClerkProvider publishableKey={publishableKey}>
       {content}
-    </ConditionalClerkProvider>
+    </ClerkProvider>
   );
 }

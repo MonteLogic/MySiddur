@@ -4,7 +4,7 @@ import path from 'path';
 let prayerIndex: Record<string, unknown> = {};
 
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line
   prayerIndex = require('#/generated/prayer-index').prayerIndex;
 } catch (error) {
   console.warn(

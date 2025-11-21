@@ -13,403 +13,895 @@
         "hebrew": "יְהִי",
         "english": "May it be",
         "transliteration": "Yehi",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "1": {
         "hebrew": "רָצוֹן",
         "english": "Your will,",
         "transliteration": "ratzon",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "2": {
         "hebrew": "מִלְּפָנֶיךָ,",
         "english": "before You,",
         "transliteration": "mil'fanekha,",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "3": {
         "hebrew": "יְיָ",
         "english": "ETERNAL",
         "transliteration": "Ad-nai",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "4": {
         "hebrew": "אֱלֹהֵינוּ",
         "english": "our God",
         "transliteration": "Eloheinu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "5": {
         "hebrew": "וֵאלֹהֵי",
         "english": "and God of",
         "transliteration": "ve'Elohei",
-        "detailed-array": [[0, [0, 1, 2]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
       },
       "6": {
         "hebrew": "אֲבוֹתֵינוּ,",
         "english": "our ancestors,",
         "transliteration": "avoteinu,",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "7": {
         "hebrew": "שֶׁתַּרְגִּילֵנוּ",
-        "english": "that You accustom us",
+        "english": "that You accustom us.",
         "transliteration": "shetargilenu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "8": {
         "hebrew": "בְּתוֹרָתֶךָ,",
         "english": "to Your Torah",
         "transliteration": "b'toratekha,",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "9": {
         "hebrew": "וְדַבְּקֵנוּ",
         "english": "and attach us",
         "transliteration": "v'dab'kenu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "10": {
         "hebrew": "בְּמִצְוֹתֶיךָ.",
         "english": "to Your commandments.",
         "transliteration": "b'mitz'votekha.",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "11": {
         "hebrew": "וְאַל",
         "english": "Do",
         "transliteration": "v'al",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "12": {
         "hebrew": "תְּבִיאֵנוּ",
         "english": "not bring us",
         "transliteration": "t'vi'enu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "13": {
         "hebrew": "לֹא",
         "english": "",
         "transliteration": "lo",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "14": {
         "hebrew": "לִידֵי",
         "english": "to",
         "transliteration": "lidei",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "15": {
         "hebrew": "חֵטְא,",
         "english": "sin,",
         "transliteration": "chet,",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "16": {
         "hebrew": "וְלֹא",
         "english": "nor",
         "transliteration": "v'lo",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "17": {
         "hebrew": "לִידֵי",
         "english": "to",
         "transliteration": "lidei",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "18": {
         "hebrew": "עָוֹן,",
         "english": "transgression or iniquity,",
         "transliteration": "avon,",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "19": {
         "hebrew": "וְלֹא",
         "english": "nor",
         "transliteration": "v'lo",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "20": {
         "hebrew": "לִידֵי",
         "english": "to",
         "transliteration": "lidei",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "21": {
         "hebrew": "נִסָּיוֹן,",
         "english": "trial,",
         "transliteration": "nisayon,",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "22": {
         "hebrew": "וְלֹא",
         "english": "nor",
         "transliteration": "v'lo",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "23": {
         "hebrew": "לִידֵי",
         "english": "to",
         "transliteration": "lidei",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "24": {
         "hebrew": "בִזָּיוֹן.",
         "english": "disgrace.",
         "transliteration": "bizayon.",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "25": {
         "hebrew": "וְאַל",
         "english": "Do not let",
         "transliteration": "v'al",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "26": {
         "hebrew": "תַּשְׁלֶט",
         "english": "rule",
         "transliteration": "tashlet",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "27": {
         "hebrew": "בָּנוּ",
         "english": "over us",
         "transliteration": "banu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "28": {
         "hebrew": "יֵצֶר",
         "english": "the inclination",
         "transliteration": "yetzer",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "29": {
         "hebrew": "הָרָע.",
         "english": "of evil.",
         "transliteration": "hara.",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "30": {
         "hebrew": "וְהַרְחִיקֵנוּ",
         "english": "Keep us far",
         "transliteration": "v'harchikenu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "31": {
         "hebrew": "מֵאָדָם",
         "english": "from a person",
         "transliteration": "me'adam",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "32": {
         "hebrew": "רָע",
         "english": "who's bad",
         "transliteration": "ra",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "33": {
         "hebrew": "וּמֵחָבֵר",
         "english": "and a friend",
         "transliteration": "umechaver",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "34": {
         "hebrew": "רָע.",
         "english": "who's bad.",
         "transliteration": "ra.",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "35": {
         "hebrew": "וְדַבְּקֵנוּ",
         "english": "Attach us",
         "transliteration": "v'dab'kenu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "36": {
         "hebrew": "בְּיֵצֶר",
         "english": "to the inclination",
         "transliteration": "b'yetzer",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "37": {
         "hebrew": "הַטּוֹב",
         "english": "the good",
         "transliteration": "hatov",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "38": {
         "hebrew": "וּבְמַעֲשִׂים",
         "english": "and to deeds",
         "transliteration": "uv'ma'asim",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "39": {
         "hebrew": "טוֹבִים.",
         "english": "good.",
         "transliteration": "tovim.",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "40": {
         "hebrew": "וְכֹף",
         "english": "Compel",
         "transliteration": "v'chof",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "41": {
         "hebrew": "אֶת",
         "english": "",
         "transliteration": "et",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "42": {
         "hebrew": "יִצְרֵנוּ",
         "english": "our inclination",
         "transliteration": "yitz'renu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "43": {
         "hebrew": "לְהִשְׁתַּעְBֶּד",
         "english": "to be subservient",
         "transliteration": "l'hishta'bed",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "44": {
         "hebrew": "לָךְ.",
         "english": "to You.",
         "transliteration": "lach.",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "45": {
         "hebrew": "וּתְנֵנוּ",
         "english": "Grant us",
         "transliteration": "ut'nenu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "46": {
         "hebrew": "הַיּוֹם",
         "english": "today",
         "transliteration": "hayom",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "47": {
         "hebrew": "וּבְכָל",
         "english": "and every",
         "transliteration": "uv'chol",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "48": {
         "hebrew": "יוֹם",
         "english": "day",
         "transliteration": "yom",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "49": {
         "hebrew": "לְחֵן",
         "english": "grace,",
         "transliteration": "l'chen",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "50": {
         "hebrew": "וּלְחֶסֶד",
         "english": "kindness,",
         "transliteration": "ul'chesed",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "51": {
         "hebrew": "וּלְרַחֲמִים",
         "english": "and mercy",
         "transliteration": "ul'rachamim",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "52": {
         "hebrew": "בְּעֵינֶיךָ",
         "english": "in your eyes",
         "transliteration": "b'eynekha",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "53": {
         "hebrew": "וּבְעֵינֵי",
         "english": "and in the eyes",
         "transliteration": "uv'einei",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "54": {
         "hebrew": "כָל",
         "english": "of all",
         "transliteration": "chol",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "55": {
         "hebrew": "רוֹאֵינוּ.",
-        "english": "who see us,",
+        "english": "who see us.",
         "transliteration": "ro'einu.",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "56": {
         "hebrew": "וְתִגְמְלֵנוּ",
         "english": "And bestow upon us",
         "transliteration": "v'tig'm'lenu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "57": {
         "hebrew": "חֲסָדִים",
         "english": "kindnesses",
         "transliteration": "chasadim",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "58": {
         "hebrew": "טוֹבִים.",
         "english": "good.",
         "transliteration": "tovim.",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "59": {
         "hebrew": "בָּרוּךְ",
         "english": "Blessed",
         "transliteration": "Baruch",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "60": {
         "hebrew": "אַתָּה",
         "english": "are You,",
         "transliteration": "atah",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "61": {
         "hebrew": "יְיָ,",
         "english": "ETERNAL,",
         "transliteration": "Ad-nai,",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "62": {
         "hebrew": "הַגּוֹמֵל",
         "english": "Who bestows",
         "transliteration": "hagomel",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "63": {
         "hebrew": "חֲסָדִים",
         "english": "kindnesses",
         "transliteration": "chasadim",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "64": {
         "hebrew": "טוֹבִים",
         "english": "good",
         "transliteration": "tovim",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "65": {
         "hebrew": "לְעַמּוֹ",
         "english": "upon His people",
         "transliteration": "l'amo",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "66": {
         "hebrew": "יִשְׂרָאֵל.",
         "english": "Israel.",
         "transliteration": "Yisrael.",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       }
     }
   }

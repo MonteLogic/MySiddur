@@ -2,6 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const {
+  WORD_WARNING_THRESHOLD,
+  WORD_ERROR_THRESHOLD,
+  punctuationRegex,
+  splitIntoWords,
+  isLikelyEnglish,
+  formatSnippet,
+} = require('./prayer-validation-utils');
 
 // --- Define Paths ---
 const prayersDir = path.join(__dirname, 'prayer/prayer-database');
@@ -15,33 +23,10 @@ const outputDataDir = path.join(__dirname, 'prayer-data-private');
 const outputIndexFile = path.join(__dirname, 'generated/prayer-index.ts'); // Moved to a dedicated 'generated' folder
 
 // --- NEW --- Sentence length guardrails
-const WORD_WARNING_THRESHOLD = 18;
-const WORD_ERROR_THRESHOLD = 30;
-
 const sentenceWarnings = [];
 const sentenceErrors = [];
 
-const punctuationRegex = /[.!?]/;
-const containsHebrew = /[\u0590-\u05FF]/;
 
-const splitIntoWords = (text) =>
-  text
-    .replace(/\s+/g, ' ')
-    .split(' ')
-    .filter(Boolean);
-
-const isLikelyEnglish = (text) => {
-  if (typeof text !== 'string') return false;
-  const letterMatch = text.match(/[A-Za-z]/g);
-  if (!letterMatch || letterMatch.length < 5) return false;
-  return !containsHebrew.test(text);
-};
-
-const formatSnippet = (words) => {
-  if (!words || words.length === 0) return '';
-  const snippet = words.join(' ');
-  return snippet.length > 160 ? `${snippet.slice(0, 157)}...` : snippet;
-};
 
 const recordSentenceIssue = ({
   prayerId,
@@ -319,11 +304,11 @@ if (sentenceErrors.length > 0) {
       `  • [${error.prayerId}] ${error.path || '<root>'} reached ${error.length} words without punctuation.\n    ↳ ${error.snippet}`,
     );
   });
-  
+
   // Only fail the build in production/CI environments
   // In local development, allow the build to continue with warnings
   const isProduction = process.env.NODE_ENV === 'production' || process.env.CI === 'true' || process.env.VERCEL === '1';
-  
+
   if (isProduction) {
     console.error('\n❌ Build aborted: Production builds require all sentences to be under the word limit.');
     throw new Error(

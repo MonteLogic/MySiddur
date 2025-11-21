@@ -6,7 +6,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useUser } from '#/lib/safe-clerk-hooks';
+import { useUser } from '@clerk/nextjs';
 import {
   XCircle,
   CheckCircle,

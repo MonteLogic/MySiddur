@@ -5,7 +5,7 @@
 
 import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { ChevronDown, CreditCard, CheckCircle, X } from 'lucide-react';
-import { useSession } from '#/lib/safe-clerk-hooks';
+import { useUser, useSession } from '@clerk/nextjs';
 import { checkUserRole } from '#/utils/UserUtils';
 import { useRouter } from 'next/navigation';
 import {
