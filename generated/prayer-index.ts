@@ -8,7 +8,7 @@ export interface PrayerIndexEntry {
 export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
   "1-0rw1": {
     "id": "1-0rw1",
-    "title": "Elohai Neshamah (My God, the Soul)"
+    "title": "Elohai Neshamah (My G-d, the Soul)"
   },
   "1-0rwa": {
     "id": "1-0rwa",
