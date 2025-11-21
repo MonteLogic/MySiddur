@@ -192,7 +192,7 @@ export const getCalendarInfo = async (date: Date): Promise<CalendarInfo> => {
       ? hdate.toString()
       : String(hdate),
     dayOfWeek: isValidFn(hdate.getDay) ? hdate.getDay() : -1,
-    isShabbat: isValidFn(hdate.getDay) ? hdate.getDay() === 6 : false,
+    isShabbos: isValidFn(hdate.getDay) ? hdate.getDay() === 6 : false,
     isYomTov,
     isRoshChodesh,
     isCholHaMoed,

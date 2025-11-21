@@ -53,7 +53,7 @@ export interface PrayerSection {
 
 // This is the structured data that will be passed to the PDF generator
 export interface SiddurContent {
-  title: string;                  // e.g., "Siddur for Shabbat Shacharis"
+  title: string;                  // e.g., "Siddur for Shabbos Shacharis"
   dateInfo: {
     gregorian: string;
     hebrew: string;
@@ -69,7 +69,7 @@ export interface CalendarInfo {
   gregorianDate: Date;
   hebrewDateStr: string;
   dayOfWeek: number; // 0 (Sun) to 6 (Sat)
-  isShabbat: boolean;
+  isShabbos: boolean;
   isYomTov: boolean;
   isRoshChodesh: boolean;
   isCholHaMoed: boolean;
