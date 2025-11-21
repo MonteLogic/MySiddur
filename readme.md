@@ -25,16 +25,6 @@ pnpm dev
 ```
 **Important Notes:**
 
-- **Development Only**: This option is **ONLY** for local development. It will **block builds and deployments** if set.
-- **Workflow**: 
-  1. Add `DISABLE_CLERK=true` to your `.env.local` file
-  2. Restart the dev server (`pnpm run dev`)
-  3. You'll see a warning notice that Clerk is disabled
-  4. All routes will be accessible without authentication
-  5. **Before deploying**: Remove `DISABLE_CLERK` from your environment variables
-- **Build Protection**: The build process will fail if `DISABLE_CLERK` is detected, preventing accidental deployments without authentication
-- **Re-enabling Clerk**: Simply remove `DISABLE_CLERK=true` from `.env.local` and restart the dev server
-
 **Why use this?**
 - Useful when Clerk's inline browser authentication doesn't work in your development environment
 - Allows testing the app without authentication setup
