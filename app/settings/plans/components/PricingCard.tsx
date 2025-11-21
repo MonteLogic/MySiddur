@@ -22,6 +22,10 @@ export function PricingCard({
   description
 }: Readonly<PricingCardProps>) {
   const [loading, setLoading] = useState(false);
+  
+  // Always call the hook - React requires this
+  // If ClerkProvider isn't rendered (when Clerk is disabled), this will throw an error
+  // This component should only be rendered when Clerk is enabled, or wrapped in an error boundary
   const { userId, isSignedIn } = useAuth();
 
   const handleUpgrade = async () => {

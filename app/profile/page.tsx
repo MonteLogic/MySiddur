@@ -5,6 +5,7 @@ import { useUser } from '#/lib/safe-clerk-hooks';
 import { UserButton } from '@clerk/nextjs';
 import { Nusach } from '#/lib/siddur/types/siddurTypes';
 import { JewishLearningProfile } from '#/types/UserTypes';
+import { Download, ExternalLink } from 'lucide-react';
 
 interface UserProfile {
   id: string;
@@ -15,11 +16,24 @@ interface UserProfile {
   jewishLearningProfile?: JewishLearningProfile;
 }
 
+interface UploadedPrayer {
+  url: string;
+  pathname: string;
+  size: number;
+  uploadedAt: Date;
+  edit_id?: string;
+  prayer_id?: string;
+  prayer_title?: string;
+  user_id?: string;
+}
+
 export default function MyProfilePage() {
   const { user, isLoaded } = useUser();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [uploadedPrayers, setUploadedPrayers] = useState<UploadedPrayer[]>([]);
+  const [loadingPrayers, setLoadingPrayers] = useState(false);
 
   useEffect(() => {
     if (isLoaded && user) {
@@ -56,6 +70,28 @@ export default function MyProfilePage() {
       setIsLoading(false);
     }
   }, [isLoaded, user]);
+
+  // Load uploaded prayers
+  useEffect(() => {
+    const loadUploadedPrayers = async () => {
+      if (!user) return;
+      
+      setLoadingPrayers(true);
+      try {
+        const response = await fetch('/api/profile/uploaded-prayers');
+        if (response.ok) {
+          const data = await response.json();
+          setUploadedPrayers(data.prayers || []);
+        }
+      } catch (error) {
+        console.error('Failed to load uploaded prayers:', error);
+      } finally {
+        setLoadingPrayers(false);
+      }
+    };
+
+    loadUploadedPrayers();
+  }, [user]);
 
   const handleSave = async () => {
     if (!profile || !profile.jewishLearningProfile) return;
@@ -501,6 +537,68 @@ export default function MyProfilePage() {
                 <p className="text-white whitespace-pre-wrap">{profile.jewishLearningProfile?.notes || 'No notes added'}</p>
               )}
             </div>
+          </div>
+
+          {/* Uploaded Prayers Section */}
+          <div className="bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4 text-cyan-400">Uploaded Prayer JSONs</h2>
+            
+            {loadingPrayers ? (
+              <p className="text-gray-400">Loading uploaded prayers...</p>
+            ) : uploadedPrayers.length === 0 ? (
+              <p className="text-gray-400">No uploaded prayers yet. Use the Visual Prayer Editor to create and upload prayers.</p>
+            ) : (
+              <div className="space-y-3">
+                {uploadedPrayers.map((prayer) => (
+                  <div
+                    key={prayer.edit_id || prayer.pathname}
+                    className="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-white font-medium truncate">
+                          {prayer.prayer_title || prayer.prayer_id || 'Untitled Prayer'}
+                        </h3>
+                        <div className="mt-1 space-y-1">
+                          <p className="text-sm text-gray-400">
+                            <span className="font-medium">Prayer ID:</span> {prayer.prayer_id || 'N/A'}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            <span className="font-medium">Edit ID:</span> {prayer.edit_id || 'N/A'}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            <span className="font-medium">Uploaded:</span>{' '}
+                            {new Date(prayer.uploadedAt).toLocaleString()}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            <span className="font-medium">Size:</span> {(prayer.size / 1024).toFixed(2)} KB
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <a
+                          href={prayer.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                          title="View JSON"
+                        >
+                          <ExternalLink className="h-4 w-4 text-white" />
+                        </a>
+                        <a
+                          href={prayer.url}
+                          download={prayer.pathname}
+                          className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                          title="Download JSON"
+                        >
+                          <Download className="h-4 w-4 text-white" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
