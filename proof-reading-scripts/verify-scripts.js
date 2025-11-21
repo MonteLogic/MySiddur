@@ -20,7 +20,9 @@ Correct: Shabbos, Torah, G-d.
     return testDir;
 }
 
-function verify() {
+const { checkCapitalization } = require('./check-capitalization');
+
+async function verify() {
     console.log("Setting up test environment...");
     const testDir = setupTestEnv();
 
@@ -47,6 +49,17 @@ function verify() {
     console.log("Running checkHebrewWords (expecting case mismatch warnings)...");
     // We are just running it to see output, not capturing it programmatically here for simplicity
     checkHebrewWords(testDir, allowedWords);
+
+    console.log("\n--- Testing check-capitalization ---");
+    // Create a file with misplaced capitals
+    const capTestFile = path.join(testDir, 'cap_test.txt');
+    fs.writeFileSync(capTestFile, "This is a Test sentence with Misplaced capitals. But this Start is okay.", 'utf8');
+
+    console.log("Running checkCapitalization (non-interactive)...");
+    // We expect it to find "Test" and "Misplaced"
+    // Since the function prints to console, we'd need to capture stdout to verify programmatically.
+    // For now, we'll just run it and rely on visual inspection of the output log.
+    await checkCapitalization(testDir, false);
 
     // Clean up
     fs.rmSync(testDir, { recursive: true, force: true });
