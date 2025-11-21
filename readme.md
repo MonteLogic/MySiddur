@@ -23,15 +23,6 @@ Start the dev server:
 ```sh
 pnpm dev
 ```
-
-### Disabling Clerk Authentication (Development Only)
-
-For local development, you can disable Clerk authentication by setting the `DISABLE_CLERK` environment variable in your `.env.local` file:
-
-```bash
-DISABLE_CLERK=true
-```
-
 **Important Notes:**
 
 - **Development Only**: This option is **ONLY** for local development. It will **block builds and deployments** if set.
