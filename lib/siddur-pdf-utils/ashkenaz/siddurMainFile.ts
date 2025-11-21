@@ -151,6 +151,11 @@ export const generateSiddurPDF = async ({
   pageMargins,
   printBlackAndWhite,
 }: GenerateSiddurPDFParams): Promise<Uint8Array> => {
+  // Import and initialize prayer data for this date
+  const { initializePrayerIndex } = await import('./drawing/helpers/prayer-data');
+  const selectedDateObj = new Date(selectedDate);
+  initializePrayerIndex(selectedDateObj);
+  
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);
 
@@ -199,8 +204,53 @@ export const generateSiddurPDF = async ({
     hebrewFont,
   };
 
-  // --- PDF Header ---
-  // ... (header code remains the same)
+  // --- PDF Header (Date and Shabbos Edition) ---
+  const { HDate } = await import('@hebcal/core');
+  const hDate = new HDate(selectedDateObj);
+  const isShabbos = hDate.getDay() === 6;
+  
+  // Format the date nicely
+  const gregDateStr = selectedDateObj.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const hebrewDateStr = hDate.toString();
+  
+  // Draw date in top left corner (above the main content area)
+  const headerY = height - 20; // 20 points from top
+  page.drawText(gregDateStr, {
+    x: margin,
+    y: headerY,
+    font: englishFont,
+    size: 9,
+    color: rgb(0, 0, 0),
+  });
+  
+  page.drawText(hebrewDateStr, {
+    x: margin,
+    y: headerY - 11,
+    font: englishFont,
+    size: 8,
+    color: rgb(0.3, 0.3, 0.3),
+  });
+  
+  // Draw "Shabbos Edition" in top right if it's Shabbos
+  if (isShabbos) {
+    const shabbosText = 'Shabbos Edition';
+    const shabbosTextWidth = englishBoldFont.widthOfTextAtSize(shabbosText, 12);
+    page.drawText(shabbosText, {
+      x: width - margin - shabbosTextWidth,
+      y: headerY,
+      font: englishBoldFont,
+      size: 12,
+      color: rgb(0.1, 0.1, 0.6), // Blue color for Shabbos
+    });
+  }
+  
+  // Adjust starting Y position to be well below the header
+  y = height - topMargin;
 
   // --- Content Generation ---
   let pageServiceMap = new Map<number, string>();
@@ -218,6 +268,7 @@ export const generateSiddurPDF = async ({
       fontSizeMultiplier,
       pageMargins,
       printBlackAndWhite,
+      selectedDate: selectedDateObj, // Pass the date to content generation
       calculateTextLines,
       ensureSpaceAndDraw: (drawingContext, textLines, label) => {
         const completeContext = { ...commonPdfParams, ...drawingContext };

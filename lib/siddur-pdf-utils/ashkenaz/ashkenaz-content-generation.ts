@@ -9,9 +9,19 @@ import {
 } from './drawing/types';
 import { drawPrayer } from './drawing/prayer-drawing';
 import { drawDividerLine } from './drawing/drawing-helpers';
+import { loadGeneratedLayout } from '#/lib/custom-siddur-date-gen/layout-resolver';
+
+// Service display names mapping
+const SERVICE_DISPLAY_NAMES: Record<string, string> = {
+  wakingPrayers: 'Waking Prayers',
+  shacharis: 'Shacharis',
+  mincha: 'Mincha',
+  maariv: 'Maariv',
+  retiringPrayers: 'Retiring Prayers'
+};
 
 export const generateAshkenazContent = (
-  params: AshkenazContentGenerationParams,
+  params: AshkenazContentGenerationParams & { selectedDate?: Date },
 ): { page: PDFPage; y: number; pageServiceMap: Map<number, string> } => {
   const {
     pdfDoc,
@@ -26,6 +36,7 @@ export const generateAshkenazContent = (
     style = 'Recommended',
     calculateTextLines,
     ensureSpaceAndDraw,
+    selectedDate,
   } = params;
 
   let context: PdfDrawingContext = {
@@ -44,124 +55,196 @@ export const generateAshkenazContent = (
 
   // Track which service is on which page
   const pageServiceMap = new Map<number, string>();
-  let currentPageIndex = 0;
 
-  const allServices = [
-    ashPrayerInfo.services['waking-prayers'],
-    ashPrayerInfo.services.shacharis,
-  ];
+  // Try to load generated layout for the selected date
+  const generatedLayout = selectedDate ? loadGeneratedLayout(selectedDate) : null;
 
-  for (const [serviceIndex, service] of allServices.entries()) {
-    if (!service || !Array.isArray(service.sections)) continue;
-
-    // Track the current service for page mapping
-    const currentServiceName = service['display-name'];
+  if (generatedLayout) {
+    // Use generated layout with all 5 services
+    console.log('[INFO] Using generated layout for PDF generation');
     
-    // This line creates the title string.
-    // It combines the text "Service: " with the value of "display-name" from your JSON file.
-    const serviceTitle = `Service: ${service['display-name']}`;
-    let lines = calculateTextLines(
-      serviceTitle,
-      context.fonts.englishBold,
-      siddurConfig.fontSizes.service,
-      context.width - context.margin * 2,
-      siddurConfig.lineSpacing.service,
-    );
+    const serviceSections: Array<{name: string, prayers: Array<{id: string, title: string}>}> = [
+      { name: 'wakingPrayers', prayers: generatedLayout.wakingPrayers },
+      { name: 'shacharis', prayers: generatedLayout.shacharis },
+      { name: 'mincha', prayers: generatedLayout.mincha },
+      { name: 'maariv', prayers: generatedLayout.maariv },
+      { name: 'retiringPrayers', prayers: generatedLayout.retiringPrayers },
+    ];
 
-    // Track page changes during service title drawing
-    const beforePage = context.page;
-    ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
-      context,
-      lines.map((l) => ({
-        ...l,
-        font: context.fonts.englishBold,
-        size: siddurConfig.fontSizes.service,
-        lineHeight: siddurConfig.lineSpacing.service,
-      })),
-      serviceTitle,
-    ));
-    
-    // If a new page was created, map it to the current service
-    if (context.page !== beforePage) {
-      const newPageIndex = pdfDoc.getPages().indexOf(context.page);
-      pageServiceMap.set(newPageIndex, currentServiceName);
-    }
-    
-    context.y -= siddurConfig.verticalSpacing.afterSiddurTitle; // Re-use spacing
+    for (const [serviceIndex, service] of serviceSections.entries()) {
+      if (!service.prayers || service.prayers.length === 0) continue;
 
-    for (const section of service.sections) {
-      // Estimate header height and check for page break
-      const estimatedSectionHeaderHeight = 100; // Simplified estimation
-      const pageBreakThreshold =
-        siddurConfig.pdfMargins.bottom +
-        estimatedSectionHeaderHeight +
-        siddurConfig.verticalSpacing.pageBuffer;
-      if (context.y < pageBreakThreshold) {
-        context.page = context.pdfDoc.addPage();
-        context.y = context.height - siddurConfig.pdfMargins.top;
-        
-        // Map the new page to the current service
-        const newPageIndex = pdfDoc.getPages().indexOf(context.page);
-        pageServiceMap.set(newPageIndex, currentServiceName);
-      }
-
-      // Draw Section Title
-      lines = calculateTextLines(
-        section.sectionTitle,
+      const displayName = SERVICE_DISPLAY_NAMES[service.name] || service.name;
+      
+      // Track the current page for this service
+      const currentPageIndex = pdfDoc.getPages().indexOf(context.page);
+      pageServiceMap.set(currentPageIndex, displayName);
+      
+      // Draw service title
+      const serviceTitle = `Service: ${displayName}`;
+      let lines = calculateTextLines(
+        serviceTitle,
         context.fonts.englishBold,
-        siddurConfig.fontSizes.sectionTitle,
+        siddurConfig.fontSizes.service,
         context.width - context.margin * 2,
-        siddurConfig.lineSpacing.sectionTitle,
+        siddurConfig.lineSpacing.service,
       );
+
+      const beforePage = context.page;
       ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
         context,
         lines.map((l) => ({
           ...l,
           font: context.fonts.englishBold,
-          size: siddurConfig.fontSizes.sectionTitle,
-          color: rgb(
-            ...(siddurConfig.colors.sectionTitle as [number, number, number]),
-          ),
-          lineHeight: siddurConfig.lineSpacing.sectionTitle,
+          size: siddurConfig.fontSizes.service,
+          lineHeight: siddurConfig.lineSpacing.service,
         })),
-        `Section Title: ${section.sectionTitle}`,
+        serviceTitle,
       ));
-      context.y -= siddurConfig.verticalSpacing.afterSectionTitleText;
 
-      // Draw Section Description
-      lines = calculateTextLines(
-        section.description,
-        context.fonts.english,
-        siddurConfig.fontSizes.sectionDescription,
+      // If page changed during title drawing, update mapping
+      if (context.page !== beforePage) {
+        const newPageIndex = pdfDoc.getPages().indexOf(context.page);
+        pageServiceMap.set(newPageIndex, displayName);
+      }
+
+      context.y -= siddurConfig.verticalSpacing.afterSiddurTitle;
+
+      // Draw each prayer in this service
+      for (const prayerEntry of service.prayers) {
+        // Check if we're on a new page and update service mapping
+        const prayerPageIndex = pdfDoc.getPages().indexOf(context.page);
+        if (!pageServiceMap.has(prayerPageIndex)) {
+          pageServiceMap.set(prayerPageIndex, displayName);
+        }
+        
+        const prayer = {
+          'prayer-id': prayerEntry.id,
+          title: prayerEntry.title,
+        } as Prayer;
+        
+        context = drawPrayer(context, prayer, { ...params, style });
+      }
+
+      // Add divider between services (except after last service)
+      if (serviceIndex < serviceSections.length - 1) {
+        context = drawDividerLine(context);
+      }
+    }
+  } else {
+    // Fallback to old static structure (only waking-prayers and shacharis)
+    console.log('[INFO] Using fallback static structure for PDF generation');
+    
+    const allServices = [
+      ashPrayerInfo.services['waking-prayers'],
+      ashPrayerInfo.services.shacharis,
+    ];
+
+    for (const [serviceIndex, service] of allServices.entries()) {
+      if (!service || !Array.isArray(service.sections)) continue;
+
+      const currentServiceName = service['display-name'];
+      
+      const serviceTitle = `Service: ${service['display-name']}`;
+      let lines = calculateTextLines(
+        serviceTitle,
+        context.fonts.englishBold,
+        siddurConfig.fontSizes.service,
         context.width - context.margin * 2,
-        siddurConfig.lineSpacing.sectionDescription,
+        siddurConfig.lineSpacing.service,
       );
+
+      const beforePage = context.page;
       ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
         context,
         lines.map((l) => ({
           ...l,
-          font: context.fonts.english,
-          size: siddurConfig.fontSizes.sectionDescription,
-          color: rgb(
-            ...(siddurConfig.colors.sectionDescription as [
-              number,
-              number,
-              number,
-            ]),
-          ),
-          lineHeight: siddurConfig.lineSpacing.sectionDescription,
+          font: context.fonts.englishBold,
+          size: siddurConfig.fontSizes.service,
+          lineHeight: siddurConfig.lineSpacing.service,
         })),
-        `Section Description: ${section.sectionTitle}`,
+        serviceTitle,
       ));
-      context.y -= siddurConfig.verticalSpacing.afterSectionDescription;
-
-      for (const prayer of section.prayers as Prayer[]) {
-        context = drawPrayer(context, prayer, { ...params, style });
+      
+      if (context.page !== beforePage) {
+        const newPageIndex = pdfDoc.getPages().indexOf(context.page);
+        pageServiceMap.set(newPageIndex, currentServiceName);
       }
-    }
+      
+      context.y -= siddurConfig.verticalSpacing.afterSiddurTitle;
 
-    if (serviceIndex < allServices.length - 1) {
-      context = drawDividerLine(context);
+      for (const section of service.sections) {
+        const estimatedSectionHeaderHeight = 100;
+        const pageBreakThreshold =
+          siddurConfig.pdfMargins.bottom +
+          estimatedSectionHeaderHeight +
+          siddurConfig.verticalSpacing.pageBuffer;
+        if (context.y < pageBreakThreshold) {
+          context.page = context.pdfDoc.addPage();
+          context.y = context.height - siddurConfig.pdfMargins.top;
+          
+          const newPageIndex = pdfDoc.getPages().indexOf(context.page);
+          pageServiceMap.set(newPageIndex, currentServiceName);
+        }
+
+        // Draw Section Title
+        lines = calculateTextLines(
+          section.sectionTitle,
+          context.fonts.englishBold,
+          siddurConfig.fontSizes.sectionTitle,
+          context.width - context.margin * 2,
+          siddurConfig.lineSpacing.sectionTitle,
+        );
+        ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
+          context,
+          lines.map((l) => ({
+            ...l,
+            font: context.fonts.englishBold,
+            size: siddurConfig.fontSizes.sectionTitle,
+            color: rgb(
+              ...(siddurConfig.colors.sectionTitle as [number, number, number]),
+            ),
+            lineHeight: siddurConfig.lineSpacing.sectionTitle,
+          })),
+          `Section Title: ${section.sectionTitle}`,
+        ));
+        context.y -= siddurConfig.verticalSpacing.afterSectionTitleText;
+
+        // Draw Section Description
+        lines = calculateTextLines(
+          section.description,
+          context.fonts.english,
+          siddurConfig.fontSizes.sectionDescription,
+          context.width - context.margin * 2,
+          siddurConfig.lineSpacing.sectionDescription,
+        );
+        ({ page: context.page, y: context.y } = ensureSpaceAndDraw(
+          context,
+          lines.map((l) => ({
+            ...l,
+            font: context.fonts.english,
+            size: siddurConfig.fontSizes.sectionDescription,
+            color: rgb(
+              ...(siddurConfig.colors.sectionDescription as [
+                number,
+                number,
+                number,
+              ]),
+            ),
+            lineHeight: siddurConfig.lineSpacing.sectionDescription,
+          })),
+          `Section Description: ${section.sectionTitle}`,
+        ));
+        context.y -= siddurConfig.verticalSpacing.afterSectionDescription;
+
+        for (const prayer of section.prayers as Prayer[]) {
+          context = drawPrayer(context, prayer, { ...params, style });
+        }
+      }
+
+      if (serviceIndex < allServices.length - 1) {
+        context = drawDividerLine(context);
+      }
     }
   }
 
