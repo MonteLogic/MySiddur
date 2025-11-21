@@ -5,7 +5,7 @@ import Button from '#/ui/button';
 import Modal from '#/ui/modal';
 import { ChevronDown } from 'lucide-react';
 import { getPrayersList, getPrayerData, savePrayerData, type Prayer, type PrayerData, type WordMapping } from './actions';
-import { useUser } from '#/lib/safe-clerk-hooks';
+import { useUser } from '@clerk/nextjs';
 
 export default function VisualPrayerEditor() {
   const { user } = useUser();

@@ -1,14 +1,14 @@
 
 'use client';
 import { ClerkLoading, UserButton } from '@clerk/nextjs';
-import { useSession } from '#/lib/safe-clerk-hooks';
+import { useSession } from '@clerk/nextjs';
 import { checkUserRole } from '#/utils/UserUtils';
 import TaskBar from './task-bar';
 import Link from 'next/link';
 
 export function AddressBar({ subscriptionData }: { subscriptionData?: any }) {
   const { session, isLoaded } = useSession();
-  const isClerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
+
   const userRole = session ? checkUserRole(session) : null;
   
   // Show loading state that maintains layout
@@ -27,7 +27,7 @@ export function AddressBar({ subscriptionData }: { subscriptionData?: any }) {
   }
   
   // Only show sign-in button when we're sure user is not logged in (and Clerk is enabled)
-  if (!session && !isClerkDisabled) {
+  if (!session) {
     return (
       <div className="flex items-center p-3.5 lg:px-5 lg:py-3">
         <Link 
@@ -41,9 +41,7 @@ export function AddressBar({ subscriptionData }: { subscriptionData?: any }) {
   }
   
   // Render full component for logged-in users (or when Clerk is disabled, show nothing)
-  if (isClerkDisabled) {
-    return null;
-  }
+
   
   return (
     <div className="flex items-center gap-x-2 p-3.5 lg:px-5 lg:py-3">

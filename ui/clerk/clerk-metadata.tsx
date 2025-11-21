@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser } from '#/lib/safe-clerk-hooks';
+import { useUser } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
 
 /**
@@ -9,19 +9,19 @@ import { useState, useEffect } from 'react';
  */
 export const useTimecardsMetadata = () => {
   const { user } = useUser();
-  const isClerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK === 'true';
+
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    if (user && !isClerkDisabled) {
+    if (user) {
       const currentCount =
         (user.unsafeMetadata?.timecardsGenerated as number) || 0;
       setCount(currentCount);
     }
-  }, [user, isClerkDisabled]);
+  }, [user]);
 
   const incrementTimecardsGenerated = async () => {
-    if (!user || isClerkDisabled) return;
+    if (!user) return;
 
     try {
       const currentCount =
