@@ -1,0 +1,13 @@
+{
+  "id": "pesukei-weekday",
+  "name": "Pesukei D'Zimra (Weekday)",
+  "grouping": "shacharis-pesukei",
+  "applicability": {
+    "days": ["weekday"]
+  },
+  "prayers": [
+    { "id": "1-1rw1-brs", "title": "Baruch She'amar (Blessed is He Who Spoke)" },
+    { "id": "400-1thm-533-(full)", "title": "Tehilim (Psalms) 146-150" },
+    { "id": "10-1-yst-705-(full)", "title": "Yishtabach (May He be Praised)" }
+  ]
+}

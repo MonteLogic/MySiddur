@@ -1,0 +1,12 @@
+{
+  "id": "mincha-core",
+  "name": "Mincha (Afternoon) Prayers",
+  "grouping": "mincha",
+  "applicability": {
+    "days": ["all"]
+  },
+  "prayers": [
+    { "id": "mincha-ashrei", "title": "Ashrei (Psalm 145)" },
+    { "id": "mincha-amidah", "title": "Amidah (Standing Prayer) - Mincha" }
+  ]
+}

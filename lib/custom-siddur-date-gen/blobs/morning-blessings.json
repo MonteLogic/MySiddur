@@ -1,0 +1,13 @@
+{
+  "id": "morning-blessings",
+  "name": "Birchot HaShachar",
+  "grouping": "shacharis-blessings",
+  "applicability": {
+    "days": ["all"]
+  },
+  "prayers": [
+    { "id": "2-0rwa", "title": "Birchot HaShachar (Series of Morning Blessings)" },
+    { "id": "2-1rwa", "title": "Birchot HaTorah (Blessings for Torah Study)" },
+    { "id": "10-0rw1", "title": "Yehi Ratzon (Daily Guidance)" }
+  ]
+}

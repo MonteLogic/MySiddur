@@ -1,8 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
-let prayerIndex: Record<string, unknown> = {};
+// This file needs to be TSDoc compliant.
 
+
+let prayerIndex: Record<string, unknown> = {};
+// I feel like some of this could be ran at build time.
+// Also the require statement should be better because the point can be errant 
+// and won't be denoted. 
 try {
   // eslint-disable-next-line
   prayerIndex = require('#/generated/prayer-index').prayerIndex;

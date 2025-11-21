@@ -1,0 +1,12 @@
+{
+  "id": "retiring-prayers",
+  "name": "Retiring (Bedtime) Prayers",
+  "grouping": "retiring",
+  "applicability": {
+    "days": ["all"]
+  },
+  "prayers": [
+    { "id": "retiring-shema", "title": "Shema Before Sleep" },
+    { "id": "retiring-hamapil", "title": "HaMapil (Who Causes Sleep)" }
+  ]
+}
