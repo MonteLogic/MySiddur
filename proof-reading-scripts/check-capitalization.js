@@ -6,6 +6,7 @@ const { spawnSync } = require('child_process');
 // Configuration
 const IGNORED_WORDS = new Set(['I', 'G-d', 'L-rd', 'Ad-nai']);
 const HEBREW_WORDS_FILE = path.join(__dirname, 'hebrew-words.json');
+const ALLOWED_CAPITALIZED_WORDS_FILE = path.join(__dirname, 'allowed-capitalized-words.json');
 
 function loadAllowedWords() {
     try {
@@ -19,7 +20,30 @@ function loadAllowedWords() {
     return new Set();
 }
 
+function loadAllowedCapitalizedWords() {
+    try {
+        if (fs.existsSync(ALLOWED_CAPITALIZED_WORDS_FILE)) {
+            const content = fs.readFileSync(ALLOWED_CAPITALIZED_WORDS_FILE, 'utf8');
+            return new Set(JSON.parse(content));
+        }
+    } catch (err) {
+        console.error(`Error loading allowed capitalized words: ${err.message}`);
+    }
+    return new Set();
+}
+
+function saveAllowedCapitalizedWords(allowedSet) {
+    try {
+        const words = Array.from(allowedSet).sort();
+        fs.writeFileSync(ALLOWED_CAPITALIZED_WORDS_FILE, JSON.stringify(words, null, 2), 'utf8');
+        console.log(`Saved to ${ALLOWED_CAPITALIZED_WORDS_FILE}`);
+    } catch (err) {
+        console.error(`Error saving allowed capitalized words: ${err.message}`);
+    }
+}
+
 const allowedHebrewWords = loadAllowedWords();
+let allowedCapitalizedWords = loadAllowedCapitalizedWords();
 
 function isCapitalized(word) {
     return /^[A-Z]/.test(word);
@@ -58,6 +82,7 @@ async function processText(text, contextName, interactive, rl) {
         if (isCapitalized(word) &&
             !IGNORED_WORDS.has(word) &&
             !allowedHebrewWords.has(word) &&
+            !allowedCapitalizedWords.has(word) &&
             !isSentenceStart(text, index)) {
             candidates.push({ word, index });
         }
@@ -95,7 +120,7 @@ async function processText(text, contextName, interactive, rl) {
         console.log(`Context: ...${highlighted}...`);
 
         const answer = await new Promise(resolve => {
-            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (l/U/Enter - no changes, e - edit, f - finish): `, resolve);
+            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (l/U/Enter - no changes, a - add to allowed, e - edit, f - finish): `, resolve);
         });
 
         const input = answer.trim().toLowerCase();
@@ -103,6 +128,13 @@ async function processText(text, contextName, interactive, rl) {
         if (input === 'f') {
             stop = true;
             break;
+        }
+
+        if (input === 'a') {
+            allowedCapitalizedWords.add(candidate.word);
+            saveAllowedCapitalizedWords(allowedCapitalizedWords);
+            console.log(`Added "${candidate.word}" to allowed list.`);
+            continue;
         }
 
         if (input === 'e') {
@@ -159,7 +191,7 @@ async function processFile(filePath, interactive) {
 
                             // Calculate line number for vim
                             const lineNumber = calculateLineNumber(filePath, 'full-english', result.currentIndex);
-                            openVim(filePath, lineNumber);
+                            openVim(filePath, lineNumber, result.candidate.word);
                             shouldReprocess = true;
                             break;
                         }
@@ -188,7 +220,7 @@ async function processFile(filePath, interactive) {
 
                                     // Calculate line number for vim
                                     const lineNumber = calculateLineNumber(filePath, `Word Mappings.${key}.english`, result.currentIndex);
-                                    openVim(filePath, lineNumber);
+                                    openVim(filePath, lineNumber, result.candidate.word);
                                     shouldReprocess = true;
                                     break;
                                 }
@@ -215,7 +247,7 @@ async function processFile(filePath, interactive) {
                 if (result.edit) {
                     if (rl) rl.close();
                     const lineNumber = calculateLineNumberInText(content, result.currentIndex);
-                    openVim(filePath, lineNumber);
+                    openVim(filePath, lineNumber, result.candidate.word);
                     shouldReprocess = true;
                 } else {
                     newContent = result.text;
@@ -276,9 +308,15 @@ function calculateLineNumberInText(content, charIndex) {
     return beforeChar.split('\n').length;
 }
 
-function openVim(filePath, lineNumber) {
-    console.log(`\nOpening vim at ${filePath}:${lineNumber}...`);
-    const result = spawnSync('vim', [`+${lineNumber}`, filePath], {
+function openVim(filePath, lineNumber, searchWord) {
+    console.log(`\nOpening vim at ${filePath}:${lineNumber} searching for "${searchWord}"...`);
+
+    // Use vim's command mode to jump to line and search for the word
+    // +{lineNumber} jumps to the line
+    // +/{searchWord} searches for the word and positions cursor on it
+    const vimArgs = [`+${lineNumber}`, `+/${searchWord}`, filePath];
+
+    const result = spawnSync('vim', vimArgs, {
         stdio: 'inherit'
     });
 
