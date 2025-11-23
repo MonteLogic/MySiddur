@@ -82,21 +82,24 @@ async function processText(text, contextName, interactive, rl, onUpdate) {
         console.log(`Context: ...${highlighted}...`);
 
         const answer = await new Promise(resolve => {
-            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (y/n/q): `, resolve);
+            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (l/U/Enter - no changes, f - finish): `, resolve);
         });
 
-        if (answer.toLowerCase() === 'q') {
+        const input = answer.trim().toLowerCase();
+
+        if (input === 'f') {
             rl.close();
             process.exit(0);
         }
 
-        if (answer.toLowerCase() === 'y') {
+        if (input === 'l') {
             const lower = candidate.word.toLowerCase();
             const before = modifiedText.substring(0, currentIndex);
             const after = modifiedText.substring(currentIndex + candidate.word.length);
             modifiedText = before + lower + after;
             offset += (lower.length - candidate.word.length);
         }
+        // 'u' or empty input (Enter) does nothing, just continues loop
     }
 
     return modifiedText;

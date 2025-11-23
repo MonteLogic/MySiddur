@@ -40,7 +40,7 @@ node proof-reading-scripts/check-hebrew-in-english.js
     - In a hardcoded ignore list (e.g., "I", "G-d").
 - **Modes:**
     - **Default:** Reports potential issues to the console.
-    - **Interactive (`--interactive`):** Prompts the user for each finding, allowing them to lowercase the word, skip it, or quit.
+    - **Interactive (`--interactive`):** Prompts the user for each finding, allowing them to lowercase the word (l), keep it uppercase/skip (U or Enter), or finish (f).
 
 **Usage:**
 ```bash
@@ -51,7 +51,24 @@ node proof-reading-scripts/check-capitalization.js
 node proof-reading-scripts/check-capitalization.js --interactive
 ```
 
-### 4. `verify-scripts.js`
+### 4. `add-full-english.js`
+**Purpose:** Populates the `full-english` field in prayer JSON files.
+**Functionality:**
+- **Single Mode:** Takes a prayer ID, finds the corresponding JSON file, and populates `full-english` from `Word Mappings`.
+- **All Mode (`--all`):** Recursively scans `prayer/prayer-database` and updates all prayer JSON files.
+- Concatenates the English translation from the `Word Mappings` in numerical order.
+
+**Usage:**
+```bash
+# Process a single prayer
+node proof-reading-scripts/add-full-english.js <prayer-id>
+# Example: node proof-reading-scripts/add-full-english.js 50-0rwa
+
+# Process all prayers
+node proof-reading-scripts/add-full-english.js --all
+```
+
+### 5. `verify-scripts.js`
 **Purpose:** Verifies the functionality of the proofreading scripts.
 **Functionality:**
 - Sets up a temporary test environment with sample files containing known issues.
