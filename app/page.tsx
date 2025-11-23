@@ -7,8 +7,7 @@ import strings from '#/strings.json';
 
 export default function LandingPage() {
   const { user, isLoaded } = useUser();
-  const [selectedStyle, setSelectedStyle] = useState('Recommended');
-  const [selectedOrder, setSelectedOrder] = useState('Recommended');
+  const [selectedStyle, setSelectedStyle] = useState('sentence-based-mapping');
   const [printBlackAndWhite, setPrintBlackAndWhite] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -219,41 +218,22 @@ export default function LandingPage() {
               </label>
 
               <div className="pt-4 border-t border-gray-700">
-                <div className="flex flex-col md:flex-row md:items-end gap-5 mb-3">
-                  <div className="flex-1 w-full">
-                <label htmlFor="style-select" className="block text-sm font-medium text-gray-300 mb-3">
-                  Prayer Style
-                </label>
+                <div className="flex items-center gap-2 mb-3">
+                  <label htmlFor="style-select" className="block text-sm font-medium text-gray-300">
+                    Prayer Style
+                  </label>
+                  <Link href="/custom-siddur" className="text-xs text-blue-400 hover:text-blue-300 underline whitespace-nowrap">
+                    More Settings
+                  </Link>
+                </div>
                 <select
                   id="style-select"
                   value={selectedStyle}
-                  onChange={(e) => setSelectedStyle(e.target.value)}
-                  className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                  disabled
+                  className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-3 cursor-not-allowed opacity-75"
                 >
-                  <option value="Recommended">Recommended</option>
-                  <option value="all-transliterated">All Transliterated</option>
-                  <option value="sentence based mapping">Sentence Based Mapping</option>
+                  <option value="sentence-based-mapping">Recommended</option>
                 </select>
-                  </div>
-                  <div className="flex-1 w-full">
-                    <div className="flex items-center gap-2 mb-3">
-                      <label htmlFor="order-select" className="block text-sm font-medium text-gray-300">
-                        Prayer Order
-                      </label>
-                      <Link href="/nusach-viz" className="text-xs text-blue-400 hover:text-blue-300 underline whitespace-nowrap">
-                        Learn More
-                      </Link>
-                    </div>
-                    <select
-                      id="order-select"
-                      value={selectedOrder}
-                      onChange={(e) => setSelectedOrder(e.target.value)}
-                      className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-                    >
-                      <option value="Recommended">Recommended</option>
-                    </select>
-                  </div>
-                </div>
               </div>
 
               {isSaving && <p className="text-xs text-gray-500">Saving...</p>}
