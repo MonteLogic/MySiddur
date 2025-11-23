@@ -37,10 +37,16 @@ node proof-reading-scripts/check-hebrew-in-english.js
 - Scans for capitalized words that are NOT:
     - At the start of a sentence.
     - In the `hebrew-words.json` allowed list.
+    - In the `allowed-capitalized-words.json` allowed list.
     - In a hardcoded ignore list (e.g., "I", "G-d").
 - **Modes:**
     - **Default:** Reports potential issues to the console.
-    - **Interactive (`--interactive`):** Prompts the user for each finding, allowing them to lowercase the word (l), keep it uppercase/skip (U or Enter), or finish (f).
+    - **Interactive (`--interactive`):** Prompts the user for each finding with the following options:
+        - **l** - Lowercase the word
+        - **U/Enter** - Keep uppercase/skip
+        - **a** - Add word to `allowed-capitalized-words.json` (word will be ignored in future runs)
+        - **e** - Edit the file in vim with cursor positioned on the flagged word
+        - **f** - Finish and save changes
 
 **Usage:**
 ```bash
@@ -93,3 +99,8 @@ node proof-reading-scripts/verify-scripts.js
 A JSON array of strings containing the authoritative list of Hebrew transliterated words. This list is used by:
 - `check-hebrew-in-english.js` to enforce casing.
 - `check-capitalization.js` to whitelist these words (ignoring their capitalization).
+
+### `allowed-capitalized-words.json`
+A JSON array of strings containing capitalized words that should be allowed in the middle of sentences. This list is used by:
+- `check-capitalization.js` to whitelist specific capitalized words (e.g., "ETERNAL", "Master", "King").
+- Words can be added interactively using the 'a' option when running `check-capitalization.js --interactive`.

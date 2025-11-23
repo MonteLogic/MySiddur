@@ -120,7 +120,7 @@ async function processText(text, contextName, interactive, rl) {
         console.log(`Context: ...${highlighted}...`);
 
         const answer = await new Promise(resolve => {
-            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (l/U/Enter - no changes, a - add to allowed, e - edit, f - finish): `, resolve);
+            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (L - Lower case/U - Upper Case/Enter - no changes, a - add to allowed, e - edit, f - finish): `, resolve);
         });
 
         const input = answer.trim().toLowerCase();
