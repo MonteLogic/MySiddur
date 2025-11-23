@@ -117,7 +117,7 @@
       },
       "8": {
         "hebrew": "א.",
-        "english": "1.",
+        "english": "1,",
         "transliteration": "Aleph.",
         "detailed-array": [
           [
@@ -156,7 +156,7 @@
       },
       "11": {
         "hebrew": "ב.",
-        "english": "2.",
+        "english": "2,",
         "transliteration": "Bet.",
         "detailed-array": [
           [
@@ -196,7 +196,7 @@
       },
       "14": {
         "hebrew": "ג.",
-        "english": "3.",
+        "english": "3,",
         "transliteration": "Gimmel.",
         "detailed-array": [
           [
@@ -314,7 +314,7 @@
       },
       "23": {
         "hebrew": "ד.",
-        "english": "4.",
+        "english": "4,",
         "transliteration": "Dalet.",
         "detailed-array": [
           [
@@ -353,7 +353,7 @@
       },
       "26": {
         "hebrew": "ה.",
-        "english": "5.",
+        "english": "5,",
         "transliteration": "Heh.",
         "detailed-array": [
           [
@@ -393,7 +393,7 @@
       },
       "29": {
         "hebrew": "ו.",
-        "english": "6.",
+        "english": "6,",
         "transliteration": "Vav.",
         "detailed-array": [
           [
@@ -518,7 +518,7 @@
       },
       "39": {
         "hebrew": "ז.",
-        "english": "7.",
+        "english": "7,",
         "transliteration": "Zayin.",
         "detailed-array": [
           [
@@ -642,7 +642,7 @@
       },
       "48": {
         "hebrew": "ח.",
-        "english": "8.",
+        "english": "8,",
         "transliteration": "Chet.",
         "detailed-array": [
           [
@@ -904,7 +904,7 @@
       },
       "68": {
         "hebrew": "ט.",
-        "english": "9.",
+        "english": "9,",
         "transliteration": "Tet.",
         "detailed-array": [
           [
@@ -1111,7 +1111,7 @@
       },
       "83": {
         "hebrew": "י.",
-        "english": "10.",
+        "english": "10,",
         "transliteration": "Yud.",
         "detailed-array": [
           [
@@ -1304,7 +1304,7 @@
       },
       "97": {
         "hebrew": "יא.",
-        "english": "11.",
+        "english": "11,",
         "transliteration": "Yud-Aleph.",
         "detailed-array": [
           [
@@ -1556,7 +1556,7 @@
       },
       "116": {
         "hebrew": "יב.",
-        "english": "12.",
+        "english": "12,",
         "transliteration": "Yud-Bet.",
         "detailed-array": [
           [
@@ -1652,7 +1652,7 @@
       },
       "123": {
         "hebrew": "יג.",
-        "english": "13.",
+        "english": "13,",
         "transliteration": "Yud-Gimmel.",
         "detailed-array": [
           [
