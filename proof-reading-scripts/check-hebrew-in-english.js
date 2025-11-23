@@ -11,6 +11,20 @@ function loadAllowedWords(filepath) {
     }
 }
 
+function checkText(text, contextName, allowedLower) {
+    const words = text.match(/\b\w+\b/g) || [];
+
+    words.forEach(word => {
+        const lowerWord = word.toLowerCase();
+        if (allowedLower.hasOwnProperty(lowerWord)) {
+            const correctForm = allowedLower[lowerWord];
+            if (word !== correctForm) {
+                console.log(`Case mismatch in ${contextName}: Found '${word}', expected '${correctForm}'`);
+            }
+        }
+    });
+}
+
 function checkHebrewWords(target, allowedWords) {
     if (!fs.existsSync(target)) {
         console.error(`Path not found: ${target}`);
@@ -30,21 +44,38 @@ function checkHebrewWords(target, allowedWords) {
             checkHebrewWords(path.join(target, file), allowedWords);
         });
     } else if (target.endsWith('.json') || target.endsWith('.txt')) {
+        // Skip schema files
+        if (target.endsWith('schema.json')) return;
+
         try {
             const content = fs.readFileSync(target, 'utf8');
 
-            // Find words that match allowed words (case-insensitive)
-            const words = content.match(/\b\w+\b/g) || [];
+            if (target.endsWith('.json')) {
+                const data = JSON.parse(content);
+                const prayerId = Object.keys(data)[0];
 
-            words.forEach(word => {
-                const lowerWord = word.toLowerCase();
-                if (allowedLower.hasOwnProperty(lowerWord)) {
-                    const correctForm = allowedLower[lowerWord];
-                    if (word !== correctForm) {
-                        console.log(`Case mismatch in ${path.basename(target)}: Found '${word}', expected '${correctForm}'`);
+                if (prayerId && data[prayerId]) {
+                    const prayerData = data[prayerId];
+
+                    // Check full-english
+                    if (prayerData['full-english']) {
+                        checkText(prayerData['full-english'], `${path.basename(target)} (full-english)`, allowedLower);
+                    }
+
+                    // Check Word Mappings
+                    if (prayerData['Word Mappings']) {
+                        for (const key in prayerData['Word Mappings']) {
+                            const mapping = prayerData['Word Mappings'][key];
+                            if (mapping.english) {
+                                checkText(mapping.english, `${path.basename(target)} (Word Mapping ${key})`, allowedLower);
+                            }
+                        }
                     }
                 }
-            });
+            } else {
+                // Fallback for text files
+                checkText(content, path.basename(target), allowedLower);
+            }
 
         } catch (err) {
             console.error(`Error processing ${target}: ${err.message}`);

@@ -8,6 +8,7 @@ This directory contains a collection of Node.js scripts designed to proofread an
 **Purpose:** Automatically standardizes references to holy names.
 **Functionality:**
 - Scans the `prayer/prayer-database` directory and `prayer/prayer-content/ashkenazi-prayer-info.json`.
+- Parses JSON files to specifically target the `full-english` field and English values in `Word Mappings`.
 - Replaces instances of "God" with "G-d".
 - Replaces instances of "Lord" with "L-rd".
 - Replaces instances of "Adonai" with "Ad-nai".
@@ -22,7 +23,8 @@ node proof-reading-scripts/fix-holy-names.js
 **Purpose:** Enforces consistent casing for transliterated Hebrew words.
 **Functionality:**
 - Uses `hebrew-words.json` as the source of truth for correct spelling and capitalization.
-- Scans the target files for any case-insensitive matches of the words in the list.
+- Scans the target files (JSON and text) for any case-insensitive matches of the words in the list.
+- Parses JSON files to specifically target the `full-english` field and English values in `Word Mappings`.
 - Reports any instances where the casing in the text does not match the casing in `hebrew-words.json` (e.g., finding "shabbos" when "Shabbos" is required).
 - **Note:** This script is read-only and logs issues to the console.
 
@@ -38,6 +40,7 @@ node proof-reading-scripts/check-hebrew-in-english.js
     - At the start of a sentence.
     - In the `hebrew-words.json` allowed list.
     - In a hardcoded ignore list (e.g., "I", "G-d").
+- Parses JSON files to specifically target the `full-english` field and English values in `Word Mappings`.
 - **Modes:**
     - **Default:** Reports potential issues to the console.
     - **Interactive (`--interactive`):** Prompts the user for each finding, allowing them to lowercase the word, skip it, or quit.
@@ -52,18 +55,20 @@ node proof-reading-scripts/check-capitalization.js --interactive
 ```
 
 ### 4. `add-full-english.js`
-**Purpose:** Populates the `full-english` field in a prayer JSON file.
+**Purpose:** Populates the `full-english` field in prayer JSON files.
 **Functionality:**
-- Takes a prayer ID as an argument.
-- Finds the corresponding JSON file in `prayer/prayer-database`.
+- **Single Mode:** Takes a prayer ID, finds the corresponding JSON file, and populates `full-english` from `Word Mappings`.
+- **All Mode (`--all`):** Recursively scans `prayer/prayer-database` and updates all prayer JSON files.
 - Concatenates the English translation from the `Word Mappings` in numerical order.
-- Updates the `full-english` field in the JSON file.
 
 **Usage:**
 ```bash
+# Process a single prayer
 node proof-reading-scripts/add-full-english.js <prayer-id>
-# Example:
-node proof-reading-scripts/add-full-english.js 50-0rwa
+# Example: node proof-reading-scripts/add-full-english.js 50-0rwa
+
+# Process all prayers
+node proof-reading-scripts/add-full-english.js --all
 ```
 
 ### 5. `verify-scripts.js`
