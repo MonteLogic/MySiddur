@@ -40,7 +40,7 @@ function isSentenceStart(text, index) {
     return ['.', '?', '!'].includes(char);
 }
 
-async function processText(text, contextName, interactive, rl, onUpdate) {
+async function processText(text, contextName, interactive, rl) {
     // Regex to find words, including hyphenated ones.
     const regex = /\b[A-Za-z]+(?:-[A-Za-z]+)*\b/g;
     let match;
@@ -58,18 +58,19 @@ async function processText(text, contextName, interactive, rl, onUpdate) {
         }
     }
 
-    if (candidates.length === 0) return text;
+    if (candidates.length === 0) return { text, stop: false };
 
     if (!interactive) {
         console.log(`\nFile/Context: ${contextName}`);
         candidates.forEach(c => {
             console.log(`  Potential misplaced capital: "${c.word}" at index ${c.index}`);
         });
-        return text;
+        return { text, stop: false };
     }
 
     let modifiedText = text;
     let offset = 0;
+    let stop = false;
 
     for (const candidate of candidates) {
         const currentIndex = candidate.index + offset;
@@ -88,8 +89,8 @@ async function processText(text, contextName, interactive, rl, onUpdate) {
         const input = answer.trim().toLowerCase();
 
         if (input === 'f') {
-            rl.close();
-            process.exit(0);
+            stop = true;
+            break;
         }
 
         if (input === 'l') {
@@ -102,10 +103,11 @@ async function processText(text, contextName, interactive, rl, onUpdate) {
         // 'u' or empty input (Enter) does nothing, just continues loop
     }
 
-    return modifiedText;
+    return { text: modifiedText, stop };
 }
 
 async function processFile(filePath, interactive) {
+    let stopProcessing = false;
     try {
         const content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
@@ -126,23 +128,30 @@ async function processFile(filePath, interactive) {
                 // Check full-english
                 if (prayerData['full-english']) {
                     const original = prayerData['full-english'];
-                    const updated = await processText(original, `${filePath} (full-english)`, interactive, rl);
-                    if (original !== updated) {
-                        prayerData['full-english'] = updated;
+                    const result = await processText(original, `${filePath} (full-english)`, interactive, rl);
+
+                    if (original !== result.text) {
+                        prayerData['full-english'] = result.text;
                         modified = true;
                     }
+                    if (result.stop) stopProcessing = true;
                 }
 
                 // Check Word Mappings
-                if (prayerData['Word Mappings']) {
+                if (!stopProcessing && prayerData['Word Mappings']) {
                     for (const key in prayerData['Word Mappings']) {
                         const mapping = prayerData['Word Mappings'][key];
                         if (mapping.english) {
                             const original = mapping.english;
-                            const updated = await processText(original, `${filePath} (Word Mapping ${key})`, interactive, rl);
-                            if (original !== updated) {
-                                mapping.english = updated;
+                            const result = await processText(original, `${filePath} (Word Mapping ${key})`, interactive, rl);
+
+                            if (original !== result.text) {
+                                mapping.english = result.text;
                                 modified = true;
+                            }
+                            if (result.stop) {
+                                stopProcessing = true;
+                                break;
                             }
                         }
                     }
@@ -151,8 +160,10 @@ async function processFile(filePath, interactive) {
             newContent = JSON.stringify(data, null, 2);
         } else {
             // Fallback for text files
-            newContent = await processText(content, filePath, interactive, rl);
+            const result = await processText(content, filePath, interactive, rl);
+            newContent = result.text;
             if (newContent !== content) modified = true;
+            if (result.stop) stopProcessing = true;
         }
 
         if (rl) rl.close();
@@ -165,12 +176,13 @@ async function processFile(filePath, interactive) {
     } catch (err) {
         console.error(`Error processing ${filePath}: ${err.message}`);
     }
+    return stopProcessing;
 }
 
 async function checkCapitalization(target, interactive) {
     if (!fs.existsSync(target)) {
         console.error(`Path not found: ${target}`);
-        return;
+        return false;
     }
 
     const stat = fs.statSync(target);
@@ -178,33 +190,43 @@ async function checkCapitalization(target, interactive) {
     if (stat.isDirectory()) {
         const files = fs.readdirSync(target);
         for (const file of files) {
-            await checkCapitalization(path.join(target, file), interactive);
+            const stop = await checkCapitalization(path.join(target, file), interactive);
+            if (stop) return true;
         }
     } else if (target.endsWith('.json') || target.endsWith('.txt')) {
         // Skip schema files
         if (!target.endsWith('schema.json')) {
-            await processFile(target, interactive);
+            const stop = await processFile(target, interactive);
+            if (stop) return true;
         }
     }
+    return false;
 }
 
 if (require.main === module) {
     const args = process.argv.slice(2);
     const interactive = args.includes('--interactive');
-    const targetDir = path.join(__dirname, '../prayer/prayer-database');
+
+    const targetArg = args.find(arg => !arg.startsWith('--'));
+    const target = targetArg ? path.resolve(targetArg) : path.join(__dirname, '../prayer/prayer-database');
     const extraFile = path.join(__dirname, '../prayer/prayer-content/ashkenazi-prayer-info.json');
 
-    console.log(`Scanning directory: ${targetDir}`);
+    console.log(`Scanning: ${target}`);
     if (interactive) {
         console.log("Interactive mode enabled.");
     }
 
     (async () => {
-        await checkCapitalization(targetDir, interactive);
+        const stop = await checkCapitalization(target, interactive);
 
-        if (fs.existsSync(extraFile)) {
+        if (!stop && !targetArg && fs.existsSync(extraFile)) {
             console.log(`Scanning file: ${extraFile}`);
             await checkCapitalization(extraFile, interactive);
+        }
+
+        if (stop) {
+            console.log("Exiting...");
+            process.exit(0);
         }
     })();
 }

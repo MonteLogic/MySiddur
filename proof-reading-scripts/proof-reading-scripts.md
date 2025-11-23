@@ -44,11 +44,17 @@ node proof-reading-scripts/check-hebrew-in-english.js
 
 **Usage:**
 ```bash
-# Report only
+# Report only (scans default directory)
 node proof-reading-scripts/check-capitalization.js
+
+# Report on specific file or directory
+node proof-reading-scripts/check-capitalization.js path/to/file.json
 
 # Interactive fix mode
 node proof-reading-scripts/check-capitalization.js --interactive
+
+# Interactive fix mode on specific file
+node proof-reading-scripts/check-capitalization.js path/to/file.json --interactive
 ```
 
 ### 4. `add-full-english.js`
