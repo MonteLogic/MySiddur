@@ -2,7 +2,7 @@
 // Shared utilities for validating and fixing prayer punctuation
 
 const WORD_WARNING_THRESHOLD = 18;
-const WORD_ERROR_THRESHOLD = 30;
+const WORD_ERROR_THRESHOLD = 38;
 
 const punctuationRegex = /[.!?]/;
 const containsHebrew = /[\u0590-\u05FF]/;

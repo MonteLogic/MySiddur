@@ -1,9 +1,9 @@
 {
   "1-0rwa": {
     "prayer-title": "Asher Yatzar (Who Formed) - Morning Version",
-    "version": "1.0.0",
-    "translation": "Metsudah Siddur",
-    "date_modified": "Wed Nov 12 06:04:40 AM CST 2025",
+    "version": "1.0.1",
+    "translation": "Corrected Literal Mapping",
+    "date_modified": "Sun Nov 23 11:01:40 AM CST 2025",
     "Introduction": "Blessing for after using the restroom.",
     "Instruction": "Recited after using the restroom and washing one's hands.",
     "prayer-id": "1-0rwa",
@@ -22,7 +22,7 @@
       },
       "1": {
         "hebrew": "אַתָּה",
-        "english": "You are",
+        "english": "You",
         "transliteration": "atah",
         "detailed-array": [
           [
@@ -36,7 +36,7 @@
       },
       "2": {
         "hebrew": "יְיָ",
-        "english": "ETERNAL",
+        "english": "Ad-nai",
         "transliteration": "Ad-nai",
         "detailed-array": [
           [
@@ -47,7 +47,7 @@
       },
       "3": {
         "hebrew": "אֱלֹהֵינוּ",
-        "english": "our G-d",
+        "english": "our God",
         "transliteration": "Eloheinu",
         "detailed-array": [
           [
@@ -120,7 +120,7 @@
       },
       "9": {
         "hebrew": "הָאָדָם",
-        "english": "man",
+        "english": "human",
         "transliteration": "ha'adam",
         "detailed-array": [
           [
@@ -173,7 +173,7 @@
       },
       "13": {
         "hebrew": "נְקָבִים",
-        "english": "many",
+        "english": "openings*",
         "transliteration": "n'kavim",
         "detailed-array": [
           [
@@ -184,7 +184,7 @@
       },
       "14": {
         "hebrew": "נְקָבִים",
-        "english": "openings",
+        "english": "openings*",
         "transliteration": "n'kavim",
         "detailed-array": [
           [
@@ -195,7 +195,7 @@
       },
       "15": {
         "hebrew": "חֲלוּלִים",
-        "english": "and many",
+        "english": "hollows*",
         "transliteration": "chalulim",
         "detailed-array": [
           [
@@ -209,7 +209,7 @@
       },
       "16": {
         "hebrew": "חֲלוּלִים",
-        "english": "hollows.",
+        "english": "hollows*.",
         "transliteration": "chalulim",
         "detailed-array": [
           [
@@ -259,9 +259,9 @@
         ]
       },
       "20": {
-        "hebrew": "כִסֵּא",
+        "hebrew": "כִּסֵּא",
         "english": "the Throne",
-        "transliteration": "khisei",
+        "transliteration": "kissei",
         "detailed-array": [
           [
             0,
@@ -275,7 +275,7 @@
       "21": {
         "hebrew": "כְבוֹדֶךָ",
         "english": "of Your Glory",
-        "transliteration": "kh'vodekha.",
+        "transliteration": "kh'vodekha",
         "detailed-array": [
           [
             0,
@@ -330,7 +330,7 @@
       },
       "25": {
         "hebrew": "מֵהֶם",
-        "english": "of them.",
+        "english": "of them",
         "transliteration": "mehem",
         "detailed-array": [
           [
@@ -396,7 +396,7 @@
       },
       "30": {
         "hebrew": "אִי",
-        "english": "it would be",
+        "english": "it is not",
         "transliteration": "ee",
         "detailed-array": [
           [
@@ -411,7 +411,7 @@
       },
       "31": {
         "hebrew": "אֶפְשַׁר",
-        "english": "impossible",
+        "english": "possible",
         "transliteration": "efshar",
         "detailed-array": [
           [
@@ -451,8 +451,8 @@
       },
       "34": {
         "hebrew": "לְפָנֶיךָ",
-        "english": "before You",
-        "transliteration": "l'fanekha",
+        "english": "before You.",
+        "transliteration": "l'fanekha.",
         "detailed-array": [
           [
             0,
@@ -476,7 +476,7 @@
       },
       "36": {
         "hebrew": "אַתָּה",
-        "english": "You are.",
+        "english": "You",
         "transliteration": "atah",
         "detailed-array": [
           [
@@ -490,7 +490,7 @@
       },
       "37": {
         "hebrew": "יְיָ",
-        "english": "ETERNAL",
+        "english": "Ad-nai",
         "transliteration": "Ad-nai",
         "detailed-array": [
           [
@@ -537,7 +537,7 @@
       },
       "41": {
         "hebrew": "וּמַפְלִיא",
-        "english": "and performs",
+        "english": "and acts wondrously",
         "transliteration": "u'mafli",
         "detailed-array": [
           [
@@ -551,7 +551,7 @@
       },
       "42": {
         "hebrew": "לַעֲשׂוֹת",
-        "english": "wonders",
+        "english": "to do",
         "transliteration": "la'asot",
         "detailed-array": [
           [
@@ -560,7 +560,6 @@
           ]
         ]
       }
-    },
-    "full-english": "Blessed you are ETERNAL our G-d King of the universe Who formed the man with wisdom and created in him many openings and many. hollows it is revealed and known before the Throne of Your Glory that if were to be opened one of them. or were to be sealed one of them it would be impossible to survive and to stand before You Blessed You are. ETERNAL Who heals all flesh and performs wonders"
+    }
   }
 }

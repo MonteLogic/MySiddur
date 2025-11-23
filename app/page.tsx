@@ -73,7 +73,7 @@ export default function LandingPage() {
   const sampleWords = [
     { english: 'Blessed', transliteration: 'Baruch', hebrew: 'ברוך' },
     { english: 'are', transliteration: 'atah', hebrew: 'אתה' },
-    { english: 'You', transliteration: 'Adonai', hebrew: 'ה\'' },
+    { english: 'You', transliteration: 'Ad-nai', hebrew: 'ה\'' },
     { english: 'Lord', transliteration: 'Eloheinu', hebrew: 'אלוקינו' },
   ];
 
