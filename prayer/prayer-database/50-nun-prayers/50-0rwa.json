@@ -12,80 +12,172 @@
         "hebrew": "בָּרוּךְ",
         "english": "Blessed",
         "transliteration": "Baruch",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "1": {
         "hebrew": "אַתָּה",
         "english": "You are",
         "transliteration": "atah",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "2": {
         "hebrew": "יְיָ",
         "english": "ETERNAL",
         "transliteration": "Ad-nai",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "3": {
         "hebrew": "אֱלֹהֵֽינוּ",
         "english": "our G-d",
         "transliteration": "Eloheinu",
-        "detailed-array": [[0, [0, 1]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1
+            ]
+          ]
+        ]
       },
       "4": {
         "hebrew": "מֶֽלֶךְ",
         "english": "King",
         "transliteration": "melekh",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "5": {
         "hebrew": "הָעוֹלָם",
         "english": "of the universe",
         "transliteration": "ha'olam",
-        "detailed-array": [[0, [0, 1, 2]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
       },
       "6": {
         "hebrew": "אֲשֶׁר",
         "english": "Who",
         "transliteration": "asher",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "7": {
         "hebrew": "קִדְּשָֽׁנוּ",
         "english": "has sanctified us",
         "transliteration": "kid'shanu",
-        "detailed-array": [[0, [0, 1, 2]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
       },
       "8": {
         "hebrew": "בְּמִצְוֹתָיו",
         "english": "with His commandments",
         "transliteration": "b'mitzvotav",
-        "detailed-array": [[0, [0, 1, 2]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
       },
       "9": {
         "hebrew": "וְצִוָּֽנוּ",
         "english": "and commanded us",
         "transliteration": "v'tzivanu",
-        "detailed-array": [[0, [0, 1, 2]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
       },
       "10": {
         "hebrew": "עַל",
         "english": "concerning",
         "transliteration": "al",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       },
       "11": {
         "hebrew": "נְטִילַת",
         "english": "the washing of",
         "transliteration": "netilat",
-        "detailed-array": [[0, [0, 1, 2]]]
+        "detailed-array": [
+          [
+            0,
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        ]
       },
       "12": {
         "hebrew": "יָדָֽיִם",
         "english": "hands",
         "transliteration": "yadayim",
-        "detailed-array": [[0, 0]]
+        "detailed-array": [
+          [
+            0,
+            0
+          ]
+        ]
       }
-    }
+    },
+    "full-english": "Blessed You are ETERNAL our G-d King of the universe Who has sanctified us with His commandments and commanded us concerning the washing of hands"
   }
 }
