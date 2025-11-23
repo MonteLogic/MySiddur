@@ -1,0 +1,82 @@
+{
+  "maariv-shema": {
+    "prayer-title": "Shema and Its Blessings - Evening",
+    "prayer-id": "maariv-shema",
+    "link-to-prayer": "https://www.sefaria.org/Siddur_Ashkenaz,_Weekday,_Maariv,_Shema_and_Blessings",
+    "version": "1.0.0",
+    "date_modified": "2025-11-21T12:12:00-06:00",
+    "Introduction": "The evening Shema with its accompanying blessings, recited as part of Maariv (evening prayers).",
+    "Instruction": "Recited during the evening prayer service. Includes two blessings before the Shema and two after.",
+    "sub-prayers": {
+      "maariv-shema-0": {
+        "prayer-title": "Maariv Aravim (Who brings on the evenings)",
+        "Word Mappings": {
+          "0": {"hebrew": "בָּרוּךְ", "english": "Blessed", "transliteration": "Baruch"},
+          "1": {"hebrew": "אַתָּה", "english": "are You,", "transliteration": "Atah"},
+          "2": {"hebrew": "יְיָ", "english": "ETERNAL", "transliteration": "Ad-nai"},
+          "3": {"hebrew": "אֱלֹהֵֽינוּ", "english": "our G-d,", "transliteration": "Eloheinu"},
+          "4": {"hebrew": "מֶֽלֶךְ", "english": "King", "transliteration": "melekh"},
+          "5": {"hebrew": "הָעוֹלָם,", "english": "of the universe,", "transliteration": "ha'olam,"},
+          "6": {"hebrew": "אֲשֶׁר", "english": "who", "transliteration": "asher"},
+          "7": {"hebrew": "בִּדְבָרוֹ", "english": "with His word", "transliteration": "bidvaro"},
+          "8": {"hebrew": "מַעֲרִיב", "english": "brings on", "transliteration": "maariv"},
+          "9": {"hebrew": "עֲרָבִים.", "english": "the evenings.", "transliteration": "aravim."}
+        }
+      },
+      "maariv-shema-1": {
+        "prayer-title": "Ahavat Olam (Eternal Love)",
+        "Word Mappings": {
+          "0": {"hebrew": "אַהֲבַת", "english": "With a love of", "transliteration": "Ahavat"},
+          "1": {"hebrew": "עוֹלָם", "english": "eternity", "transliteration": "olam"},
+          "2": {"hebrew": "בֵּית", "english": "the House of", "transliteration": "beit"},
+          "3": {"hebrew": "יִשְׂרָאֵל", "english": "Israel", "transliteration": "Yisrael"},
+          "4": {"hebrew": "עַמְּךָ", "english": "Your people", "transliteration": "amcha"},
+          "5": {"hebrew": "אָהָֽבְתָּ.", "english": "You have loved.", "transliteration": "ahavta."}
+        }
+      },
+      "maariv-shema-2": {
+        "prayer-title": "Shema Yisrael",
+        "Word Mappings": {
+          "0": {"hebrew": "שְׁמַע", "english": "Hear,", "transliteration": "Shema"},
+          "1": {"hebrew": "יִשְׂרָאֵל", "english": "O Israel:", "transliteration": "Yisrael"},
+          "2": {"hebrew": "יְהוָה", "english": "The L-RD", "transliteration": "Ad-nai"},
+          "3": {"hebrew": "אֱלֹהֵינוּ", "english": "is our G-d,", "transliteration": "Eloheinu"},
+          "4": {"hebrew": "יְהוָה", "english": "the L-RD", "transliteration": "Ad-nai"},
+          "5": {"hebrew": "אֶחָד!", "english": "is One!", "transliteration": "Echad!"}
+        }
+      },
+      "maariv-shema-3": {
+        "prayer-title": "Baruch Shem (Blessed is the Name)",
+        "Word Mappings": {
+          "0": {"hebrew": "בָּרוּךְ", "english": "Blessed", "transliteration": "Baruch"},
+          "1": {"hebrew": "שֵׁם", "english": "is the name", "transliteration": "shem"},
+          "2": {"hebrew": "כְּבוֹד", "english": "of the glory of", "transliteration": "k'vod"},
+          "3": {"hebrew": "מַלְכוּתוֹ", "english": "His kingdom", "transliteration": "malchuto"},
+          "4": {"hebrew": "לְעוֹלָם", "english": "forever", "transliteration": "l'olam"},
+          "5": {"hebrew": "וָעֶד.", "english": "and ever.", "transliteration": "va'ed."}
+        }
+      },
+      "maariv-shema-4": {
+        "prayer-title": "Emet V'Emunah (Truth and Faith)",
+        "Word Mappings": {
+          "0": {"hebrew": "אֱמֶת", "english": "True", "transliteration": "Emet"},
+          "1": {"hebrew": "וֶאֱמוּנָה", "english": "and certain", "transliteration": "v'emunah"},
+          "2": {"hebrew": "כָּל", "english": "is all", "transliteration": "kol"},
+          "3": {"hebrew": "זֹאת", "english": "this", "transliteration": "zot"}
+        }
+      },
+      "maariv-shema-5": {
+        "prayer-title": "Hashkiveinu (Cause us to lie down)",
+        "Word Mappings": {
+          "0": {"hebrew": "הַשְׁכִּיבֵֽנוּ", "english": "Cause us to lie down,", "transliteration": "Hashkiveinu"},
+          "1": {"hebrew": "יְיָ", "english": "L-RD", "transliteration": "Ad-nai"},
+          "2": {"hebrew": "אֱלֹהֵֽינוּ", "english": "our G-d,", "transliteration": "Eloheinu"},
+          "3": {"hebrew": "לְשָׁלוֹם,", "english": "in peace,", "transliteration": "l'shalom,"},
+          "4": {"hebrew": "וְהַעֲמִידֵֽנוּ", "english": "and raise us up,", "transliteration": "v'ha'amideinu"},
+          "5": {"hebrew": "מַלְכֵּֽנוּ", "english": "our King,", "transliteration": "malkenu"},
+          "6": {"hebrew": "לְחַיִּים.", "english": "to life.", "transliteration": "l'chayim."}
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "1-0rw1": {
-    "prayer-title": "Elohai Neshamah (My God, the Soul)",
+    "prayer-title": "Elohai Neshamah (My G-d, the Soul)",
     "version": "1.0.0",
     "date_modified": "2025-08-31T02:30:52-05:00",
     "Introduction": "A prayer acknowledging the purity of the soul, recited upon waking.",
@@ -10,7 +10,7 @@
     "Word Mappings": {
       "0": {
         "hebrew": "אֱלֹהַי,",
-        "english": "My God,",
+        "english": "My G-d,",
         "transliteration": "Elohai,",
         "detailed-array": [
           [
@@ -437,7 +437,7 @@
       },
       "32": {
         "hebrew": "אֱלֹהַי",
-        "english": "my God",
+        "english": "my G-d",
         "transliteration": "Elohai",
         "detailed-array": [
           [
@@ -451,7 +451,7 @@
       },
       "33": {
         "hebrew": "וֵאלֹהֵי",
-        "english": "and God of",
+        "english": "and G-d of",
         "transliteration": "v'Elohei",
         "detailed-array": [
           [
@@ -516,7 +516,7 @@
       },
       "38": {
         "hebrew": "אֲדוֹן",
-        "english": "Lord of",
+        "english": "L-rd of",
         "transliteration": "Adon",
         "detailed-array": [
           [

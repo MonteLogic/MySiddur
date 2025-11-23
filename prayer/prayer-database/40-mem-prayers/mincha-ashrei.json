@@ -1,0 +1,80 @@
+{
+  "mincha-ashrei": {
+    "prayer-title": "Ashrei (Psalm 145)",
+    "prayer-id": "mincha-ashrei",
+    "link-to-prayer": "https://www.sefaria.org/Psalms.145",
+    "version": "1.0.0",
+    "date_modified": "2025-11-21T12:12:00-06:00",
+    "Introduction": "Ashrei, primarily Psalm 145, is recited at least three times daily. It is an alphabetical acrostic praising G-d.",
+    "Instruction": "Recited before the Mincha Amidah. Includes two introductory verses and a concluding verse.",
+    "sub-prayers": {
+      "mincha-ashrei-0": {
+        "prayer-title": "Introductory Verses",
+        "Word Mappings": {
+          "0": {"hebrew": "אַשְׁרֵי", "english": "Happy are", "transliteration": "Ashrei"},
+          "1": {"hebrew": "יוֹשְׁבֵי", "english": "those who dwell in", "transliteration": "yoshvei"},
+          "2": {"hebrew": "בֵיתֶךָ", "english": "Your house;", "transliteration": "veitecha"},
+          "3": {"hebrew": "עוֹד", "english": "they will ever", "transliteration": "od"},
+          "4": {"hebrew": "יְהַלְלוּךָ", "english": "praise You!", "transliteration": "y'halelucha"},
+          "5": {"hebrew": "סֶּלָה.", "english": "Selah.", "transliteration": "selah."}
+        }
+      },
+      "mincha-ashrei-1": {
+        "prayer-title": "Psalm 145 - Opening",
+        "Word Mappings": {
+          "0": {"hebrew": "תְּהִלָּה", "english": "A song of praise.", "transliteration": "T'hilah"},
+          "1": {"hebrew": "לְדָוִד", "english": "Of David.", "transliteration": "l'David"},
+          "2": {"hebrew": "אֲרוֹמִמְךָ", "english": "I will extol You,", "transliteration": "Aromimcha"},
+          "3": {"hebrew": "אֱלוֹהַי", "english": "my G-d", "transliteration": "Elohai"},
+          "4": {"hebrew": "הַמֶּלֶךְ,", "english": "and King,", "transliteration": "Hamelech,"},
+          "5": {"hebrew": "וַאֲבָרְכָה", "english": "and bless", "transliteration": "va'avar'chah"},
+          "6": {"hebrew": "שִׁמְךָ", "english": "Your name", "transliteration": "shimcha"},
+          "7": {"hebrew": "לְעוֹלָם", "english": "forever", "transliteration": "l'olam"},
+          "8": {"hebrew": "וָעֶד.", "english": "and ever.", "transliteration": "va'ed."}
+        }
+      },
+      "mincha-ashrei-2": {
+        "prayer-title": "Every day I will bless You",
+        "Word Mappings": {
+          "0": {"hebrew": "בְּכָל־יוֹם", "english": "Every day", "transliteration": "B'chol yom"},
+          "1": {"hebrew": "אֲבָרְכֶךָּ,", "english": "will I bless You", "transliteration": "avar'cheka,"},
+          "2": {"hebrew": "וַאֲהַלְלָה", "english": "and praise", "transliteration": "va'ahal'lah"},
+          "3": {"hebrew": "שִׁמְךָ", "english": "Your name", "transliteration": "shimcha"},
+          "4": {"hebrew": "לְעוֹלָם", "english": "forever", "transliteration": "l'olam"},
+          "5": {"hebrew": "וָעֶד.", "english": "and ever.", "transliteration": "va'ed."}
+        }
+      },
+      "mincha-ashrei-3": {
+        "prayer-title": "Great is the L-RD",
+        "Word Mappings": {
+          "0": {"hebrew": "גָּדוֹל", "english": "Great is", "transliteration": "Gadol"},
+          "1": {"hebrew": "יְהֹוָה", "english": "the L-RD", "transliteration": "Ad-nai"},
+          "2": {"hebrew": "וּמְהֻלָּל", "english": "and much acclaimed;", "transliteration": "um'hulal"},
+          "3": {"hebrew": "מְאֹד,", "english": "greatly,", "transliteration": "m'od,"},
+          "4": {"hebrew": "וְלִגְדֻלָּתוֹ", "english": "His greatness", "transliteration": "v'ligdulato"},
+          "5": {"hebrew": "אֵין", "english": "cannot be", "transliteration": "ein"},
+          "6": {"hebrew": "חֵקֶר.", "english": "fathomed.", "transliteration": "cheiker."}
+        }
+      },
+      "mincha-ashrei-4": {
+        "prayer-title": "The L-RD is good to all",
+        "Word Mappings": {
+          "0": {"hebrew": "טוֹב־יְהֹוָה", "english": "The L-RD is good", "transliteration": "Tov Ad-nai"},
+          "1": {"hebrew": "לַכֹּל", "english": "to all,", "transliteration": "lakol"},
+          "2": {"hebrew": "וְרַחֲמָיו", "english": "and His mercy is", "transliteration": "v'rachamav"},
+          "3": {"hebrew": "עַל־כָּל־מַעֲשָׂיו.", "english": "upon all His works.", "transliteration": "al kol ma'asav."}
+        }
+      },
+      "mincha-ashrei-5": {
+        "prayer-title": "You open Your hand",
+        "Word Mappings": {
+          "0": {"hebrew": "פּוֹתֵחַ", "english": "You open", "transliteration": "Potei'ach"},
+          "1": {"hebrew": "אֶת־יָדֶךָ,", "english": "Your hand,", "transliteration": "et yadecha,"},
+          "2": {"hebrew": "וּמַשְׂבִּיעַ", "english": "and satisfy", "transliteration": "umasbi'a"},
+          "3": {"hebrew": "לְכָל־חַי", "english": "every living thing", "transliteration": "l'chol chai"},
+          "4": {"hebrew": "רָצוֹן.", "english": "[with] its desire.", "transliteration": "ratzon."}
+        }
+      }
+    }
+  }
+}

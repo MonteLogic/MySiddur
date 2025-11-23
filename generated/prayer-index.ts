@@ -8,7 +8,7 @@ export interface PrayerIndexEntry {
 export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
   "1-0rw1": {
     "id": "1-0rw1",
-    "title": "Elohai Neshamah (My God, the Soul)"
+    "title": "Elohai Neshamah (My G-d, the Soul)"
   },
   "1-0rwa": {
     "id": "1-0rwa",
@@ -42,9 +42,37 @@ export const prayerIndex: { [key: string]: PrayerIndexEntry } = {
     "id": "200-1-ryo-157-(full)",
     "title": "Rabbi Yishmael Omer (Rabbi Yishmael Says) - Full"
   },
+  "retiring-hamapil": {
+    "id": "retiring-hamapil",
+    "title": "HaMapil (Who Causes Sleep)"
+  },
+  "retiring-shema": {
+    "id": "retiring-shema",
+    "title": "Shema Before Sleep"
+  },
   "40-0rwa": {
     "id": "40-0rwa",
     "title": "Modei Ani"
+  },
+  "maariv-aleinu": {
+    "id": "maariv-aleinu",
+    "title": "Aleinu"
+  },
+  "maariv-amidah": {
+    "id": "maariv-amidah",
+    "title": "Amidah (Standing Prayer) - Maariv"
+  },
+  "maariv-shema": {
+    "id": "maariv-shema",
+    "title": "Shema and Its Blessings - Evening"
+  },
+  "mincha-amidah": {
+    "id": "mincha-amidah",
+    "title": "Amidah (Standing Prayer) - Mincha"
+  },
+  "mincha-ashrei": {
+    "id": "mincha-ashrei",
+    "title": "Ashrei (Psalm 145)"
   },
   "400-1thm-533-(full)": {
     "id": "400-1thm-533-(full)",

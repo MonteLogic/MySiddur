@@ -17,7 +17,10 @@
     "test:playwright": " exec playwright test",
     "generate-markdown-paths": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate.ts",
     "build-prayers": "node build-prayer-data.js",
-    "generate-prayer-file": "ts-node scripts/prayers/generate-prayer.js"
+    "generate-prayer-file": "ts-node scripts/prayers/generate-prayer.js",
+    "generate-siddur": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate-siddur.ts",
+    "generate-siddur-layouts": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/generate-siddur-layouts.ts",
+    "analyze-missing-prayers": "ts-node -O '{\"module\": \"CommonJS\"}' scripts/analyze-missing-prayers.ts"
   },
   "git": {
     "pre-commit": "lint-staged"

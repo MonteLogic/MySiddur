@@ -65,12 +65,12 @@ import {
     sections.push(birkotHaShacharSection);
   
     // Example: Pesukei D'Zimra (very simplified)
-    // Add logic for Shabbat/Yom Tov vs. Weekday
+    // Add logic for Shabbos/Yom Tov vs. Weekday
     const pesukeiDezimraSection: PrayerSection = {
       sectionTitle: [{ hebrew: "פסוקי דזמרה", isBold: true, isCentered: true }],
       prayers: [placeholderPrayer("תוכן פסוקי דזמרה...", 'all')]
     };
-    if (calendarInfo.isShabbat || calendarInfo.isYomTov) {
+    if (calendarInfo.isShabbos || calendarInfo.isYomTov) {
       // pesukeiDezimraSection.prayers.unshift(placeholderPrayer("תוספות לשבת ויום טוב", 'all'));
     }
     sections.push(pesukeiDezimraSection);
@@ -87,9 +87,9 @@ import {
       sectionTitle: [{ hebrew: "תפילת עמידה", isBold: true, isCentered: true }],
       prayers: []
     };
-    if (calendarInfo.isShabbat && timeOfDay === 'Musaf') {
+    if (calendarInfo.isShabbos && timeOfDay === 'Musaf') {
        amidahSection.prayers.push(placeholderPrayer("עמידה של מוסף לשבת...", [nusach]));
-    } else if (calendarInfo.isShabbat) {
+    } else if (calendarInfo.isShabbos) {
        amidahSection.prayers.push(placeholderPrayer("עמידה של שבת...", [nusach]));
     } else if (calendarInfo.isRoshChodesh) {
        amidahSection.prayers.push(placeholderPrayer("עמידה של ראש חודש (עם יעלה ויבוא)...", [nusach]));

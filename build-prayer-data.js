@@ -13,10 +13,6 @@ const {
 
 // --- Define Paths ---
 const prayersDir = path.join(__dirname, 'prayer/prayer-database');
-const liturgyFile = path.join(
-  __dirname,
-  'prayer/prayer-content/ashkenazi-prayer-info.json',
-);
 
 // --- MODIFIED --- Output paths are now cleaner
 const outputDataDir = path.join(__dirname, 'prayer-data-private');
@@ -217,26 +213,52 @@ const validateWordMappingSequences = (prayerId, wordMappings) => {
   });
 };
 
-// --- NEW --- Step 1: Get the list of required prayer IDs from the liturgy file.
+// --- Step 1: Get the list of required prayer IDs from generated layouts (SINGLE SOURCE OF TRUTH)
 const getRequiredPrayerIds = () => {
-  console.log(`📖 Reading liturgy file: ${liturgyFile}`);
-  const liturgyContent = fs.readFileSync(liturgyFile, 'utf-8');
-  const liturgyJson = JSON.parse(liturgyContent);
   const prayerIds = new Set();
 
-  // Helper function to recursively find all 'prayer-id' keys
-  const findIds = (obj) => {
-    for (const key in obj) {
-      if (key === 'prayer-id' && typeof obj[key] === 'string') {
-        prayerIds.add(obj[key]);
-      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-        findIds(obj[key]);
+  // The generated layouts are the ONLY source of truth
+  const generatedDir = path.join(__dirname, 'lib/custom-siddur-date-gen/generated');
+
+  if (!fs.existsSync(generatedDir)) {
+    console.warn('⚠️  No generated layouts found. Please run: pnpm run generate-siddur-layouts N-days');
+    console.warn('   Example: pnpm run generate-siddur-layouts 30-days');
+    return prayerIds;
+  }
+
+  console.log(`📖 Scanning generated layouts (SINGLE SOURCE OF TRUTH)...`);
+
+  const scanForPrayerIndexFiles = (dir) => {
+    const items = fs.readdirSync(dir);
+    for (const item of items) {
+      const fullPath = path.join(dir, item);
+      const stat = fs.statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        scanForPrayerIndexFiles(fullPath);
+      } else if (item === 'prayer-index.ts') {
+        try {
+          const content = fs.readFileSync(fullPath, 'utf-8');
+          // Extract prayer IDs from the TypeScript file
+          const idMatches = content.matchAll(/"id":\s*"([^"]+)"/g);
+          for (const match of idMatches) {
+            prayerIds.add(match[1]);
+          }
+        } catch (error) {
+          console.warn(`  ⚠️  Could not read ${fullPath}: ${error.message}`);
+        }
       }
     }
   };
 
-  findIds(liturgyJson);
-  console.log(`Found ${prayerIds.size} unique prayer-ids required by the liturgy.`);
+  scanForPrayerIndexFiles(generatedDir);
+  console.log(`✅ Found ${prayerIds.size} unique prayer IDs from generated layouts.`);
+
+  if (prayerIds.size === 0) {
+    console.warn('⚠️  No prayer IDs found in generated layouts!');
+    console.warn('   Make sure to generate layouts first: pnpm run generate-siddur-layouts 30-days');
+  }
+
   return prayerIds;
 };
 

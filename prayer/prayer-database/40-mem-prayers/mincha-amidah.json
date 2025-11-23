@@ -1,0 +1,69 @@
+{
+  "mincha-amidah": {
+    "prayer-title": "Amidah (Standing Prayer) - Mincha",
+    "prayer-id": "mincha-amidah",
+    "link-to-prayer": "https://www.sefaria.org/Siddur_Ashkenaz,_Weekday,_Mincha,_Amidah",
+    "version": "1.0.0",
+    "date_modified": "2025-11-21T12:12:00-06:00",
+    "Introduction": "The afternoon Amidah, also known as Shemoneh Esreh, is the central prayer of the Mincha service.",
+    "Instruction": "Recited silently while standing, facing Jerusalem. Take three steps back, then three steps forward before beginning.",
+    "sub-prayers": {
+      "mincha-amidah-0": {
+        "prayer-title": "Opening - My Master, open my lips",
+        "Word Mappings": {
+          "0": {"hebrew": "אֲדֹנָי", "english": "My Master,", "transliteration": "Ad-nai"},
+          "1": {"hebrew": "שְׂפָתַי", "english": "my lips", "transliteration": "s'fatai"},
+          "2": {"hebrew": "תִּפְתָּח,", "english": "open,", "transliteration": "tiftach,"},
+          "3": {"hebrew": "וּפִי", "english": "and my mouth", "transliteration": "u-fi"},
+          "4": {"hebrew": "יַגִּיד", "english": "shall declare", "transliteration": "yaggid"},
+          "5": {"hebrew": "תְּהִלָּתֶךָ.", "english": "Your praise.", "transliteration": "t'hilatecha."}
+        }
+      },
+      "mincha-amidah-1": {
+        "prayer-title": "Avot (Patriarchs)",
+        "Word Mappings": {
+          "0": {"hebrew": "בָּרוּךְ", "english": "Blessed", "transliteration": "Baruch"},
+          "1": {"hebrew": "אַתָּה", "english": "are You,", "transliteration": "Atah"},
+          "2": {"hebrew": "יְהֹוָה", "english": "L-RD,", "transliteration": "Ad-nai,"},
+          "3": {"hebrew": "אֱלֹהֵינוּ", "english": "our G-d", "transliteration": "Eloheinu"},
+          "4": {"hebrew": "וֵאלֹהֵי", "english": "and G-d of", "transliteration": "vEilohei"},
+          "5": {"hebrew": "אֲבוֹתֵינוּ,", "english": "our fathers,", "transliteration": "avoteinu,"},
+          "6": {"hebrew": "אֱלֹהֵי", "english": "G-d of", "transliteration": "Elohei"},
+          "7": {"hebrew": "אַבְרָהָם,", "english": "Abraham,", "transliteration": "Avraham,"},
+          "8": {"hebrew": "אֱלֹהֵי", "english": "G-d of", "transliteration": "Elohei"},
+          "9": {"hebrew": "יִצְחָק,", "english": "Isaac,", "transliteration": "Yitzchak,"},
+          "10": {"hebrew": "וֵאלֹהֵי", "english": "and G-d of", "transliteration": "vEilohei"},
+          "11": {"hebrew": "יַעֲקֹב.", "english": "Jacob.", "transliteration": "Yaakov."}
+        }
+      },
+      "mincha-amidah-2": {
+        "prayer-title": "Gevurot (Divine Might)",
+        "Word Mappings": {
+          "0": {"hebrew": "אַתָּה", "english": "You are", "transliteration": "Atah"},
+          "1": {"hebrew": "גִּבּוֹר", "english": "mighty", "transliteration": "gibor"},
+          "2": {"hebrew": "לְעוֹלָם", "english": "forever,", "transliteration": "l'olam"},
+          "3": {"hebrew": "אֲדֹנָי,", "english": "my Master;", "transliteration": "Ad-nai,"},
+          "4": {"hebrew": "מְחַיֵּה", "english": "the Resurrector of", "transliteration": "m'chayeh"},
+          "5": {"hebrew": "מֵתִים", "english": "the dead", "transliteration": "meitim"},
+          "6": {"hebrew": "אַתָּה,", "english": "are You,", "transliteration": "Atah,"},
+          "7": {"hebrew": "רַב", "english": "the Powerful One", "transliteration": "rav"},
+          "8": {"hebrew": "לְהוֹשִׁיעַ.", "english": "to deliver us.", "transliteration": "l'hoshia."}
+        }
+      },
+      "mincha-amidah-3": {
+        "prayer-title": "Kedushat Hashem (Sanctification of G-d's Name)",
+        "Word Mappings": {
+          "0": {"hebrew": "אַתָּה", "english": "You are", "transliteration": "Atah"},
+          "1": {"hebrew": "קָדוֹשׁ", "english": "holy", "transliteration": "kadosh"},
+          "2": {"hebrew": "וְשִׁמְךָ", "english": "and Your Name is", "transliteration": "v'shimcha"},
+          "3": {"hebrew": "קָדוֹשׁ,", "english": "holy,", "transliteration": "kadosh,"},
+          "4": {"hebrew": "וּקְדוֹשִׁים", "english": "and holy beings", "transliteration": "u'k'doshim"},
+          "5": {"hebrew": "בְּכָל", "english": "every", "transliteration": "b'chol"},
+          "6": {"hebrew": "יוֹם", "english": "day", "transliteration": "yom"},
+          "7": {"hebrew": "יְהַלְלֽוּךָ", "english": "praise You", "transliteration": "y'halelucha"},
+          "8": {"hebrew": "סֶּלָה.", "english": "forever.", "transliteration": "selah."}
+        }
+      }
+    }
+  }
+}

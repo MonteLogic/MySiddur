@@ -1,0 +1,13 @@
+{
+  "id": "korbanot",
+  "name": "Korbanot (Sacrifices)",
+  "grouping": "shacharis-korbanot",
+  "applicability": {
+    "days": ["all"]
+  },
+  "prayers": [
+    { "id": "80-1-pth-381-(full)", "title": "Parashat HaTamid (The Daily Offering) - Morning Version" },
+    { "id": "1-1emk-924-(full)", "title": "Eizehu Mekoman (Where is Their Place?)" },
+    { "id": "200-1-ryo-157-(full)", "title": "Rabbi Yishmael Omer (Rabbi Yishmael Says) - Full" }
+  ]
+}

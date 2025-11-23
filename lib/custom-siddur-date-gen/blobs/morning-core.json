@@ -1,0 +1,14 @@
+{
+  "id": "morning-core",
+  "name": "Morning Core Prayers",
+  "grouping": "shacharis-start",
+  "applicability": {
+    "days": ["all"]
+  },
+  "prayers": [
+    { "id": "40-0rwa", "title": "Modei Ani" },
+    { "id": "50-0rwa", "title": "Netilat Yadayim" },
+    { "id": "1-0rwa", "title": "Asher Yatzar (Who Formed) - Morning Version" },
+    { "id": "1-0rw1", "title": "Elohai Neshamah (My G-d, the Soul)" }
+  ]
+}

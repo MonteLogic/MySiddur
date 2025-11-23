@@ -105,7 +105,7 @@ const handleWordMappings = (
   const firstMapping = wordMappings['0'] as any;
   const mappingHasTransliteration = hasTransliteration(firstMapping);
         
-  if (style === 'sentence based mapping') {
+  if (style === 'sentence based mapping' || style === 'Recommended') {
     if (mappingHasTransliteration) {
       return drawSentenceBasedMappingPrayerThreeColumn(
         context,

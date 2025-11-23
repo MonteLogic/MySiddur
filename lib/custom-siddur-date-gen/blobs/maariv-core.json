@@ -1,0 +1,13 @@
+{
+  "id": "maariv-core",
+  "name": "Maariv (Evening) Prayers",
+  "grouping": "maariv",
+  "applicability": {
+    "days": ["all"]
+  },
+  "prayers": [
+    { "id": "maariv-shema", "title": "Shema and Its Blessings - Evening" },
+    { "id": "maariv-amidah", "title": "Amidah (Standing Prayer) - Maariv" },
+    { "id": "maariv-aleinu", "title": "Aleinu" }
+  ]
+}
