@@ -29,7 +29,11 @@ function isSentenceStart(text, index) {
 
     // Look backwards for the previous non-whitespace character
     let i = index - 1;
-    while (i >= 0 && /\s/.test(text[i])) {
+    while (i >= 0) {
+        const char = text[i];
+        if (!/\s/.test(char)) {
+            break;
+        }
         i--;
     }
 
@@ -77,7 +81,14 @@ async function processText(text, contextName, interactive, rl) {
         const start = Math.max(0, currentIndex - 20);
         const end = Math.min(modifiedText.length, currentIndex + candidate.word.length + 20);
         const context = modifiedText.substring(start, end);
-        const highlighted = context.replace(candidate.word, `\x1b[31m${candidate.word}\x1b[0m`);
+
+        // Calculate relative index of the word within the context string
+        const relativeIndex = currentIndex - start;
+        const beforeWord = context.substring(0, relativeIndex);
+        const wordStr = context.substring(relativeIndex, relativeIndex + candidate.word.length);
+        const afterWord = context.substring(relativeIndex + candidate.word.length);
+
+        const highlighted = `${beforeWord}\x1b[31m${wordStr}\x1b[0m${afterWord}`;
 
         console.log(`\nFile/Context: ${contextName}`);
         console.log(`Context: ...${highlighted}...`);
@@ -225,7 +236,7 @@ if (require.main === module) {
         }
 
         if (stop) {
-            console.log("Exiting...");
+            console.log("Saving..Exiting...");
             process.exit(0);
         }
     })();
