@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const { spawnSync } = require('child_process');
 
 // Configuration
 const IGNORED_WORDS = new Set(['I', 'G-d', 'L-rd', 'Ad-nai']);
@@ -94,7 +95,7 @@ async function processText(text, contextName, interactive, rl) {
         console.log(`Context: ...${highlighted}...`);
 
         const answer = await new Promise(resolve => {
-            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (l/U/Enter - no changes, f - finish): `, resolve);
+            rl.question(`Lowercase "${candidate.word}" to "${candidate.word.toLowerCase()}"? (l/U/Enter - no changes, e - edit, f - finish): `, resolve);
         });
 
         const input = answer.trim().toLowerCase();
@@ -102,6 +103,10 @@ async function processText(text, contextName, interactive, rl) {
         if (input === 'f') {
             stop = true;
             break;
+        }
+
+        if (input === 'e') {
+            return { text: modifiedText, stop: false, edit: true, candidate, currentIndex };
         }
 
         if (input === 'l') {
@@ -119,75 +124,167 @@ async function processText(text, contextName, interactive, rl) {
 
 async function processFile(filePath, interactive) {
     let stopProcessing = false;
-    try {
-        const content = fs.readFileSync(filePath, 'utf8');
-        let modified = false;
-        let newContent = content;
+    let shouldReprocess = false;
 
-        const rl = interactive ? readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        }) : null;
+    do {
+        shouldReprocess = false;
+        try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            let modified = false;
+            let newContent = content;
 
-        if (filePath.endsWith('.json')) {
-            const data = JSON.parse(content);
-            const prayerId = Object.keys(data)[0];
+            const rl = interactive ? readline.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            }) : null;
 
-            if (prayerId && data[prayerId]) {
-                const prayerData = data[prayerId];
+            if (filePath.endsWith('.json')) {
+                const data = JSON.parse(content);
+                const prayerId = Object.keys(data)[0];
 
-                // Check full-english
-                if (prayerData['full-english']) {
-                    const original = prayerData['full-english'];
-                    const result = await processText(original, `${filePath} (full-english)`, interactive, rl);
+                if (prayerId && data[prayerId]) {
+                    const prayerData = data[prayerId];
 
-                    if (original !== result.text) {
-                        prayerData['full-english'] = result.text;
-                        modified = true;
-                    }
-                    if (result.stop) stopProcessing = true;
-                }
+                    // Check full-english
+                    if (prayerData['full-english']) {
+                        const original = prayerData['full-english'];
+                        const result = await processText(original, `${filePath} (full-english)`, interactive, rl);
 
-                // Check Word Mappings
-                if (!stopProcessing && prayerData['Word Mappings']) {
-                    for (const key in prayerData['Word Mappings']) {
-                        const mapping = prayerData['Word Mappings'][key];
-                        if (mapping.english) {
-                            const original = mapping.english;
-                            const result = await processText(original, `${filePath} (Word Mapping ${key})`, interactive, rl);
-
-                            if (original !== result.text) {
-                                mapping.english = result.text;
-                                modified = true;
+                        if (result.edit) {
+                            // Save current changes before opening vim
+                            if (modified) {
+                                fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
                             }
-                            if (result.stop) {
-                                stopProcessing = true;
-                                break;
+                            if (rl) rl.close();
+
+                            // Calculate line number for vim
+                            const lineNumber = calculateLineNumber(filePath, 'full-english', result.currentIndex);
+                            openVim(filePath, lineNumber);
+                            shouldReprocess = true;
+                            break;
+                        }
+
+                        if (original !== result.text) {
+                            prayerData['full-english'] = result.text;
+                            modified = true;
+                        }
+                        if (result.stop) stopProcessing = true;
+                    }
+
+                    // Check Word Mappings
+                    if (!stopProcessing && prayerData['Word Mappings']) {
+                        for (const key in prayerData['Word Mappings']) {
+                            const mapping = prayerData['Word Mappings'][key];
+                            if (mapping.english) {
+                                const original = mapping.english;
+                                const result = await processText(original, `${filePath} (Word Mapping ${key})`, interactive, rl);
+
+                                if (result.edit) {
+                                    // Save current changes before opening vim
+                                    if (modified) {
+                                        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+                                    }
+                                    if (rl) rl.close();
+
+                                    // Calculate line number for vim
+                                    const lineNumber = calculateLineNumber(filePath, `Word Mappings.${key}.english`, result.currentIndex);
+                                    openVim(filePath, lineNumber);
+                                    shouldReprocess = true;
+                                    break;
+                                }
+
+                                if (original !== result.text) {
+                                    mapping.english = result.text;
+                                    modified = true;
+                                }
+                                if (result.stop) {
+                                    stopProcessing = true;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+                if (!shouldReprocess) {
+                    newContent = JSON.stringify(data, null, 2);
+                }
+            } else {
+                // Fallback for text files
+                const result = await processText(content, filePath, interactive, rl);
+
+                if (result.edit) {
+                    if (rl) rl.close();
+                    const lineNumber = calculateLineNumberInText(content, result.currentIndex);
+                    openVim(filePath, lineNumber);
+                    shouldReprocess = true;
+                } else {
+                    newContent = result.text;
+                    if (newContent !== content) modified = true;
+                    if (result.stop) stopProcessing = true;
+                }
             }
-            newContent = JSON.stringify(data, null, 2);
-        } else {
-            // Fallback for text files
-            const result = await processText(content, filePath, interactive, rl);
-            newContent = result.text;
-            if (newContent !== content) modified = true;
-            if (result.stop) stopProcessing = true;
+
+            if (rl && !shouldReprocess) rl.close();
+
+            if (modified && !shouldReprocess) {
+                fs.writeFileSync(filePath, newContent, 'utf8');
+                console.log(`Saved changes to ${filePath}`);
+            }
+
+        } catch (err) {
+            console.error(`Error processing ${filePath}: ${err.message}`);
+            break;
         }
+    } while (shouldReprocess);
 
-        if (rl) rl.close();
-
-        if (modified) {
-            fs.writeFileSync(filePath, newContent, 'utf8');
-            console.log(`Saved changes to ${filePath}`);
-        }
-
-    } catch (err) {
-        console.error(`Error processing ${filePath}: ${err.message}`);
-    }
     return stopProcessing;
+}
+
+function calculateLineNumber(filePath, fieldPath, charIndex) {
+    // Read the file and find the approximate line number
+    const content = fs.readFileSync(filePath, 'utf8');
+    const lines = content.split('\n');
+
+    // Find the line containing the field
+    const fieldParts = fieldPath.split('.');
+    let targetLine = 1;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (fieldParts[0] === 'full-english' && line.includes('"full-english"')) {
+            targetLine = i + 1;
+            break;
+        } else if (fieldParts[0] === 'Word Mappings') {
+            if (line.includes(`"${fieldParts[1]}"`) && i > 0) {
+                // Look for the english field within this mapping
+                for (let j = i; j < Math.min(i + 20, lines.length); j++) {
+                    if (lines[j].includes('"english"')) {
+                        targetLine = j + 1;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    return targetLine;
+}
+
+function calculateLineNumberInText(content, charIndex) {
+    const beforeChar = content.substring(0, charIndex);
+    return beforeChar.split('\n').length;
+}
+
+function openVim(filePath, lineNumber) {
+    console.log(`\nOpening vim at ${filePath}:${lineNumber}...`);
+    const result = spawnSync('vim', [`+${lineNumber}`, filePath], {
+        stdio: 'inherit'
+    });
+
+    if (result.error) {
+        console.error(`Failed to open vim: ${result.error.message}`);
+    }
 }
 
 async function checkCapitalization(target, interactive) {
