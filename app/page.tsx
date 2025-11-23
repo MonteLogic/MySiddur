@@ -7,7 +7,7 @@ import strings from '#/strings.json';
 
 export default function LandingPage() {
   const { user, isLoaded } = useUser();
-  const [selectedStyle, setSelectedStyle] = useState('sentence-based-mapping');
+  const [selectedStyle, setSelectedStyle] = useState('Recommended');
   const [printBlackAndWhite, setPrintBlackAndWhite] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -232,7 +232,7 @@ export default function LandingPage() {
                   disabled
                   className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-3 cursor-not-allowed opacity-75"
                 >
-                  <option value="sentence-based-mapping">Recommended</option>
+                  <option value="Recommended">Recommended</option>
                 </select>
               </div>
 
