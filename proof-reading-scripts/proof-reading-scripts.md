@@ -37,21 +37,50 @@ node proof-reading-scripts/check-hebrew-in-english.js
 - Scans for capitalized words that are NOT:
     - At the start of a sentence.
     - In the `hebrew-words.json` allowed list.
+    - In the `allowed-capitalized-words.json` allowed list.
     - In a hardcoded ignore list (e.g., "I", "G-d").
 - **Modes:**
     - **Default:** Reports potential issues to the console.
-    - **Interactive (`--interactive`):** Prompts the user for each finding, allowing them to lowercase the word, skip it, or quit.
+    - **Interactive (`--interactive`):** Prompts the user for each finding with the following options:
+        - **l** - Lowercase the word
+        - **U/Enter** - Keep uppercase/skip
+        - **a** - Add word to `allowed-capitalized-words.json` (word will be ignored in future runs)
+        - **e** - Edit the file in vim with cursor positioned on the flagged word
+        - **f** - Finish and save changes
 
 **Usage:**
 ```bash
-# Report only
+# Report only (scans default directory)
 node proof-reading-scripts/check-capitalization.js
+
+# Report on specific file or directory
+node proof-reading-scripts/check-capitalization.js path/to/file.json
 
 # Interactive fix mode
 node proof-reading-scripts/check-capitalization.js --interactive
+
+# Interactive fix mode on specific file
+node proof-reading-scripts/check-capitalization.js path/to/file.json --interactive
 ```
 
-### 4. `verify-scripts.js`
+### 4. `add-full-english.js`
+**Purpose:** Populates the `full-english` field in prayer JSON files.
+**Functionality:**
+- **Single Mode:** Takes a prayer ID, finds the corresponding JSON file, and populates `full-english` from `Word Mappings`.
+- **All Mode (`--all`):** Recursively scans `prayer/prayer-database` and updates all prayer JSON files.
+- Concatenates the English translation from the `Word Mappings` in numerical order.
+
+**Usage:**
+```bash
+# Process a single prayer
+node proof-reading-scripts/add-full-english.js <prayer-id>
+# Example: node proof-reading-scripts/add-full-english.js 50-0rwa
+
+# Process all prayers
+node proof-reading-scripts/add-full-english.js --all
+```
+
+### 5. `verify-scripts.js`
 **Purpose:** Verifies the functionality of the proofreading scripts.
 **Functionality:**
 - Sets up a temporary test environment with sample files containing known issues.
@@ -70,3 +99,8 @@ node proof-reading-scripts/verify-scripts.js
 A JSON array of strings containing the authoritative list of Hebrew transliterated words. This list is used by:
 - `check-hebrew-in-english.js` to enforce casing.
 - `check-capitalization.js` to whitelist these words (ignoring their capitalization).
+
+### `allowed-capitalized-words.json`
+A JSON array of strings containing capitalized words that should be allowed in the middle of sentences. This list is used by:
+- `check-capitalization.js` to whitelist specific capitalized words (e.g., "ETERNAL", "Master", "King").
+- Words can be added interactively using the 'a' option when running `check-capitalization.js --interactive`.

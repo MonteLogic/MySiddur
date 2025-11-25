@@ -86,7 +86,7 @@
       },
       "6": {
         "hebrew": "אֲשֶׁר",
-        "english": "Who",
+        "english": "who",
         "transliteration": "asher",
         "detailed-array": [
           [
@@ -112,7 +112,7 @@
       },
       "8": {
         "hebrew": "בְּמִצְוֹתָיו",
-        "english": "with His commandments",
+        "english": "with his commandments",
         "transliteration": "b'mitzvotav",
         "detailed-array": [
           [
@@ -168,7 +168,7 @@
       },
       "12": {
         "hebrew": "יָדָֽיִם",
-        "english": "hands",
+        "english": "hands.",
         "transliteration": "yadayim",
         "detailed-array": [
           [
@@ -178,6 +178,6 @@
         ]
       }
     },
-    "full-english": "Blessed You are ETERNAL our G-d King of the universe Who has sanctified us with His commandments and commanded us concerning the washing of hands"
+    "full-english": "Blessed You are ETERNAL our G-d King of the universe who has sanctified us with his commandments and commanded us concerning the washing of hands."
   }
 }
