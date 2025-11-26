@@ -182,12 +182,17 @@ export const drawSentenceBasedMappingPrayer = (
           const restOfNotation = notationValue.substring(1);
 
           const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
-          if (currentHebrewX - colorLetterWidth < hebrewColumnStart) {
+          const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+          const totalWidth = colorLetterWidth + restWidth;
+
+          if (currentHebrewX - totalWidth < hebrewColumnStart) {
             currentHebrewX = hebrewColumnEnd;
             hebrewY -= hebrewLineHeight;
             checkAndHandlePageBreak();
           }
-          currentHebrewX -= colorLetterWidth;
+
+          currentHebrewX -= totalWidth;
+          
           page.drawText(colorLetter, {
             x: currentHebrewX,
             y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
@@ -196,15 +201,8 @@ export const drawSentenceBasedMappingPrayer = (
             color: rgb(0, 0, 0),
           });
 
-          const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
-          if (currentHebrewX - restWidth < hebrewColumnStart) {
-            currentHebrewX = hebrewColumnEnd;
-            hebrewY -= hebrewLineHeight;
-            checkAndHandlePageBreak();
-          }
-          currentHebrewX -= restWidth;
           page.drawText(restOfNotation, {
-            x: currentHebrewX,
+            x: currentHebrewX + colorLetterWidth,
             y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
             font: fonts.english,
             size: notationSize,
@@ -495,13 +493,19 @@ export const drawSentenceBasedMappingPrayerThreeColumn = (
           const notationSize = hebrewFontSize * 0.6;
           const colorLetter = notationValue.charAt(0);
           const restOfNotation = notationValue.substring(1);
+          
           const colorLetterWidth = fonts.english.widthOfTextAtSize(colorLetter, notationSize);
-          if (currentHebrewX - colorLetterWidth < hebrewColumnStart) {
+          const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
+          const totalWidth = colorLetterWidth + restWidth;
+
+          if (currentHebrewX - totalWidth < hebrewColumnStart) {
             currentHebrewX = hebrewColumnEnd;
             hebrewY -= hebrewLineHeight;
             checkAndHandlePageBreak();
           }
-          currentHebrewX -= colorLetterWidth;
+
+          currentHebrewX -= totalWidth;
+
           page.drawText(colorLetter, {
             x: currentHebrewX,
             y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
@@ -510,15 +514,8 @@ export const drawSentenceBasedMappingPrayerThreeColumn = (
             color: rgb(0, 0, 0),
           });
 
-          const restWidth = fonts.english.widthOfTextAtSize(restOfNotation, notationSize);
-          if (currentHebrewX - restWidth < hebrewColumnStart) {
-            currentHebrewX = hebrewColumnEnd;
-            hebrewY -= hebrewLineHeight;
-            checkAndHandlePageBreak();
-          }
-          currentHebrewX -= restWidth;
           page.drawText(restOfNotation, {
-            x: currentHebrewX,
+            x: currentHebrewX + colorLetterWidth,
             y: hebrewY - (hebrewFontSize - notationSize) * 0.5,
             font: fonts.english,
             size: notationSize,
