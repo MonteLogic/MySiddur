@@ -26,6 +26,10 @@ import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
 } from './renderers/sentence-mapped';
+import {
+  drawSentenceBasedMappingPrayerBW,
+  drawSentenceBasedMappingPrayerThreeColumnBW,
+} from './renderers/sentence-mapped-bw';
 import { drawSubPrayers } from './renderers/sub-prayers';
 import {
   getDetailedPrayerData,
@@ -102,17 +106,35 @@ const handleWordMappings = (
   styleSource?: any,
 ): PdfDrawingContext => {
   const { style = 'Recommended' } = params;
+  const printBlackAndWhite = (params as any).printBlackAndWhite ?? false;
   const firstMapping = wordMappings['0'] as any;
   const mappingHasTransliteration = hasTransliteration(firstMapping);
         
   if (style === 'sentence based mapping' || style === 'Recommended') {
     if (mappingHasTransliteration) {
+      if (printBlackAndWhite) {
+        return drawSentenceBasedMappingPrayerThreeColumnBW(
+          context,
+          prayer,
+          wordMappings,
+          params,
+        );
+      }
       return drawSentenceBasedMappingPrayerThreeColumn(
         context,
         prayer,
             wordMappings,
             params,
           );
+    }
+    if (printBlackAndWhite) {
+      return drawSentenceBasedMappingPrayerBW(
+        context,
+        prayer,
+        wordMappings,
+        params,
+        columnWidth,
+      );
     }
     return drawSentenceBasedMappingPrayer(
       context,
