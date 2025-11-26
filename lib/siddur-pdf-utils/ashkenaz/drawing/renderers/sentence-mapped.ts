@@ -177,7 +177,7 @@ export const drawSentenceBasedMappingPrayer = (
 
         if (notationValue && !hasAppliedHebrewNotation) {
           hasAppliedHebrewNotation = true;
-          const notationSize = hebrewFontSize * 0.6;
+          const notationSize = englishFontSize * 0.6;
           const colorLetter = notationValue.charAt(0);
           const restOfNotation = notationValue.substring(1);
 
@@ -490,7 +490,7 @@ export const drawSentenceBasedMappingPrayerThreeColumn = (
         });
 
         if (notationValue) {
-          const notationSize = hebrewFontSize * 0.6;
+          const notationSize = englishFontSize * 0.6;
           const colorLetter = notationValue.charAt(0);
           const restOfNotation = notationValue.substring(1);
           
