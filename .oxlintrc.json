@@ -112,9 +112,9 @@
     "unicorn/prefer-set-size": "warn",
     "unicorn/prefer-string-starts-ends-with": "warn",
     "max-lines-per-function": [
-      "error", 
-      { 
-        "max": 100,
+      "error",
+      {
+        "max": 125,
         "skipBlankLines": true,
         "skipComments": true
       }

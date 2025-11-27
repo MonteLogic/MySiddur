@@ -196,63 +196,23 @@ export const drawBracketUnderlines = (
 };
 
 /**
- * Draws Hebrew line notation showing sentence and phrase indices.
- * @param page - PDF page object
- * @param lineIndices - Map of Y coordinates to phrase indices
- * @param sentenceNum - Current sentence number
- * @param x - X coordinate for the notation
- * @param fonts - Font objects
- * @param fontSize - Base font size
- */
-export const drawHebrewLineNotation = (
-  page: any,
-  lineIndices: Map<number, number[]>,
-  sentenceNum: number,
-  x: number,
-  fonts: any,
-  fontSize: number,
-) => {
-  const sortedYs = Array.from(lineIndices.keys()).sort((a, b) => b - a);
-  sortedYs.forEach((y) => {
-    const indices = lineIndices.get(y)!.sort((a, b) => a - b);
-    if (indices.length === 0) return;
-
-    const min = indices[0];
-    const max = indices[indices.length - 1];
-    const rangeStr =
-      min === max ? toSubscript(min) : `${toSubscript(min)}-${toSubscript(max)}`;
-    const notation = `ts${rangeStr}⁽${toSuperscript(sentenceNum)}⁾`;
-
-    page.drawText(notation, {
-      x,
-      y: y + 2,
-      font: fonts.english,
-      size: fontSize * 0.6,
-      color: rgb(0, 0, 0),
-    });
-  });
-};
-
-/**
  * Renders notation text (e.g. "ts1(2)") with proper positioning and wrapping.
  * @param context - Rendering context
- * @param positionState - Current position state
+ * @param state - Current mutable position state
  * @param notationValue - The notation string to render
  * @param fontSize - Font size
  * @param lineHeight - Line height
  * @param checkPageBreak - Callback to check if page break is needed
- * @returns Updated position state
  */
 export const renderNotation = (
   context: RenderContext,
-  positionState: ColumnPositionState,
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
   notationValue: string,
   fontSize: number,
   lineHeight: number,
   checkPageBreak: () => void,
-): ColumnPositionState => {
-  const { page, fonts } = context;
-  let { x, y, columnStart, columnEnd } = positionState;
+) => {
+  const { fonts } = context;
   const notationSize = fontSize * 0.6;
   const colorLetter = notationValue.charAt(0);
   const restOfNotation = notationValue.substring(1);
@@ -261,198 +221,163 @@ export const renderNotation = (
     colorLetter,
     notationSize,
   );
-  if (x + colorLetterWidth > columnEnd) {
-    x = columnStart;
-    y -= lineHeight;
+  if (state.x + colorLetterWidth > state.columnEnd) {
+    state.x = state.columnStart;
+    state.y -= lineHeight;
     checkPageBreak();
   }
-  page.drawText(colorLetter, {
-    x,
-    y: y - (fontSize - notationSize) * 0.5,
+  state.page.drawText(colorLetter, {
+    x: state.x,
+    y: state.y - (fontSize - notationSize) * 0.5,
     font: fonts.english,
     size: notationSize,
     color: rgb(0, 0, 0),
   });
-  x += colorLetterWidth;
+  state.x += colorLetterWidth;
 
   const restWidth = fonts.english.widthOfTextAtSize(
     restOfNotation,
     notationSize,
   );
-  if (x + restWidth > columnEnd) {
-    x = columnStart;
-    y -= lineHeight;
+  if (state.x + restWidth > state.columnEnd) {
+    state.x = state.columnStart;
+    state.y -= lineHeight;
     checkPageBreak();
   }
-  page.drawText(restOfNotation, {
-    x,
-    y: y - (fontSize - notationSize) * 0.5,
+  state.page.drawText(restOfNotation, {
+    x: state.x,
+    y: state.y - (fontSize - notationSize) * 0.5,
     font: fonts.english,
     size: notationSize,
     color: rgb(0, 0, 0),
   });
-  x += restWidth;
-
-  return { x, y, columnStart, columnEnd };
+  state.x += restWidth;
 };
 
 /**
  * Renders an English phrase with word wrapping and underline tracking.
  * @param context - Rendering context
- * @param positionState - Current position state
+ * @param state - Current mutable position state
  * @param text - English text to render
  * @param fontSize - Font size
  * @param lineHeight - Line height
  * @param color - Text color
  * @param notationValue - Optional notation to render before text
  * @param checkPageBreak - Callback to check if page break is needed
- * @returns Updated position state
  */
 export const processEnglishColumn = (
   context: RenderContext,
-  positionState: ColumnPositionState,
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
   text: string,
   fontSize: number,
   lineHeight: number,
   color: any,
   notationValue: string | undefined,
   checkPageBreak: () => void,
-): ColumnPositionState => {
-  const { page, fonts } = context;
-  let { x, y, columnStart, columnEnd } = positionState;
+) => {
+  const { fonts } = context;
   const parts = text.split(/( )/);
   const segments: UnderlineSegment[] = [];
-  let segmentStartX = x;
-  let segmentY = y;
+  let segmentStartX = state.x;
+  let segmentY = state.y;
   let isFirst = true;
 
-  // Removed local renderNotation definition
-
   parts.forEach((part: string) => {
-
     if (part === '') return;
 
     if (part === ' ') {
       const spaceWidth = fonts.english.widthOfTextAtSize(' ', fontSize);
-      if (x + spaceWidth > columnEnd) {
-        if (x > segmentStartX) {
+      if (state.x + spaceWidth > state.columnEnd) {
+        if (state.x > segmentStartX) {
           segments.push({
             startX: segmentStartX,
-            endX: x,
+            endX: state.x,
             y: segmentY,
             isFirst,
             isLast: false,
           });
           isFirst = false;
         }
-        x = columnStart;
-        y -= lineHeight;
+        state.x = state.columnStart;
+        state.y -= lineHeight;
         checkPageBreak();
-        segmentStartX = x;
-        segmentY = y;
+        segmentStartX = state.x;
+        segmentY = state.y;
       }
-      x += spaceWidth;
+      state.x += spaceWidth;
       return;
     }
 
     const wordWidth = fonts.english.widthOfTextAtSize(part, fontSize);
-    if (x + wordWidth > columnEnd) {
-      if (x > segmentStartX) {
+    if (state.x + wordWidth > state.columnEnd) {
+      if (state.x > segmentStartX) {
         segments.push({
           startX: segmentStartX,
-          endX: x,
+          endX: state.x,
           y: segmentY,
           isFirst,
           isLast: false,
         });
         isFirst = false;
       }
-      x = columnStart;
-      y -= lineHeight;
+      state.x = state.columnStart;
+      state.y -= lineHeight;
       checkPageBreak();
-      segmentStartX = x;
-      segmentY = y;
+      segmentStartX = state.x;
+      segmentY = state.y;
     }
-    page.drawText(part, { x, y, font: fonts.english, size: fontSize, color });
-    x += wordWidth;
+    state.page.drawText(part, { x: state.x, y: state.y, font: fonts.english, size: fontSize, color });
+    state.x += wordWidth;
   });
 
-  if (x > segmentStartX) {
+  if (state.x > segmentStartX) {
     segments.push({
       startX: segmentStartX,
-      endX: x,
+      endX: state.x,
       y: segmentY,
       isFirst,
       isLast: true,
     });
   }
 
-  drawBracketUnderlines(page, segments, color);
+  drawBracketUnderlines(state.page, segments, color);
 
   if (notationValue) {
-    const newState = renderNotation(
+    renderNotation(
       context,
-      { x, y, columnStart, columnEnd },
+      state,
       notationValue,
       fontSize,
       lineHeight,
       checkPageBreak,
     );
-    x = newState.x;
-    y = newState.y;
   }
 
   const enSpaceWidth = fonts.english.widthOfTextAtSize(' ', fontSize);
-  if (x + enSpaceWidth > columnEnd) {
-    x = columnStart;
-    y -= lineHeight;
+  if (state.x + enSpaceWidth > state.columnEnd) {
+    state.x = state.columnStart;
+    state.y -= lineHeight;
     checkPageBreak();
   }
-  x += enSpaceWidth;
-
-  return { x, y, columnStart, columnEnd };
+  state.x += enSpaceWidth;
 };
 
-/**
- * Renders a Hebrew phrase with right-to-left layout, word wrapping, and line index tracking.
- * @param context - Rendering context
- * @param positionState - Current position state
- * @param text - Hebrew text to render
- * @param fontSize - Font size
- * @param lineHeight - Line height
- * @param color - Text color
- * @param phraseIndex - Index of the current phrase
- * @param sentenceLineIndices - Map tracking which phrases appear on which lines
- * @param checkPageBreak - Callback to check if page break is needed
- * @returns Updated position state
- */
 export const processHebrewColumn = (
   context: RenderContext,
-  positionState: ColumnPositionState,
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
   text: string,
   fontSize: number,
   lineHeight: number,
   color: any,
-  phraseIndex: number,
-  sentenceLineIndices: Map<number, number[]>,
+  notationValue: string | undefined,
   checkPageBreak: () => void,
-): ColumnPositionState => {
-  const { page, fonts } = context;
-  let { x, y, columnStart, columnEnd } = positionState;
+) => {
+  const { fonts } = context;
   const words = text.split(/( )/).filter((w: string) => w !== '');
   const segments: UnderlineSegment[] = [];
-  let segmentStartX = x;
-  let segmentY = y;
+  let segmentStartX = state.x;
+  let segmentY = state.y;
   let isFirst = true;
-
-  const trackPhraseIndex = () => {
-    if (!sentenceLineIndices.has(y)) {
-      sentenceLineIndices.set(y, []);
-    }
-    if (!sentenceLineIndices.get(y)!.includes(phraseIndex)) {
-      sentenceLineIndices.get(y)!.push(phraseIndex);
-    }
-  };
 
   const hebrewWordCount =
     text?.trim().split(/\s+/).filter(Boolean).length ?? 0;
@@ -465,13 +390,11 @@ export const processHebrewColumn = (
   words.forEach((word: string) => {
     if (word === '') return;
 
-    trackPhraseIndex();
-
     const wordWidth = fonts.hebrew.widthOfTextAtSize(word, fontSize);
-    if (x - wordWidth < columnStart) {
-      if (x < segmentStartX) {
+    if (state.x - wordWidth < state.columnStart) {
+      if (state.x < segmentStartX) {
         segments.push({
-          startX: x,
+          startX: state.x,
           endX: segmentStartX,
           y: segmentY,
           isFirst,
@@ -479,20 +402,19 @@ export const processHebrewColumn = (
         });
         isFirst = false;
       }
-      x = columnEnd;
-      y -= lineHeight;
+      state.x = state.columnEnd;
+      state.y -= lineHeight;
       checkPageBreak();
-      segmentStartX = x;
-      segmentY = y;
-      trackPhraseIndex();
+      segmentStartX = state.x;
+      segmentY = state.y;
     }
-    x -= wordWidth;
-    page.drawText(word, { x, y, font: fonts.hebrew, size: fontSize, color });
+    state.x -= wordWidth;
+    state.page.drawText(word, { x: state.x, y: state.y, font: fonts.hebrew, size: fontSize, color });
   });
 
-  if (x < segmentStartX) {
+  if (state.x < segmentStartX) {
     segments.push({
-      startX: x,
+      startX: state.x,
       endX: segmentStartX,
       y: segmentY,
       isFirst,
@@ -500,129 +422,142 @@ export const processHebrewColumn = (
     });
   }
 
-  drawBracketUnderlines(page, segments, color);
+  drawBracketUnderlines(state.page, segments, color);
+
+  if (notationValue) {
+    const notationSize = fontSize * 0.6;
+    const notationWidth = fonts.english.widthOfTextAtSize(
+      notationValue,
+      notationSize,
+    );
+    if (state.x - notationWidth < state.columnStart) {
+      state.x = state.columnEnd;
+      state.y -= lineHeight;
+      checkPageBreak();
+    }
+    state.x -= notationWidth;
+    state.page.drawText(notationValue, {
+      x: state.x,
+      y: state.y - (fontSize - notationSize) * 0.5,
+      font: fonts.english,
+      size: notationSize,
+      color: rgb(0, 0, 0),
+    });
+  }
 
   const heSpaceWidth = fonts.hebrew.widthOfTextAtSize(' ', fontSize);
-  if (x - heSpaceWidth < columnStart) {
-    x = columnEnd;
-    y -= lineHeight;
+  if (state.x - heSpaceWidth < state.columnStart) {
+    state.x = state.columnEnd;
+    state.y -= lineHeight;
     checkPageBreak();
   }
-  x -= heSpaceWidth;
-
-  return { x, y, columnStart, columnEnd };
+  state.x -= heSpaceWidth;
 };
 
 /**
  * Renders a transliteration phrase with word wrapping and underline tracking.
  * @param context - Rendering context
- * @param positionState - Current position state
+ * @param state - Current mutable position state
  * @param text - Transliteration text to render
  * @param fontSize - Font size
  * @param lineHeight - Line height
  * @param color - Text color
  * @param notationValue - Optional notation to render before text
  * @param checkPageBreak - Callback to check if page break is needed
- * @returns Updated position state
  */
 export const processTransliterationColumn = (
   context: RenderContext,
-  positionState: ColumnPositionState,
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
   text: string,
   fontSize: number,
   lineHeight: number,
   color: any,
   notationValue: string | undefined,
   checkPageBreak: () => void,
-): ColumnPositionState => {
-  const { page, fonts } = context;
-  let { x, y, columnStart, columnEnd } = positionState;
+) => {
+  const { fonts } = context;
   const parts = text.split(/( )/);
   const segments: UnderlineSegment[] = [];
-  let segmentStartX = x;
-  let segmentY = y;
+  let segmentStartX = state.x;
+  let segmentY = state.y;
   let isFirst = true;
 
   parts.forEach((part: string) => {
     if (part === '') return;
     if (part === ' ') {
       const spaceWidth = fonts.english.widthOfTextAtSize(' ', fontSize);
-      if (x + spaceWidth > columnEnd) {
-        if (x > segmentStartX) {
+      if (state.x + spaceWidth > state.columnEnd) {
+        if (state.x > segmentStartX) {
           segments.push({
             startX: segmentStartX,
-            endX: x,
+            endX: state.x,
             y: segmentY,
             isFirst,
             isLast: false,
           });
           isFirst = false;
         }
-        x = columnStart;
-        y -= lineHeight;
+        state.x = state.columnStart;
+        state.y -= lineHeight;
         checkPageBreak();
-        segmentStartX = x;
-        segmentY = y;
+        segmentStartX = state.x;
+        segmentY = state.y;
       }
-      x += spaceWidth;
+      state.x += spaceWidth;
       return;
     }
     const wordWidth = fonts.english.widthOfTextAtSize(part, fontSize);
-    if (x + wordWidth > columnEnd) {
-      if (x > segmentStartX) {
+    if (state.x + wordWidth > state.columnEnd) {
+      if (state.x > segmentStartX) {
         segments.push({
           startX: segmentStartX,
-          endX: x,
+          endX: state.x,
           y: segmentY,
           isFirst,
           isLast: false,
         });
         isFirst = false;
       }
-      x = columnStart;
-      y -= lineHeight;
+      state.x = state.columnStart;
+      state.y -= lineHeight;
       checkPageBreak();
-      segmentStartX = x;
-      segmentY = y;
+      segmentStartX = state.x;
+      segmentY = state.y;
     }
-    page.drawText(part, { x, y, font: fonts.english, size: fontSize, color });
-    x += wordWidth;
+    state.page.drawText(part, { x: state.x, y: state.y, font: fonts.english, size: fontSize, color });
+    state.x += wordWidth;
   });
 
-  if (x > segmentStartX) {
+  if (state.x > segmentStartX) {
     segments.push({
       startX: segmentStartX,
-      endX: x,
+      endX: state.x,
       y: segmentY,
       isFirst,
       isLast: true,
     });
   }
 
-  drawBracketUnderlines(page, segments, color);
+  drawBracketUnderlines(state.page, segments, color);
 
   if (notationValue) {
-    const newState = renderNotation(
+    renderNotation(
       context,
-      { x, y, columnStart, columnEnd },
+      state,
       notationValue,
       fontSize,
       lineHeight,
       checkPageBreak,
     );
-    x = newState.x;
-    y = newState.y;
   }
 
   const spaceWidth = fonts.hebrew.widthOfTextAtSize(' ', fontSize);
-  if (x - spaceWidth < columnStart) {
-    x = columnEnd;
-    y -= lineHeight;
+  if (state.x - spaceWidth < state.columnStart) {
+    state.x = state.columnEnd;
+    state.y -= lineHeight;
     checkPageBreak();
   }
-  x -= spaceWidth;
-
-  return { x, y, columnStart, columnEnd };
+  state.x -= spaceWidth;
 };
 
 /**
@@ -632,7 +567,6 @@ export const processTransliterationColumn = (
  * @param displaySentenceNum - Display number for the sentence
  * @param context - Rendering context with all formatting parameters
  * @param state - Current position state for both columns
- * @param sentenceLineIndices - Map tracking phrase positions
  * @param color - Color for rendering
  * @param checkPageBreak - Callback to check if page break is needed
  * @returns Updated positions for both columns
@@ -647,13 +581,7 @@ export const processPhraseMapping = (
     hebrewColumnStart: number;
     hebrewColumnEnd: number;
   },
-  state: {
-    currentEnglishX: number;
-    englishY: number;
-    currentHebrewX: number;
-    hebrewY: number;
-  },
-  sentenceLineIndices: Map<number, number[]>,
+  state: SentenceState,
   color: any,
   checkPageBreak: () => void,
 ): { englishX: number; englishY: number; hebrewX: number; hebrewY: number } => {
@@ -665,10 +593,28 @@ export const processPhraseMapping = (
       : undefined;
   const englishNotation = phraseIndex === 1 ? notationValue : undefined;
 
+  const createMutableColumnState = (
+    globalState: any,
+    xProp: string,
+    yProp: string,
+    columnStart: number,
+    columnEnd: number
+  ) => ({
+    get x() { return globalState[xProp]; },
+    set x(val) { globalState[xProp] = val; },
+    get y() { return globalState[yProp]; },
+    set y(val) { globalState[yProp] = val; },
+    get page() { return globalState.page; },
+    set page(val) { globalState.page = val; },
+    columnStart,
+    columnEnd
+  });
+
   // English rendering
-  const englishState = processEnglishColumn(
+  const englishStateAdapter = createMutableColumnState(state, 'currentEnglishX', 'englishY', context.englishColumnStart, context.englishColumnEnd);
+  processEnglishColumn(
     renderContext,
-    { x: state.currentEnglishX, y: state.englishY, columnStart: context.englishColumnStart, columnEnd: context.englishColumnEnd },
+    englishStateAdapter,
     mapping.english,
     context.englishFontSize,
     context.englishLineHeight,
@@ -678,19 +624,19 @@ export const processPhraseMapping = (
   );
 
   // Hebrew rendering
-  const hebrewState = processHebrewColumn(
+  const hebrewStateAdapter = createMutableColumnState(state, 'currentHebrewX', 'hebrewY', context.hebrewColumnStart, context.hebrewColumnEnd);
+  processHebrewColumn(
     renderContext,
-    { x: state.currentHebrewX, y: state.hebrewY, columnStart: context.hebrewColumnStart, columnEnd: context.hebrewColumnEnd },
+    hebrewStateAdapter,
     mapping.hebrew,
     context.hebrewFontSize,
     context.hebrewLineHeight,
     color,
-    phraseIndex,
-    sentenceLineIndices,
+    notationValue,
     checkPageBreak,
   );
 
-  return { englishX: englishState.x, englishY: englishState.y, hebrewX: hebrewState.x, hebrewY: hebrewState.y };
+  return { englishX: state.currentEnglishX, englishY: state.englishY, hebrewX: state.currentHebrewX, hebrewY: state.hebrewY };
 };
 
 /**
@@ -700,7 +646,6 @@ export const processPhraseMapping = (
  * @param displaySentenceNum - Display number for the sentence
  * @param context - Rendering context with all formatting parameters
  * @param state - Current position state for all three columns
- * @param sentenceLineIndices - Map tracking phrase positions
  * @param color - Color for rendering
  * @param checkPageBreak - Callback to check if page break is needed
  * @returns Updated positions for all three columns
@@ -716,15 +661,7 @@ export const processPhraseMappingThreeColumn = (
     hebrewColumnEnd: number;
     columnWidth: number;
   },
-  state: {
-    currentEnglishX: number;
-    englishY: number;
-    currentTranslitX: number;
-    translitY: number;
-    currentHebrewX: number;
-    hebrewY: number;
-  },
-  sentenceLineIndices: Map<number, number[]>,
+  state: ThreeColumnState,
   color: any,
   checkPageBreak: () => void,
 ): { englishX: number; englishY: number; translitX: number; translitY: number; hebrewX: number; hebrewY: number } => {
@@ -739,10 +676,28 @@ export const processPhraseMappingThreeColumn = (
   const englishColumnEnd = context.englishColumnStart + context.columnWidth;
   const translitColumnEnd = context.transliterationColumnStart + context.columnWidth;
 
+  const createMutableColumnState = (
+    globalState: any,
+    xProp: string,
+    yProp: string,
+    columnStart: number,
+    columnEnd: number
+  ) => ({
+    get x() { return globalState[xProp]; },
+    set x(val) { globalState[xProp] = val; },
+    get y() { return globalState[yProp]; },
+    set y(val) { globalState[yProp] = val; },
+    get page() { return globalState.page; },
+    set page(val) { globalState.page = val; },
+    columnStart,
+    columnEnd
+  });
+
   // English rendering
-  const englishState = processEnglishColumn(
+  const englishStateAdapter = createMutableColumnState(state, 'currentEnglishX', 'englishY', context.englishColumnStart, englishColumnEnd);
+  processEnglishColumn(
     renderContext,
-    { x: state.currentEnglishX, y: state.englishY, columnStart: context.englishColumnStart, columnEnd: englishColumnEnd },
+    englishStateAdapter,
     mapping.english,
     context.englishFontSize,
     context.englishLineHeight,
@@ -753,9 +708,10 @@ export const processPhraseMappingThreeColumn = (
 
   // Transliteration rendering
   const translitText = mapping.transliteration || mapping.Transliteration || '';
-  const translitState = processTransliterationColumn(
+  const translitStateAdapter = createMutableColumnState(state, 'currentTranslitX', 'translitY', context.transliterationColumnStart, translitColumnEnd);
+  processTransliterationColumn(
     renderContext,
-    { x: state.currentTranslitX, y: state.translitY, columnStart: context.transliterationColumnStart, columnEnd: translitColumnEnd },
+    translitStateAdapter,
     translitText,
     context.translitFontSize,
     context.translitLineHeight,
@@ -765,25 +721,25 @@ export const processPhraseMappingThreeColumn = (
   );
 
   // Hebrew rendering
-  const hebrewState = processHebrewColumn(
+  const hebrewStateAdapter = createMutableColumnState(state, 'currentHebrewX', 'hebrewY', context.hebrewColumnStart, context.hebrewColumnEnd);
+  processHebrewColumn(
     renderContext,
-    { x: state.currentHebrewX, y: state.hebrewY, columnStart: context.hebrewColumnStart, columnEnd: context.hebrewColumnEnd },
+    hebrewStateAdapter,
     mapping.hebrew,
     context.hebrewFontSize,
     context.hebrewLineHeight,
     color,
-    phraseIndex,
-    sentenceLineIndices,
+    notationValue,
     checkPageBreak,
   );
 
   return {
-    englishX: englishState.x,
-    englishY: englishState.y,
-    translitX: translitState.x,
-    translitY: translitState.y,
-    hebrewX: hebrewState.x,
-    hebrewY: hebrewState.y
+    englishX: state.currentEnglishX,
+    englishY: state.englishY,
+    translitX: state.currentTranslitX,
+    translitY: state.translitY,
+    hebrewX: state.currentHebrewX,
+    hebrewY: state.hebrewY
   };
 };
 
@@ -826,7 +782,6 @@ export const processSentence = (
   transformColor: (color: any) => any,
 ): SentenceState => {
   const displaySentenceNum = sentenceNum + 1;
-  const sentenceLineIndices = new Map<number, number[]>();
   let colorIndex = 0;
 
   const phraseContext = {
@@ -848,39 +803,18 @@ export const processSentence = (
 
     phraseContext.page = state.page;
 
-    const result = processPhraseMapping(
+    processPhraseMapping(
       mapping,
       phraseIndex,
       displaySentenceNum,
       phraseContext,
-      {
-        currentEnglishX: state.currentEnglishX,
-        englishY: state.englishY,
-        currentHebrewX: state.currentHebrewX,
-        hebrewY: state.hebrewY,
-      },
-      sentenceLineIndices,
+      state, // Pass the mutable state directly
       color,
       checkAndHandlePageBreak,
     );
 
-    state.currentEnglishX = result.englishX;
-    state.englishY = result.englishY;
-    state.currentHebrewX = result.hebrewX;
-    state.hebrewY = result.hebrewY;
+    // state is already updated by processPhraseMapping via the adapters
   });
-
-  // Draw side notation for this sentence
-  if (context.showSubscripts) {
-    drawHebrewLineNotation(
-      state.page,
-      sentenceLineIndices,
-      displaySentenceNum,
-      layout.hebrewColumnEnd + 5,
-      context.fonts,
-      context.englishFontSize,
-    );
-  }
 
   return state;
 };
@@ -912,7 +846,6 @@ export const processSentenceThreeColumn = (
   transformColor: (color: any) => any,
 ): ThreeColumnState => {
   const displaySentenceNum = sentenceNum + 1;
-  const sentenceLineIndices = new Map<number, number[]>();
   let colorIndex = 0;
 
   const phraseContext = {
@@ -935,43 +868,18 @@ export const processSentenceThreeColumn = (
 
     phraseContext.page = state.page;
 
-    const result = processPhraseMappingThreeColumn(
+    processPhraseMappingThreeColumn(
       mapping,
       phraseIndex,
       displaySentenceNum,
       phraseContext,
-      {
-        currentEnglishX: state.currentEnglishX,
-        englishY: state.englishY,
-        currentTranslitX: state.currentTranslitX,
-        translitY: state.translitY,
-        currentHebrewX: state.currentHebrewX,
-        hebrewY: state.hebrewY,
-      },
-      sentenceLineIndices,
+      state, // Pass the mutable state directly
       color,
       checkAndHandlePageBreak,
     );
 
-    state.currentEnglishX = result.englishX;
-    state.englishY = result.englishY;
-    state.currentTranslitX = result.translitX;
-    state.translitY = result.translitY;
-    state.currentHebrewX = result.hebrewX;
-    state.hebrewY = result.hebrewY;
+    // state is already updated
   });
-
-  // Draw side notation for this sentence
-  if (context.showSubscripts) {
-    drawHebrewLineNotation(
-      state.page,
-      sentenceLineIndices,
-      displaySentenceNum,
-      layout.hebrewColumnEnd + 5,
-      context.fonts,
-      context.englishFontSize,
-    );
-  }
 
   return state;
 };
