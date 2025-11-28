@@ -10,6 +10,7 @@ import {
   AshkenazContentGenerationParams,
   Prayer,
   BasePrayer,
+  WordMapping,
 } from './types';
 import { drawIntroductionInstruction } from './drawing-helpers';
 import siddurConfig from '../siddur-formatting-config.json';
@@ -94,20 +95,20 @@ const drawPrayerTitle = (
   return { ...context, page, y: y - siddurConfig.verticalSpacing.beforePrayerTitle };
       };
 
-const hasTransliteration = (mapping: any): boolean =>
+const hasTransliteration = (mapping: WordMapping[string]): boolean =>
   Boolean(mapping && (mapping.transliteration || mapping.Transliteration));
 
 const handleWordMappings = (
   context: PdfDrawingContext,
   prayer: Prayer,
-  wordMappings: Record<string, any>,
+  wordMappings: WordMapping,
   params: AshkenazContentGenerationParams,
   columnWidth: number,
-  styleSource?: any,
+  styleSource?: unknown,
 ): PdfDrawingContext => {
   const { style = 'Recommended' } = params;
-  const printBlackAndWhite = (params as any).printBlackAndWhite ?? false;
-  const firstMapping = wordMappings['0'] as any;
+  const printBlackAndWhite = params.printBlackAndWhite ?? false;
+  const firstMapping = wordMappings['0'];
   const mappingHasTransliteration = hasTransliteration(firstMapping);
         
   if (style === 'sentence based mapping' || style === 'Recommended') {
