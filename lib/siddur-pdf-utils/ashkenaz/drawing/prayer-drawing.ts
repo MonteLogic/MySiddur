@@ -26,11 +26,11 @@ import {
 import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
-} from './renderers/sentence-mapped';
+} from './renderers/permus-product/sentence-mapped-utils';
 import {
   drawSentenceBasedMappingPrayerBW,
   drawSentenceBasedMappingPrayerThreeColumnBW,
-} from './renderers/sentence-mapped-bw';
+} from './renderers/permus-product/sentence-mapped-bw/sentence-mapped-bw';
 import { drawSubPrayers } from './renderers/sub-prayers';
 import {
   getDetailedPrayerData,

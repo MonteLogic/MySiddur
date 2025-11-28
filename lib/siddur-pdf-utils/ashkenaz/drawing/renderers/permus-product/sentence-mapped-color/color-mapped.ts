@@ -5,9 +5,9 @@ import {
   PdfDrawingContext,
   Prayer,
   WordMapping,
-} from '../types';
-import { drawSourceIfPresent } from '../drawing-helpers';
-import siddurConfig from '../../siddur-formatting-config.json';
+} from '../../../types';
+import { drawSourceIfPresent } from '../../../drawing-helpers';
+import siddurConfig from '../../../../siddur-formatting-config.json';
 
 /**
  * Represents the state of the text flow on the page.

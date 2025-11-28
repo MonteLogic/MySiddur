@@ -1,18 +1,24 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/permus-product/sentence-mapped-color/sentence-mapped.ts
+/**
+ * @file Renderer for sentence-mapped prayers in Color.
+ * Supports both two-column and three-column layouts with full color support.
+ * @packageDocumentation
+ */
 import { rgb, PDFPage, PDFDocument, PDFFont } from 'pdf-lib';
 import {
   AshkenazContentGenerationParams,
   PdfDrawingContext,
   Prayer,
   WordMapping,
-} from '../types';
-import { drawSourceIfPresent } from '../drawing-helpers';
-import siddurConfig from '../../siddur-formatting-config.json';
-import { groupMappingsBySentence } from '../helpers/sentence-mapping';
+} from '../../types';
+import { drawSourceIfPresent } from '../../drawing-helpers';
+import siddurConfig from '../../../siddur-formatting-config.json';
+import { groupMappingsBySentence } from '../../helpers/sentence-mapping';
 import {
   getMappedColors,
   processSentence,
   processSentenceThreeColumn,
-} from './sentence-mapped-common';
+} from '../sentence-mapped-common';
 
 interface FontCollection {
   english: PDFFont;

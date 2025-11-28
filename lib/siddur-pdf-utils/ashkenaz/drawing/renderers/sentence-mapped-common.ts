@@ -1,3 +1,10 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/sentence-mapped-common.ts
+/**
+ * @file Shared utilities and rendering logic for sentence-mapped prayers.
+ * Contains core functions for processing English, Hebrew, and Transliteration columns,
+ * handling page breaks, and drawing bracket underlines.
+ * @packageDocumentation
+ */
 import { rgb, PDFPage, Color, PDFDocument, PDFFont, RGB } from 'pdf-lib';
 import siddurConfig from '../../siddur-formatting-config.json';
 import { toSubscript, toSuperscript } from '../helpers/sentence-mapping';

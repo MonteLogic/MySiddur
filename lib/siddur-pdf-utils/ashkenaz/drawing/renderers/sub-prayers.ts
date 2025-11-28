@@ -1,3 +1,9 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/sub-prayers.ts
+/**
+ * @file Handles the rendering of sub-prayers within a larger prayer structure.
+ * Delegates to specific renderers based on the sub-prayer's content and style settings.
+ * @packageDocumentation
+ */
 import {
   AshkenazContentGenerationParams,
   PdfDrawingContext,
@@ -8,11 +14,11 @@ import siddurConfig from '../../siddur-formatting-config.json';
 import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
-} from './sentence-mapped';
+} from './permus-product/sentence-mapped-utils';
 import {
   drawThreeColumnColorMappedPrayer,
   drawTwoColumnColorMappedPrayer,
-} from './color-mapped';
+} from './permus-product/sentence-mapped-color/color-mapped';
 import { resolveDisplayStyle } from '../helpers/prayer-data';
 
 interface SubPrayer {

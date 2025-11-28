@@ -1,3 +1,9 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/permus-product/sentence-mapped-bw/sentence-mapped-bw.ts
+/**
+ * @file Renderer for sentence-mapped prayers in Black and White.
+ * Supports both two-column and three-column layouts, converting colors to grayscale.
+ * @packageDocumentation
+ */
 import { rgb } from 'pdf-lib';
 
 import {
@@ -5,15 +11,15 @@ import {
   PdfDrawingContext,
   Prayer,
   WordMapping,
-} from '../types';
-import { drawSourceIfPresent } from '../drawing-helpers';
-import siddurConfig from '../../siddur-formatting-config.json';
-import { groupMappingsBySentence } from '../helpers/sentence-mapping';
+} from '../../../types';
+import { drawSourceIfPresent } from '../../../drawing-helpers';
+import siddurConfig from '../../../../siddur-formatting-config.json';
+import { groupMappingsBySentence } from '../../../helpers/sentence-mapping';
 import {
   getMappedColors,
   processSentence,
   processSentenceThreeColumn,
-} from './sentence-mapped-common';
+} from '../../sentence-mapped-common';
 
 /**
  * Converts RGB color values to grayscale.

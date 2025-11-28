@@ -1,3 +1,9 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/text-prayers.ts
+/**
+ * @file Renderers for standard text-based prayers (Blessings, Parts, Simple).
+ * Handles simple text flow without complex sentence or word mapping logic.
+ * @packageDocumentation
+ */
 import { rgb } from 'pdf-lib';
 
 import {
