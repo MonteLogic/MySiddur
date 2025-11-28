@@ -14,7 +14,7 @@ import siddurConfig from '../../siddur-formatting-config.json';
 import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
-} from './permus-product/sentence-mapped-utils';
+} from './permus-product/sentence-mapped-color/sentence-mapped-color-renderer';
 import {
   drawThreeColumnColorMappedPrayer,
   drawTwoColumnColorMappedPrayer,

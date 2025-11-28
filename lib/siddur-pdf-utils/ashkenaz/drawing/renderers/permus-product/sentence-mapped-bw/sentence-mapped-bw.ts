@@ -19,7 +19,7 @@ import {
   getMappedColors,
   processSentence,
   processSentenceThreeColumn,
-} from '../../sentence-mapped-common';
+} from './sentence-mapped-bw-utils';
 
 /**
  * Converts RGB color values to grayscale.

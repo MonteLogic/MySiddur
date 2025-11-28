@@ -26,7 +26,7 @@ import {
 import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
-} from './renderers/permus-product/sentence-mapped-utils';
+} from './renderers/permus-product/sentence-mapped-color/sentence-mapped-color-renderer';
 import {
   drawSentenceBasedMappingPrayerBW,
   drawSentenceBasedMappingPrayerThreeColumnBW,

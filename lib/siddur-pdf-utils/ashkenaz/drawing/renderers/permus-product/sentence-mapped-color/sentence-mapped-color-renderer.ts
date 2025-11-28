@@ -1,88 +1,24 @@
-// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/permus-product/sentence-mapped-color/sentence-mapped.ts
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/permus-product/sentence-mapped-color/sentence-mapped-color-renderer.ts
 /**
  * @file Renderer for sentence-mapped prayers in Color.
  * Supports both two-column and three-column layouts with full color support.
  * @packageDocumentation
  */
-import { rgb, PDFPage, PDFDocument, PDFFont } from 'pdf-lib';
+import { rgb } from 'pdf-lib';
 import {
   AshkenazContentGenerationParams,
   PdfDrawingContext,
   Prayer,
   WordMapping,
-} from '../../types';
-import { drawSourceIfPresent } from '../../drawing-helpers';
-import siddurConfig from '../../../siddur-formatting-config.json';
-import { groupMappingsBySentence } from '../../helpers/sentence-mapping';
+} from '../../../types';
+import { drawSourceIfPresent } from '../../../drawing-helpers';
+import siddurConfig from '../../../../siddur-formatting-config.json';
+import { groupMappingsBySentence } from '../../../helpers/sentence-mapping';
 import {
   getMappedColors,
   processSentence,
   processSentenceThreeColumn,
-} from '../sentence-mapped-common';
-
-interface FontCollection {
-  english: PDFFont;
-  hebrew: PDFFont;
-}
-
-
-
-export interface RenderContext {
-  /** PDF page object */
-  page: PDFPage;
-  /** Font objects for different scripts */
-  fonts: FontCollection;
-  /** PDF document object */
-  pdfDoc: PDFDocument;
-  /** Page height */
-  height: number;
-  /** Page margin */
-  margin: number;
-}
-
-/**
- * Context for processing a sentence in two-column layout.
- */
-export interface SentenceProcessingContext {
-  page: PDFPage;
-  fonts: FontCollection;
-  pdfDoc: PDFDocument;
-  height: number;
-  margin: number;
-  englishFontSize: number;
-  englishLineHeight: number;
-  hebrewFontSize: number;
-  hebrewLineHeight: number;
-  showSubscripts: boolean;
-}
-
-export interface SentenceState {
-  currentEnglishX: number;
-  englishY: number;
-  currentHebrewX: number;
-  hebrewY: number;
-  page: PDFPage;
-}
-
-export interface ThreeColumnSentenceProcessingContext extends RenderContext {
-  englishFontSize: number;
-  englishLineHeight: number;
-  translitFontSize: number;
-  translitLineHeight: number;
-  hebrewFontSize: number;
-  hebrewLineHeight: number;
-  showSubscripts: boolean;
-}
-
-export interface ThreeColumnState {
-  currentEnglishX: number;
-  englishY: number;
-  currentTranslitX: number;
-  translitY: number;
-  currentHebrewX: number;
-  hebrewY: number;
-  page: PDFPage;
-}
+} from './sentence-mapped-color-utils';
 
 /**
  * Draws a prayer using sentence-based mapping in color (two columns).
@@ -128,7 +64,7 @@ export const drawSentenceBasedMappingPrayer = (
   let currentEnglishX = englishColumnStart;
 
   const sentenceMap = groupMappingsBySentence(wordMappings);
-  const sortedSentences = Array.from(sentenceMap.keys()).sort((a, b) => a - b);
+  const sortedSentences = Array.from(sentenceMap.keys()).sort((a: number, b: number) => a - b);
 
   sortedSentences.forEach((sentenceNum) => {
     const phrases = sentenceMap.get(sentenceNum)!;
@@ -144,6 +80,7 @@ export const drawSentenceBasedMappingPrayer = (
         hebrewFontSize,
         hebrewLineHeight,
         showSubscripts,
+        shouldDrawUnderlines: params.printBlackAndWhite ?? false,
       },
       sentenceNum,
       phrases,
@@ -232,7 +169,7 @@ export const drawSentenceBasedMappingPrayerThreeColumn = (
   let currentHebrewX = hebrewColumnEnd;
 
   const sentenceMap = groupMappingsBySentence(wordMappings);
-  const sortedSentences = Array.from(sentenceMap.keys()).sort((a, b) => a - b);
+  const sortedSentences = Array.from(sentenceMap.keys()).sort((a: number, b: number) => a - b);
 
   sortedSentences.forEach((sentenceNum) => {
     const phrases = sentenceMap.get(sentenceNum)!;
@@ -250,6 +187,7 @@ export const drawSentenceBasedMappingPrayerThreeColumn = (
         hebrewFontSize,
         hebrewLineHeight,
         showSubscripts,
+        shouldDrawUnderlines: params.printBlackAndWhite ?? false,
       },
       sentenceNum,
       phrases,

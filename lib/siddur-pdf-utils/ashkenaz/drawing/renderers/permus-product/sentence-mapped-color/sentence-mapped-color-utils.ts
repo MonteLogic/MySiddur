@@ -1,13 +1,13 @@
-// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/sentence-mapped-common.ts
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/permus-product/sentence-mapped-color/sentence-mapped-color-utils.ts
 /**
- * @file Shared utilities and rendering logic for sentence-mapped prayers.
+ * @file Shared utilities and rendering logic for sentence-mapped prayers (Color).
  * Contains core functions for processing English, Hebrew, and Transliteration columns,
  * handling page breaks, and drawing bracket underlines.
  * @packageDocumentation
  */
 import { rgb, PDFPage, Color, PDFDocument, PDFFont, RGB } from 'pdf-lib';
-import siddurConfig from '../../siddur-formatting-config.json';
-import { toSubscript, toSuperscript } from '../helpers/sentence-mapping';
+import siddurConfig from '../../../../siddur-formatting-config.json';
+import { toSubscript, toSuperscript } from '../../../helpers/sentence-mapping';
 
 /**
  * Represents a segment of an underline for bracket notation.
@@ -77,6 +77,7 @@ export interface SentenceProcessingContext {
   hebrewFontSize: number;
   hebrewLineHeight: number;
   showSubscripts: boolean;
+  shouldDrawUnderlines: boolean;
 }
 
 /**
@@ -105,6 +106,8 @@ export interface SentenceState {
 export interface ThreeColumnState extends SentenceState {
   currentTranslitX: number;
   translitY: number;
+  currentHebrewX: number;
+  hebrewY: number;
 }
 
 type NumberKeys<T> = { [K in keyof T]: T[K] extends number ? K : never }[keyof T];
@@ -282,6 +285,22 @@ export const renderNotation = (
 };
 
 /**
+ * Adds an underline segment to the list if the text color is black.
+ * @param segments - The list of segments to add to.
+ * @param segment - The segment to add.
+ * @param shouldDraw - Whether to draw the underline.
+ */
+export const addUnderlinePairing = (
+  segments: UnderlineSegment[],
+  segment: UnderlineSegment,
+  shouldDraw: boolean,
+) => {
+  if (shouldDraw) {
+    segments.push(segment);
+  }
+};
+
+/**
  * Renders an English phrase with word wrapping and underline tracking.
  * @param context - Rendering context
  * @param state - Current mutable position state
@@ -293,7 +312,7 @@ export const renderNotation = (
  * @param checkPageBreak - Callback to check if page break is needed
  */
 export const processEnglishColumn = (
-  context: RenderContext,
+  context: RenderContext & { shouldDrawUnderlines?: boolean },
   state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   text: string,
   fontSize: number,
@@ -316,13 +335,17 @@ export const processEnglishColumn = (
       const spaceWidth = fonts.english.widthOfTextAtSize(' ', fontSize);
       if (state.x + spaceWidth > state.columnEnd) {
         if (state.x > segmentStartX) {
-          segments.push({
-            startX: segmentStartX,
-            endX: state.x,
-            y: segmentY,
-            isFirst,
-            isLast: false,
-          });
+          addUnderlinePairing(
+            segments,
+            {
+              startX: segmentStartX,
+              endX: state.x,
+              y: segmentY,
+              isFirst,
+              isLast: false,
+            },
+            context.shouldDrawUnderlines ?? false,
+          );
           isFirst = false;
         }
         state.x = state.columnStart;
@@ -338,13 +361,17 @@ export const processEnglishColumn = (
     const wordWidth = fonts.english.widthOfTextAtSize(part, fontSize);
     if (state.x + wordWidth > state.columnEnd) {
       if (state.x > segmentStartX) {
-        segments.push({
-          startX: segmentStartX,
-          endX: state.x,
-          y: segmentY,
-          isFirst,
-          isLast: false,
-        });
+        addUnderlinePairing(
+          segments,
+          {
+            startX: segmentStartX,
+            endX: state.x,
+            y: segmentY,
+            isFirst,
+            isLast: false,
+          },
+          context.shouldDrawUnderlines ?? false,
+        );
         isFirst = false;
       }
       state.x = state.columnStart;
@@ -358,13 +385,17 @@ export const processEnglishColumn = (
   });
 
   if (state.x > segmentStartX) {
-    segments.push({
-      startX: segmentStartX,
-      endX: state.x,
-      y: segmentY,
-      isFirst,
-      isLast: true,
-    });
+    addUnderlinePairing(
+      segments,
+      {
+        startX: segmentStartX,
+        endX: state.x,
+        y: segmentY,
+        isFirst,
+        isLast: true,
+      },
+      context.shouldDrawUnderlines ?? false,
+    );
   }
 
   drawBracketUnderlines(state.page, segments, color);
@@ -390,7 +421,7 @@ export const processEnglishColumn = (
 };
 
 export const processHebrewColumn = (
-  context: RenderContext,
+  context: RenderContext & { shouldDrawUnderlines?: boolean },
   state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   text: string,
   fontSize: number,
@@ -401,7 +432,6 @@ export const processHebrewColumn = (
 ) => {
   const { fonts } = context;
   const words = text.split(/( )/).filter((w: string) => w !== '');
-  // I feel like this should only fire IF, IF it's BW. 
   const segments: UnderlineSegment[] = [];
   let segmentStartX = state.x;
   let segmentY = state.y;
@@ -421,13 +451,17 @@ export const processHebrewColumn = (
     const wordWidth = fonts.hebrew.widthOfTextAtSize(word, fontSize);
     if (state.x - wordWidth < state.columnStart) {
       if (state.x < segmentStartX) {
-        segments.push({
-          startX: state.x,
-          endX: segmentStartX,
-          y: segmentY,
-          isFirst,
-          isLast: false,
-        });
+        addUnderlinePairing(
+          segments,
+          {
+            startX: state.x,
+            endX: segmentStartX,
+            y: segmentY,
+            isFirst,
+            isLast: false,
+          },
+          context.shouldDrawUnderlines ?? false,
+        );
         isFirst = false;
       }
       state.x = state.columnEnd;
@@ -441,13 +475,17 @@ export const processHebrewColumn = (
   });
 
   if (state.x < segmentStartX) {
-    segments.push({
-      startX: state.x,
-      endX: segmentStartX,
-      y: segmentY,
-      isFirst,
-      isLast: true,
-    });
+    addUnderlinePairing(
+      segments,
+      {
+        startX: state.x,
+        endX: segmentStartX,
+        y: segmentY,
+        isFirst,
+        isLast: true,
+      },
+      context.shouldDrawUnderlines ?? false,
+    );
   }
 
   drawBracketUnderlines(state.page, segments, color);
@@ -494,7 +532,7 @@ export const processHebrewColumn = (
  * @param checkPageBreak - Callback to check if page break is needed
  */
 export const processTransliterationColumn = (
-  context: RenderContext,
+  context: RenderContext & { shouldDrawUnderlines?: boolean },
   state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   text: string,
   fontSize: number,
@@ -516,13 +554,17 @@ export const processTransliterationColumn = (
       const spaceWidth = fonts.english.widthOfTextAtSize(' ', fontSize);
       if (state.x + spaceWidth > state.columnEnd) {
         if (state.x > segmentStartX) {
-          segments.push({
-            startX: segmentStartX,
-            endX: state.x,
-            y: segmentY,
-            isFirst,
-            isLast: false,
-          });
+          addUnderlinePairing(
+            segments,
+            {
+              startX: segmentStartX,
+              endX: state.x,
+              y: segmentY,
+              isFirst,
+              isLast: false,
+            },
+            context.shouldDrawUnderlines ?? false,
+          );
           isFirst = false;
         }
         state.x = state.columnStart;
@@ -537,13 +579,17 @@ export const processTransliterationColumn = (
     const wordWidth = fonts.english.widthOfTextAtSize(part, fontSize);
     if (state.x + wordWidth > state.columnEnd) {
       if (state.x > segmentStartX) {
-        segments.push({
-          startX: segmentStartX,
-          endX: state.x,
-          y: segmentY,
-          isFirst,
-          isLast: false,
-        });
+        addUnderlinePairing(
+          segments,
+          {
+            startX: segmentStartX,
+            endX: state.x,
+            y: segmentY,
+            isFirst,
+            isLast: false,
+          },
+          context.shouldDrawUnderlines ?? false,
+        );
         isFirst = false;
       }
       state.x = state.columnStart;
@@ -557,13 +603,17 @@ export const processTransliterationColumn = (
   });
 
   if (state.x > segmentStartX) {
-    segments.push({
-      startX: segmentStartX,
-      endX: state.x,
-      y: segmentY,
-      isFirst,
-      isLast: true,
-    });
+    addUnderlinePairing(
+      segments,
+      {
+        startX: segmentStartX,
+        endX: state.x,
+        y: segmentY,
+        isFirst,
+        isLast: true,
+      },
+      context.shouldDrawUnderlines ?? false,
+    );
   }
 
   drawBracketUnderlines(state.page, segments, color);
@@ -777,7 +827,7 @@ export const processPhraseMappingThreeColumn = (
  */
 export const getMappedColors = (): { id: string; color: RGB }[] => {
   return Object.entries(siddurConfig.colors.wordMappingColors).map(
-    ([key, value]) => ({
+    ([key, value]: [string, number[]]) => ({
       id: key.charAt(0),
       color: rgb(value[0], value[1], value[2]),
     }),
