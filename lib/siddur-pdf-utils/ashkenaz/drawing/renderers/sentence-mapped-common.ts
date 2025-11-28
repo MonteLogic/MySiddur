@@ -1,4 +1,4 @@
-import { rgb, PDFPage, Color, PDFDocument, PDFFont } from 'pdf-lib';
+import { rgb, PDFPage, Color, PDFDocument, PDFFont, RGB } from 'pdf-lib';
 import siddurConfig from '../../siddur-formatting-config.json';
 import { toSubscript, toSuperscript } from '../helpers/sentence-mapping';
 
@@ -767,7 +767,7 @@ export const processPhraseMappingThreeColumn = (
  * Retrieves the mapped colors for word mapping from the configuration.
  * @returns An array of objects containing the ID and RGB color for each mapping.
  */
-export const getMappedColors = () => {
+export const getMappedColors = (): { id: string; color: RGB }[] => {
   return Object.entries(siddurConfig.colors.wordMappingColors).map(
     ([key, value]) => ({
       id: key.charAt(0),
@@ -791,7 +791,7 @@ export const processSentence = (
   context: SentenceProcessingContext,
   sentenceNum: number,
   phrases: { mapping: PhraseMapping; phraseIndex: number }[],
-  mappedColors: { id: string; color: Color }[],
+  mappedColors: { id: string; color: RGB }[],
   layout: {
     englishColumnStart: number;
     englishColumnEnd: number;
@@ -799,7 +799,7 @@ export const processSentence = (
     hebrewColumnEnd: number;
   },
   state: SentenceState,
-  transformColor: (color: Color) => Color,
+  transformColor: (color: RGB) => Color,
 ): SentenceState => {
   const displaySentenceNum = sentenceNum + 1;
   let colorIndex = 0;
@@ -854,7 +854,7 @@ export const processSentenceThreeColumn = (
   context: ThreeColumnSentenceProcessingContext,
   sentenceNum: number,
   phrases: { mapping: PhraseMapping; phraseIndex: number }[],
-  mappedColors: { id: string; color: Color }[],
+  mappedColors: { id: string; color: RGB }[],
   layout: {
     englishColumnStart: number;
     transliterationColumnStart: number;
@@ -863,7 +863,7 @@ export const processSentenceThreeColumn = (
     columnWidth: number;
   },
   state: ThreeColumnState,
-  transformColor: (color: Color) => Color,
+  transformColor: (color: RGB) => Color,
 ): ThreeColumnState => {
   const displaySentenceNum = sentenceNum + 1;
   let colorIndex = 0;

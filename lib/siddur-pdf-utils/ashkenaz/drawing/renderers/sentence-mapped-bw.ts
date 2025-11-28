@@ -47,8 +47,8 @@ export const drawSentenceBasedMappingPrayerBW = (
 
   const mappedColors = getMappedColors();
 
-  const showSubscripts = (params as any).showWordMappingSubscripts !== false;
-  const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
+  const showSubscripts = params.showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = params.fontSizeMultiplier ?? 1.0;
 
   const hebrewFontSize =
     siddurConfig.fontSizes.blessingHebrew * fontSizeMultiplier;
@@ -141,8 +141,8 @@ export const drawSentenceBasedMappingPrayerThreeColumnBW = (
 
   const mappedColors = getMappedColors();
 
-  const showSubscripts = (params as any).showWordMappingSubscripts !== false;
-  const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
+  const showSubscripts = params.showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = params.fontSizeMultiplier ?? 1.0;
 
   const columnGutter = 15;
   const totalContentWidth = width - margin * 2;
