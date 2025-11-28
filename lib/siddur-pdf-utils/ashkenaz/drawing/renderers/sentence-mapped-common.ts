@@ -401,6 +401,7 @@ export const processHebrewColumn = (
 ) => {
   const { fonts } = context;
   const words = text.split(/( )/).filter((w: string) => w !== '');
+  // I feel like this should only fire IF, IF it's BW. 
   const segments: UnderlineSegment[] = [];
   let segmentStartX = state.x;
   let segmentY = state.y;

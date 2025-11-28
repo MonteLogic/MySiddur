@@ -18,7 +18,7 @@ import {
 import {
   drawThreeColumnColorMappedPrayer,
   drawTwoColumnColorMappedPrayer,
-} from './permus-product/sentence-mapped-color/color-mapped';
+} from './permus-product/sentence-mapped-color/sentence-mapped-color';
 import { resolveDisplayStyle } from '../helpers/prayer-data';
 
 interface SubPrayer {

@@ -1,3 +1,9 @@
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/permus-product/sentence-mapped-color/sentence-mapped-color.ts
+/**
+ * @file Renderer for word-by-word color-mapped prayers.
+ * Handles complex word-level mapping and coloring for educational or detailed layouts.
+ * @packageDocumentation
+ */
 import { rgb, PDFPage, PDFFont, Color, PDFDocument } from 'pdf-lib';
 
 import {
@@ -9,53 +15,10 @@ import {
 import { drawSourceIfPresent } from '../../../drawing-helpers';
 import siddurConfig from '../../../../siddur-formatting-config.json';
 
-/**
- * Represents the state of the text flow on the page.
- */
-interface FlowState {
-  /** The current PDF page. */
-  page: PDFPage;
-  /** The current x-coordinate. */
-  x: number;
-  /** The current y-coordinate. */
-  y: number;
-}
-
-/**
- * Context required for drawing flowing text.
- */
-interface FlowContext {
-  /** The PDF document. */
-  pdfDoc: PDFDocument;
-  /** The page height. */
-  height: number;
-  /** The page margin. */
-  margin: number;
-  /** The starting x-coordinate of the column. */
-  columnStart: number;
-  /** The ending x-coordinate of the column. */
-  columnEnd: number;
-  /** The line height for the text. */
-  lineHeight: number;
-  /** The font to use. */
-  font: PDFFont;
-  /** The font size. */
-  fontSize: number;
-  /** The color of the text. */
-  color: Color;
-  /** Whether the text is right-to-left (Hebrew). */
-  isRtl?: boolean;
-  /** Function to check and handle page breaks. */
-  checkPageBreak: (state: FlowState) => FlowState;
-}
-
-/**
- * Extended context for drawing flowing text with an optional Y offset.
- */
-interface ExtendedFlowContext extends FlowContext {
-  /** Optional vertical offset for the text (e.g., for subscripts). */
-  yOffset?: number;
-}
+import {
+  FlowState,
+  ExtendedFlowContext
+} from './types';
 
 /**
  * Draws text that flows within a column, handling wrapping and page breaks.

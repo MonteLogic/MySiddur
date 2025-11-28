@@ -22,7 +22,7 @@ import {
 import {
   drawTwoColumnColorMappedPrayer,
   drawThreeColumnColorMappedPrayer,
-} from './renderers/color-mapped';
+} from './renderers/permus-product/sentence-mapped-color/sentence-mapped-color';
 import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
