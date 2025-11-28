@@ -111,6 +111,7 @@
     "unicorn/no-useless-spread": "warn",
     "unicorn/prefer-set-size": "warn",
     "unicorn/prefer-string-starts-ends-with": "warn",
+    "typescript/no-explicit-any": "error",
     "max-lines-per-function": [
       "error",
       {
