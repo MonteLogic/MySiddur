@@ -1,4 +1,4 @@
-import { rgb } from 'pdf-lib';
+import { rgb, PDFPage, PDFDocument, PDFFont, Color } from 'pdf-lib';
 import {
   AshkenazContentGenerationParams,
   PdfDrawingContext,
@@ -13,6 +13,76 @@ import {
   processSentence,
   processSentenceThreeColumn,
 } from './sentence-mapped-common';
+
+interface FontCollection {
+  english: PDFFont;
+  hebrew: PDFFont;
+}
+
+interface PhraseMapping {
+  english: string;
+  hebrew: string;
+  transliteration?: string;
+  Transliteration?: string;
+  [key: string]: unknown;
+}
+
+export interface RenderContext {
+  /** PDF page object */
+  page: PDFPage;
+  /** Font objects for different scripts */
+  fonts: FontCollection;
+  /** PDF document object */
+  pdfDoc: PDFDocument;
+  /** Page height */
+  height: number;
+  /** Page margin */
+  margin: number;
+}
+
+/**
+ * Context for processing a sentence in two-column layout.
+ */
+export interface SentenceProcessingContext {
+  page: PDFPage;
+  fonts: FontCollection;
+  pdfDoc: PDFDocument;
+  height: number;
+  margin: number;
+  englishFontSize: number;
+  englishLineHeight: number;
+  hebrewFontSize: number;
+  hebrewLineHeight: number;
+  showSubscripts: boolean;
+}
+
+export interface SentenceState {
+  currentEnglishX: number;
+  englishY: number;
+  currentHebrewX: number;
+  hebrewY: number;
+  page: PDFPage;
+}
+
+export interface ThreeColumnSentenceProcessingContext extends RenderContext {
+  englishFontSize: number;
+  englishLineHeight: number;
+  translitFontSize: number;
+  translitLineHeight: number;
+  hebrewFontSize: number;
+  hebrewLineHeight: number;
+  showSubscripts: boolean;
+}
+
+export interface ThreeColumnState {
+  currentEnglishX: number;
+  englishY: number;
+  currentTranslitX: number;
+  translitY: number;
+  currentHebrewX: number;
+  hebrewY: number;
+  page: PDFPage;
+}
 
 /**
  * Draws a prayer using sentence-based mapping in color (two columns).
@@ -34,9 +104,9 @@ export const drawSentenceBasedMappingPrayer = (
 
   const mappedColors = getMappedColors();
 
-  const showSubscripts = (params as any).showWordMappingSubscripts !== false;
-  const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
-  const printBlackAndWhite = (params as any).printBlackAndWhite ?? false;
+  const showSubscripts = params.showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = params.fontSizeMultiplier ?? 1.0;
+  const printBlackAndWhite = params.printBlackAndWhite ?? false;
 
   const hebrewFontSize =
     siddurConfig.fontSizes.blessingHebrew * fontSizeMultiplier;
@@ -129,9 +199,9 @@ export const drawSentenceBasedMappingPrayerThreeColumn = (
 
   const mappedColors = getMappedColors();
 
-  const showSubscripts = (params as any).showWordMappingSubscripts !== false;
-  const fontSizeMultiplier = (params as any).fontSizeMultiplier ?? 1.0;
-  const printBlackAndWhite = (params as any).printBlackAndWhite ?? false;
+  const showSubscripts = params.showWordMappingSubscripts !== false;
+  const fontSizeMultiplier = params.fontSizeMultiplier ?? 1.0;
+  const printBlackAndWhite = params.printBlackAndWhite ?? false;
 
   const columnGutter = 15;
   const totalContentWidth = width - margin * 2;
