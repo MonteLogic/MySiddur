@@ -1,4 +1,4 @@
-import { rgb } from 'pdf-lib';
+import { rgb, PDFPage, Color, PDFDocument, PDFFont } from 'pdf-lib';
 import siddurConfig from '../../siddur-formatting-config.json';
 import { toSubscript, toSuperscript } from '../helpers/sentence-mapping';
 
@@ -37,11 +37,15 @@ export interface ColumnPositionState {
  */
 export interface RenderContext {
   /** PDF page object */
-  page: any;
+  page: PDFPage;
   /** Font objects for different scripts */
-  fonts: any;
+  fonts: {
+    english: PDFFont;
+    hebrew: PDFFont;
+    [key: string]: PDFFont;
+  };
   /** PDF document object */
-  pdfDoc: any;
+  pdfDoc: PDFDocument;
   /** Page height */
   height: number;
   /** Page margin */
@@ -52,9 +56,13 @@ export interface RenderContext {
  * Context for processing a sentence in two-column layout.
  */
 export interface SentenceProcessingContext {
-  page: any;
-  fonts: any;
-  pdfDoc: any;
+  page: PDFPage;
+  fonts: {
+    english: PDFFont;
+    hebrew: PDFFont;
+    [key: string]: PDFFont;
+  };
+  pdfDoc: PDFDocument;
   height: number;
   margin: number;
   englishFontSize: number;
@@ -81,7 +89,7 @@ export interface SentenceState {
   englishY: number;
   currentHebrewX: number;
   hebrewY: number;
-  page: any;
+  page: PDFPage;
 }
 
 /**
@@ -90,6 +98,18 @@ export interface SentenceState {
 export interface ThreeColumnState extends SentenceState {
   currentTranslitX: number;
   translitY: number;
+}
+
+type NumberKeys<T> = { [K in keyof T]: T[K] extends number ? K : never }[keyof T];
+
+/**
+ * Represents the mapping for a single phrase.
+ */
+export interface PhraseMapping {
+  english: string;
+  hebrew: string;
+  transliteration?: string;
+  Transliteration?: string;
 }
 
 /**
@@ -160,9 +180,9 @@ export const checkPageBreakThreeColumn = (
  * @param color - Color of the underlines
  */
 export const drawBracketUnderlines = (
-  page: any,
+  page: PDFPage,
   segments: UnderlineSegment[],
-  color: any,
+  color: Color,
 ) => {
   const tickHeight = 3.36; // 3 * 1.12
   segments.forEach((seg) => {
@@ -206,7 +226,7 @@ export const drawBracketUnderlines = (
  */
 export const renderNotation = (
   context: RenderContext,
-  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   notationValue: string,
   fontSize: number,
   lineHeight: number,
@@ -267,11 +287,11 @@ export const renderNotation = (
  */
 export const processEnglishColumn = (
   context: RenderContext,
-  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   text: string,
   fontSize: number,
   lineHeight: number,
-  color: any,
+  color: Color,
   notationValue: string | undefined,
   checkPageBreak: () => void,
 ) => {
@@ -364,11 +384,11 @@ export const processEnglishColumn = (
 
 export const processHebrewColumn = (
   context: RenderContext,
-  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   text: string,
   fontSize: number,
   lineHeight: number,
-  color: any,
+  color: Color,
   notationValue: string | undefined,
   checkPageBreak: () => void,
 ) => {
@@ -467,11 +487,11 @@ export const processHebrewColumn = (
  */
 export const processTransliterationColumn = (
   context: RenderContext,
-  state: { x: number; y: number; columnStart: number; columnEnd: number; page: any },
+  state: { x: number; y: number; columnStart: number; columnEnd: number; page: PDFPage },
   text: string,
   fontSize: number,
   lineHeight: number,
-  color: any,
+  color: Color,
   notationValue: string | undefined,
   checkPageBreak: () => void,
 ) => {
@@ -572,7 +592,7 @@ export const processTransliterationColumn = (
  * @returns Updated positions for both columns
  */
 export const processPhraseMapping = (
-  mapping: any,
+  mapping: PhraseMapping,
   phraseIndex: number,
   displaySentenceNum: number,
   context: SentenceProcessingContext & {
@@ -582,7 +602,7 @@ export const processPhraseMapping = (
     hebrewColumnEnd: number;
   },
   state: SentenceState,
-  color: any,
+  color: Color,
   checkPageBreak: () => void,
 ): { englishX: number; englishY: number; hebrewX: number; hebrewY: number } => {
   const renderContext = { page: context.page, fonts: context.fonts, pdfDoc: context.pdfDoc, height: context.height, margin: context.margin };
@@ -593,17 +613,17 @@ export const processPhraseMapping = (
       : undefined;
   const englishNotation = phraseIndex === 1 ? notationValue : undefined;
 
-  const createMutableColumnState = (
-    globalState: any,
-    xProp: string,
-    yProp: string,
+  const createMutableColumnState = <T extends SentenceState>(
+    globalState: T,
+    xProp: NumberKeys<T>,
+    yProp: NumberKeys<T>,
     columnStart: number,
     columnEnd: number
   ) => ({
-    get x() { return globalState[xProp]; },
-    set x(val) { globalState[xProp] = val; },
-    get y() { return globalState[yProp]; },
-    set y(val) { globalState[yProp] = val; },
+    get x() { return globalState[xProp] as number; },
+    set x(val) { globalState[xProp] = val as T[NumberKeys<T>]; },
+    get y() { return globalState[yProp] as number; },
+    set y(val) { globalState[yProp] = val as T[NumberKeys<T>]; },
     get page() { return globalState.page; },
     set page(val) { globalState.page = val; },
     columnStart,
@@ -651,7 +671,7 @@ export const processPhraseMapping = (
  * @returns Updated positions for all three columns
  */
 export const processPhraseMappingThreeColumn = (
-  mapping: any,
+  mapping: PhraseMapping,
   phraseIndex: number,
   displaySentenceNum: number,
   context: ThreeColumnSentenceProcessingContext & {
@@ -662,7 +682,7 @@ export const processPhraseMappingThreeColumn = (
     columnWidth: number;
   },
   state: ThreeColumnState,
-  color: any,
+  color: Color,
   checkPageBreak: () => void,
 ): { englishX: number; englishY: number; translitX: number; translitY: number; hebrewX: number; hebrewY: number } => {
   const renderContext = { page: context.page, fonts: context.fonts, pdfDoc: context.pdfDoc, height: context.height, margin: context.margin };
@@ -676,17 +696,17 @@ export const processPhraseMappingThreeColumn = (
   const englishColumnEnd = context.englishColumnStart + context.columnWidth;
   const translitColumnEnd = context.transliterationColumnStart + context.columnWidth;
 
-  const createMutableColumnState = (
-    globalState: any,
-    xProp: string,
-    yProp: string,
+  const createMutableColumnState = <T extends ThreeColumnState>(
+    globalState: T,
+    xProp: NumberKeys<T>,
+    yProp: NumberKeys<T>,
     columnStart: number,
     columnEnd: number
   ) => ({
-    get x() { return globalState[xProp]; },
-    set x(val) { globalState[xProp] = val; },
-    get y() { return globalState[yProp]; },
-    set y(val) { globalState[yProp] = val; },
+    get x() { return globalState[xProp] as number; },
+    set x(val) { globalState[xProp] = val as T[NumberKeys<T>]; },
+    get y() { return globalState[yProp] as number; },
+    set y(val) { globalState[yProp] = val as T[NumberKeys<T>]; },
     get page() { return globalState.page; },
     set page(val) { globalState.page = val; },
     columnStart,
@@ -770,8 +790,8 @@ export const getMappedColors = () => {
 export const processSentence = (
   context: SentenceProcessingContext,
   sentenceNum: number,
-  phrases: { mapping: any; phraseIndex: number }[],
-  mappedColors: { id: string; color: any }[],
+  phrases: { mapping: PhraseMapping; phraseIndex: number }[],
+  mappedColors: { id: string; color: Color }[],
   layout: {
     englishColumnStart: number;
     englishColumnEnd: number;
@@ -779,7 +799,7 @@ export const processSentence = (
     hebrewColumnEnd: number;
   },
   state: SentenceState,
-  transformColor: (color: any) => any,
+  transformColor: (color: Color) => Color,
 ): SentenceState => {
   const displaySentenceNum = sentenceNum + 1;
   let colorIndex = 0;
@@ -833,8 +853,8 @@ export const processSentence = (
 export const processSentenceThreeColumn = (
   context: ThreeColumnSentenceProcessingContext,
   sentenceNum: number,
-  phrases: { mapping: any; phraseIndex: number }[],
-  mappedColors: { id: string; color: any }[],
+  phrases: { mapping: PhraseMapping; phraseIndex: number }[],
+  mappedColors: { id: string; color: Color }[],
   layout: {
     englishColumnStart: number;
     transliterationColumnStart: number;
@@ -843,7 +863,7 @@ export const processSentenceThreeColumn = (
     columnWidth: number;
   },
   state: ThreeColumnState,
-  transformColor: (color: any) => any,
+  transformColor: (color: Color) => Color,
 ): ThreeColumnState => {
   const displaySentenceNum = sentenceNum + 1;
   let colorIndex = 0;
