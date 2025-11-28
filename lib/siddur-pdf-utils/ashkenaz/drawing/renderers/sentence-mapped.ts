@@ -1,4 +1,4 @@
-import { rgb, PDFPage, PDFDocument, PDFFont, Color } from 'pdf-lib';
+import { rgb, PDFPage, PDFDocument, PDFFont } from 'pdf-lib';
 import {
   AshkenazContentGenerationParams,
   PdfDrawingContext,
@@ -19,13 +19,7 @@ interface FontCollection {
   hebrew: PDFFont;
 }
 
-interface PhraseMapping {
-  english: string;
-  hebrew: string;
-  transliteration?: string;
-  Transliteration?: string;
-  [key: string]: unknown;
-}
+
 
 export interface RenderContext {
   /** PDF page object */
