@@ -23,6 +23,8 @@ export interface UnderlineSegment {
   isFirst: boolean;
   /** Whether this is the last segment in a series */
   isLast: boolean;
+  /** The page this segment belongs to */
+  page: PDFPage;
 }
 
 /**
@@ -122,6 +124,54 @@ export interface PhraseMapping {
   Transliteration?: string;
 }
 
+const createDecoupledAdapter = <T extends SentenceState>(
+  globalState: T,
+  xProp: NumberKeys<T>,
+  yProp: NumberKeys<T>,
+  columnStart: number,
+  columnEnd: number,
+  initialPage: PDFPage
+) => {
+  let currentPage = initialPage;
+  return {
+    get x() { return globalState[xProp] as number; },
+    set x(val) { globalState[xProp] = val as T[NumberKeys<T>]; },
+    get y() { return globalState[yProp] as number; },
+    set y(val) { globalState[yProp] = val as T[NumberKeys<T>]; },
+    get page() { return currentPage; },
+    set page(val) { currentPage = val; },
+    columnStart,
+    columnEnd
+  };
+};
+
+const synchronizeThreeColumnState = (
+  state: ThreeColumnState,
+  context: ThreeColumnSentenceProcessingContext & {
+    englishColumnStart: number;
+    transliterationColumnStart: number;
+    hebrewColumnStart: number;
+    hebrewColumnEnd: number;
+  },
+  pageIndices: { english: number; translit: number; hebrew: number }
+) => {
+  const maxPageIndex = Math.max(pageIndices.english, pageIndices.translit, pageIndices.hebrew);
+  state.page = context.pdfDoc.getPages()[maxPageIndex];
+
+  if (pageIndices.english < maxPageIndex) {
+    state.englishY = context.height - siddurConfig.pdfMargins.top;
+    state.currentEnglishX = context.englishColumnStart;
+  }
+  if (pageIndices.translit < maxPageIndex) {
+    state.translitY = context.height - siddurConfig.pdfMargins.top;
+    state.currentTranslitX = context.transliterationColumnStart;
+  }
+  if (pageIndices.hebrew < maxPageIndex) {
+    state.hebrewY = context.height - siddurConfig.pdfMargins.top;
+    state.currentHebrewX = context.hebrewColumnEnd;
+  }
+};
+
 /**
  * Checks if a page break is needed for two-column layout and handles it.
  * @param context - Rendering context
@@ -189,13 +239,20 @@ export const checkPageBreakThreeColumn = (
  * @param segments - Array of underline segments to draw
  * @param color - Color of the underlines
  */
+/**
+ * Draws bracket-style underlines for phrase segments.
+ * @param _page - PDF page object (unused, kept for signature compatibility or fallback)
+ * @param segments - Array of underline segments to draw
+ * @param color - Color of the underlines
+ */
 export const drawBracketUnderlines = (
-  page: PDFPage,
+  _page: PDFPage,
   segments: UnderlineSegment[],
   color: Color,
 ) => {
   const tickHeight = 3.36; // 3 * 1.12
   segments.forEach((seg) => {
+    const page = seg.page || _page;
     const underlineY = seg.y - 2;
     // Horizontal line
     page.drawLine({
@@ -343,6 +400,7 @@ export const processEnglishColumn = (
               y: segmentY,
               isFirst,
               isLast: false,
+              page: state.page,
             },
             context.shouldDrawUnderlines ?? false,
           );
@@ -369,6 +427,7 @@ export const processEnglishColumn = (
             y: segmentY,
             isFirst,
             isLast: false,
+            page: state.page,
           },
           context.shouldDrawUnderlines ?? false,
         );
@@ -393,6 +452,7 @@ export const processEnglishColumn = (
         y: segmentY,
         isFirst,
         isLast: true,
+        page: state.page,
       },
       context.shouldDrawUnderlines ?? false,
     );
@@ -459,6 +519,7 @@ export const processHebrewColumn = (
             y: segmentY,
             isFirst,
             isLast: false,
+            page: state.page,
           },
           context.shouldDrawUnderlines ?? false,
         );
@@ -483,6 +544,7 @@ export const processHebrewColumn = (
         y: segmentY,
         isFirst,
         isLast: true,
+        page: state.page,
       },
       context.shouldDrawUnderlines ?? false,
     );
@@ -562,6 +624,7 @@ export const processTransliterationColumn = (
               y: segmentY,
               isFirst,
               isLast: false,
+              page: state.page,
             },
             context.shouldDrawUnderlines ?? false,
           );
@@ -587,6 +650,7 @@ export const processTransliterationColumn = (
             y: segmentY,
             isFirst,
             isLast: false,
+            page: state.page,
           },
           context.shouldDrawUnderlines ?? false,
         );
@@ -611,6 +675,7 @@ export const processTransliterationColumn = (
         y: segmentY,
         isFirst,
         isLast: true,
+        page: state.page,
       },
       context.shouldDrawUnderlines ?? false,
     );
@@ -661,7 +726,7 @@ export const processPhraseMapping = (
   },
   state: SentenceState,
   color: Color,
-  checkPageBreak: () => void,
+  _checkPageBreak: () => void,
 ): { englishX: number; englishY: number; hebrewX: number; hebrewY: number } => {
   const renderContext = { page: context.page, fonts: context.fonts, pdfDoc: context.pdfDoc, height: context.height, margin: context.margin };
   
@@ -671,25 +736,34 @@ export const processPhraseMapping = (
       : undefined;
   const englishNotation = phraseIndex === 1 ? notationValue : undefined;
 
-  const createMutableColumnState = <T extends SentenceState>(
-    globalState: T,
-    xProp: NumberKeys<T>,
-    yProp: NumberKeys<T>,
-    columnStart: number,
-    columnEnd: number
-  ) => ({
-    get x() { return globalState[xProp] as number; },
-    set x(val) { globalState[xProp] = val as T[NumberKeys<T>]; },
-    get y() { return globalState[yProp] as number; },
-    set y(val) { globalState[yProp] = val as T[NumberKeys<T>]; },
-    get page() { return globalState.page; },
-    set page(val) { globalState.page = val; },
-    columnStart,
-    columnEnd
-  });
+  const startPageIndex = context.pdfDoc.getPages().indexOf(state.page);
+  let englishPageIndex = startPageIndex;
+  let hebrewPageIndex = startPageIndex;
 
   // English rendering
-  const englishStateAdapter = createMutableColumnState(state, 'currentEnglishX', 'englishY', context.englishColumnStart, context.englishColumnEnd);
+  const englishStateAdapter = createDecoupledAdapter(
+    state, 
+    'currentEnglishX', 
+    'englishY', 
+    context.englishColumnStart, 
+    context.englishColumnEnd,
+    state.page
+  );
+
+  const checkEnglishPageBreak = () => {
+    if (englishStateAdapter.y < siddurConfig.pdfMargins.bottom) {
+      englishPageIndex++;
+      let newPage = context.pdfDoc.getPages()[englishPageIndex];
+      if (!newPage) {
+        newPage = context.pdfDoc.addPage();
+      }
+      englishStateAdapter.page = newPage;
+      const topY = context.height - siddurConfig.pdfMargins.top;
+      englishStateAdapter.y = topY;
+      englishStateAdapter.x = context.englishColumnStart;
+    }
+  };
+
   processEnglishColumn(
     renderContext,
     englishStateAdapter,
@@ -698,11 +772,33 @@ export const processPhraseMapping = (
     context.englishLineHeight,
     color,
     englishNotation,
-    checkPageBreak,
+    checkEnglishPageBreak,
   );
 
   // Hebrew rendering
-  const hebrewStateAdapter = createMutableColumnState(state, 'currentHebrewX', 'hebrewY', context.hebrewColumnStart, context.hebrewColumnEnd);
+  const hebrewStateAdapter = createDecoupledAdapter(
+    state, 
+    'currentHebrewX', 
+    'hebrewY', 
+    context.hebrewColumnStart, 
+    context.hebrewColumnEnd,
+    state.page
+  );
+
+  const checkHebrewPageBreak = () => {
+    if (hebrewStateAdapter.y < siddurConfig.pdfMargins.bottom) {
+      hebrewPageIndex++;
+      let newPage = context.pdfDoc.getPages()[hebrewPageIndex];
+      if (!newPage) {
+        newPage = context.pdfDoc.addPage();
+      }
+      hebrewStateAdapter.page = newPage;
+      const topY = context.height - siddurConfig.pdfMargins.top;
+      hebrewStateAdapter.y = topY;
+      hebrewStateAdapter.x = context.hebrewColumnEnd;
+    }
+  };
+
   processHebrewColumn(
     renderContext,
     hebrewStateAdapter,
@@ -711,8 +807,22 @@ export const processPhraseMapping = (
     context.hebrewLineHeight,
     color,
     notationValue,
-    checkPageBreak,
+    checkHebrewPageBreak,
   );
+
+  // Synchronize state
+  const maxPageIndex = Math.max(englishPageIndex, hebrewPageIndex);
+  state.page = context.pdfDoc.getPages()[maxPageIndex];
+
+  // If any column is behind, bring it to the top of the new page
+  if (englishPageIndex < maxPageIndex) {
+    state.englishY = context.height - siddurConfig.pdfMargins.top;
+    state.currentEnglishX = context.englishColumnStart;
+  }
+  if (hebrewPageIndex < maxPageIndex) {
+    state.hebrewY = context.height - siddurConfig.pdfMargins.top;
+    state.currentHebrewX = context.hebrewColumnEnd;
+  }
 
   return { englishX: state.currentEnglishX, englishY: state.englishY, hebrewX: state.currentHebrewX, hebrewY: state.hebrewY };
 };
@@ -728,6 +838,7 @@ export const processPhraseMapping = (
  * @param checkPageBreak - Callback to check if page break is needed
  * @returns Updated positions for all three columns
  */
+// oxlint-disable-next-line max-lines-per-function
 export const processPhraseMappingThreeColumn = (
   mapping: PhraseMapping,
   phraseIndex: number,
@@ -741,7 +852,7 @@ export const processPhraseMappingThreeColumn = (
   },
   state: ThreeColumnState,
   color: Color,
-  checkPageBreak: () => void,
+  _checkPageBreak: () => void,
 ): { englishX: number; englishY: number; translitX: number; translitY: number; hebrewX: number; hebrewY: number } => {
   const renderContext = { page: context.page, fonts: context.fonts, pdfDoc: context.pdfDoc, height: context.height, margin: context.margin };
   
@@ -754,25 +865,35 @@ export const processPhraseMappingThreeColumn = (
   const englishColumnEnd = context.englishColumnStart + context.columnWidth;
   const translitColumnEnd = context.transliterationColumnStart + context.columnWidth;
 
-  const createMutableColumnState = <T extends ThreeColumnState>(
-    globalState: T,
-    xProp: NumberKeys<T>,
-    yProp: NumberKeys<T>,
-    columnStart: number,
-    columnEnd: number
-  ) => ({
-    get x() { return globalState[xProp] as number; },
-    set x(val) { globalState[xProp] = val as T[NumberKeys<T>]; },
-    get y() { return globalState[yProp] as number; },
-    set y(val) { globalState[yProp] = val as T[NumberKeys<T>]; },
-    get page() { return globalState.page; },
-    set page(val) { globalState.page = val; },
-    columnStart,
-    columnEnd
-  });
+  const startPageIndex = context.pdfDoc.getPages().indexOf(state.page);
+  let englishPageIndex = startPageIndex;
+  let translitPageIndex = startPageIndex;
+  let hebrewPageIndex = startPageIndex;
 
   // English rendering
-  const englishStateAdapter = createMutableColumnState(state, 'currentEnglishX', 'englishY', context.englishColumnStart, englishColumnEnd);
+  const englishStateAdapter = createDecoupledAdapter(
+    state, 
+    'currentEnglishX', 
+    'englishY', 
+    context.englishColumnStart, 
+    englishColumnEnd,
+    state.page
+  );
+
+  const checkEnglishPageBreak = () => {
+    if (englishStateAdapter.y < siddurConfig.pdfMargins.bottom) {
+      englishPageIndex++;
+      let newPage = context.pdfDoc.getPages()[englishPageIndex];
+      if (!newPage) {
+        newPage = context.pdfDoc.addPage();
+      }
+      englishStateAdapter.page = newPage;
+      const topY = context.height - siddurConfig.pdfMargins.top;
+      englishStateAdapter.y = topY;
+      englishStateAdapter.x = context.englishColumnStart;
+    }
+  };
+
   processEnglishColumn(
     renderContext,
     englishStateAdapter,
@@ -781,12 +902,34 @@ export const processPhraseMappingThreeColumn = (
     context.englishLineHeight,
     color,
     englishNotation,
-    checkPageBreak,
+    checkEnglishPageBreak,
   );
 
   // Transliteration rendering
   const translitText = mapping.transliteration || mapping.Transliteration || '';
-  const translitStateAdapter = createMutableColumnState(state, 'currentTranslitX', 'translitY', context.transliterationColumnStart, translitColumnEnd);
+  const translitStateAdapter = createDecoupledAdapter(
+    state, 
+    'currentTranslitX', 
+    'translitY', 
+    context.transliterationColumnStart, 
+    translitColumnEnd,
+    state.page
+  );
+
+  const checkTranslitPageBreak = () => {
+    if (translitStateAdapter.y < siddurConfig.pdfMargins.bottom) {
+      translitPageIndex++;
+      let newPage = context.pdfDoc.getPages()[translitPageIndex];
+      if (!newPage) {
+        newPage = context.pdfDoc.addPage();
+      }
+      translitStateAdapter.page = newPage;
+      const topY = context.height - siddurConfig.pdfMargins.top;
+      translitStateAdapter.y = topY;
+      translitStateAdapter.x = context.transliterationColumnStart;
+    }
+  };
+
   processTransliterationColumn(
     renderContext,
     translitStateAdapter,
@@ -795,11 +938,33 @@ export const processPhraseMappingThreeColumn = (
     context.translitLineHeight,
     color,
     notationValue,
-    checkPageBreak,
+    checkTranslitPageBreak,
   );
 
   // Hebrew rendering
-  const hebrewStateAdapter = createMutableColumnState(state, 'currentHebrewX', 'hebrewY', context.hebrewColumnStart, context.hebrewColumnEnd);
+  const hebrewStateAdapter = createDecoupledAdapter(
+    state, 
+    'currentHebrewX', 
+    'hebrewY', 
+    context.hebrewColumnStart, 
+    context.hebrewColumnEnd,
+    state.page
+  );
+
+  const checkHebrewPageBreak = () => {
+    if (hebrewStateAdapter.y < siddurConfig.pdfMargins.bottom) {
+      hebrewPageIndex++;
+      let newPage = context.pdfDoc.getPages()[hebrewPageIndex];
+      if (!newPage) {
+        newPage = context.pdfDoc.addPage();
+      }
+      hebrewStateAdapter.page = newPage;
+      const topY = context.height - siddurConfig.pdfMargins.top;
+      hebrewStateAdapter.y = topY;
+      hebrewStateAdapter.x = context.hebrewColumnEnd;
+    }
+  };
+
   processHebrewColumn(
     renderContext,
     hebrewStateAdapter,
@@ -808,8 +973,15 @@ export const processPhraseMappingThreeColumn = (
     context.hebrewLineHeight,
     color,
     notationValue,
-    checkPageBreak,
+    checkHebrewPageBreak,
   );
+
+  // Synchronize state
+  synchronizeThreeColumnState(state, context, {
+    english: englishPageIndex,
+    translit: translitPageIndex,
+    hebrew: hebrewPageIndex
+  });
 
   return {
     englishX: state.currentEnglishX,
