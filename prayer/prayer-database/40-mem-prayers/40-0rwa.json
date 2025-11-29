@@ -1,127 +1,86 @@
 {
   "40-0rwa": {
     "prayer-title": "Modei Ani",
+    "version": "1.1.0",
+    "date_modified": "2025-11-26T00:00:00-00:00",
     "Introduction": "Give thanks upon waking",
     "Instruction": "Said with hands clasped together",
     "prayer-id": "40-0rwa",
     "link-to-prayer": "https://www.sefaria.org/api/texts/Modeh_Ani?lang=bi",
     "Word Mappings": {
       "0": {
-        "hebrew": "מוֹדֶה אֲנִי",
-        "english": "I thank",
-        "transliteration": "Modeh Ani",
-        "detailed-array": [
-          [
-            1,
-            0
-          ],
-          [
-            0,
-            1
-          ]
-        ]
+        "hebrew": "מוֹדֶה",
+        "english": "Grateful",
+        "transliteration": "Modeh",
+        "detailed-array": [[0, 0]]
       },
       "1": {
+        "hebrew": "אֲנִי",
+        "english": "am I",
+        "transliteration": "ani",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "2": {
         "hebrew": "לְפָנֶֽיךָ",
         "english": "before You",
         "transliteration": "l'fanekha",
-        "detailed-array": [
-          [
-            0,
-            [
-              0,
-              1
-            ]
-          ]
-        ]
-      },
-      "2": {
-        "hebrew": "מֶֽלֶךְ חַי וְקַיָּם",
-        "english": "King living and eternal",
-        "transliteration": "melekh khai v'kayam",
-        "detailed-array": [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            1
-          ],
-          [
-            2,
-            [
-              2,
-              3
-            ]
-          ]
-        ]
+        "detailed-array": [[0, [0, 1]]]
       },
       "3": {
-        "hebrew": "שֶׁהֶחֱזַֽרְתָּ בִּי נִשְׁמָתִי",
-        "english": "that You returned in me my soul",
-        "transliteration": "shehechezarta bi nishmati",
-        "detailed-array": [
-          [
-            0,
-            [
-              0,
-              1,
-              2
-            ]
-          ],
-          [
-            1,
-            [
-              3,
-              4
-            ]
-          ],
-          [
-            2,
-            [
-              5,
-              6
-            ]
-          ]
-        ]
+        "hebrew": "מֶֽלֶךְ",
+        "english": "King",
+        "transliteration": "melekh",
+        "detailed-array": [[0, 0]]
       },
       "4": {
+        "hebrew": "חַי",
+        "english": "living",
+        "transliteration": "khai",
+        "detailed-array": [[0, 0]]
+      },
+      "5": {
+        "hebrew": "וְקַיָּם",
+        "english": "and eternal",
+        "transliteration": "v'kayam",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "6": {
+        "hebrew": "שֶׁהֶחֱזַֽרְתָּ",
+        "english": "that You returned",
+        "transliteration": "shehechezarta",
+        "detailed-array": [[0, [0, 1, 2]]]
+      },
+      "7": {
+        "hebrew": "בִּי",
+        "english": "in me",
+        "transliteration": "bi",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "8": {
+        "hebrew": "נִשְׁמָתִי",
+        "english": "my soul",
+        "transliteration": "nishmati",
+        "detailed-array": [[0, [0, 1]]]
+      },
+      "9": {
         "hebrew": "בְּחֶמְלָה",
         "english": "with compassion",
         "transliteration": "b'chemlah",
-        "detailed-array": [
-          [
-            0,
-            [
-              0,
-              1
-            ]
-          ]
-        ]
+        "detailed-array": [[0, [0, 1]]]
       },
-      "5": {
-        "hebrew": "רַבָּה אֱמוּנָתֶֽךָ",
-        "english": "great is Your faithfulness",
-        "transliteration": "rabbah emunatekha",
-        "detailed-array": [
-          [
-            0,
-            [
-              0,
-              1
-            ]
-          ],
-          [
-            1,
-            [
-              2,
-              3
-            ]
-          ]
-        ]
+      "10": {
+        "hebrew": "רַבָּה",
+        "english": "great",
+        "transliteration": "rabbah",
+        "detailed-array": [[0, 0]]
+      },
+      "11": {
+        "hebrew": "אֱמוּנָתֶֽךָ",
+        "english": "is Your faithfulness.",
+        "transliteration": "emunatekha",
+        "detailed-array": [[0, [0, 1, 2]]]
       }
     },
-    "full-english": "I thank before You King living and eternal that You returned in me my soul with compassion great is Your faithfulness"
+    "full-english": "Grateful am I before You King living and eternal that You returned in me my soul with compassion great is Your faithfulness"
   }
 }

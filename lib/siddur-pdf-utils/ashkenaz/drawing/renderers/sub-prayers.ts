@@ -1,12 +1,34 @@
-import { AshkenazContentGenerationParams, PdfDrawingContext } from '../types';
+// lib/siddur-pdf-utils/ashkenaz/drawing/renderers/sub-prayers.ts
+/**
+ * @file Handles the rendering of sub-prayers within a larger prayer structure.
+ * Delegates to specific renderers based on the sub-prayer's content and style settings.
+ * @packageDocumentation
+ */
+import {
+  AshkenazContentGenerationParams,
+  PdfDrawingContext,
+  WordMapping,
+  Prayer,
+} from '../types';
 import siddurConfig from '../../siddur-formatting-config.json';
-import { drawSentenceBasedMappingPrayer, drawSentenceBasedMappingPrayerThreeColumn } from './sentence-mapped';
-import { drawThreeColumnColorMappedPrayer, drawTwoColumnColorMappedPrayer } from './color-mapped';
+import {
+  drawSentenceBasedMappingPrayer,
+  drawSentenceBasedMappingPrayerThreeColumn,
+} from './permus-product/sentence-mapped-color/sentence-mapped-color-renderer';
+import {
+  drawThreeColumnColorMappedPrayer,
+  drawTwoColumnColorMappedPrayer,
+} from './permus-product/sentence-mapped-color/sentence-mapped-color';
 import { resolveDisplayStyle } from '../helpers/prayer-data';
+
+interface SubPrayer {
+  'prayer-title': string;
+  'Word Mappings'?: WordMapping;
+}
 
 export const drawSubPrayers = (
   context: PdfDrawingContext,
-  detailedPrayer: any,
+  detailedPrayer: Prayer & { 'sub-prayers': Record<string, SubPrayer> },
   params: AshkenazContentGenerationParams,
 ): PdfDrawingContext => {
   let currentContext = context;
@@ -54,7 +76,7 @@ export const drawSubPrayers = (
     if (!wordMappings || Object.keys(wordMappings).length === 0) continue;
 
     if (params.style === 'sentence based mapping') {
-      const firstMapping = Object.values(wordMappings)[0] as any;
+      const firstMapping = Object.values(wordMappings)[0];
       const hasTransliteration =
         firstMapping &&
         (firstMapping.transliteration || firstMapping.Transliteration);
@@ -78,7 +100,7 @@ export const drawSubPrayers = (
       continue;
     }
 
-    const firstMapping = Object.values(wordMappings)[0] as any;
+    const firstMapping = Object.values(wordMappings)[0];
     const hasTransliteration =
       firstMapping &&
       (firstMapping.transliteration || firstMapping.Transliteration);
@@ -110,4 +132,5 @@ export const drawSubPrayers = (
 
   return currentContext;
 };
+
 

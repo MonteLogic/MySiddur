@@ -29,7 +29,7 @@ export const drawDividerLine = (context: PdfDrawingContext): PdfDrawingContext =
 
 export const drawSourceIfPresent = (
   context: PdfDrawingContext,
-  prayerObject: { source?: unknown } & { [key: string]: any },
+  prayerObject: { source?: string },
   params: AshkenazContentGenerationParams,
   calculationWidth: number,
 ): PdfDrawingContext => {
@@ -82,8 +82,8 @@ export const drawIntroductionInstruction = (
   let currentContext = { ...context };
 
   // Check user settings for including introduction and instructions
-  const includeIntroduction = (params as any).includeIntroduction !== false;
-  const includeInstructions = (params as any).includeInstructions !== false;
+  const includeIntroduction = params.includeIntroduction !== false;
+  const includeInstructions = params.includeInstructions !== false;
 
   const instructionStyles = {
     fontSize: 10,

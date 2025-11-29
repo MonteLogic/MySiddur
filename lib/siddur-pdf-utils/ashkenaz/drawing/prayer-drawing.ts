@@ -10,6 +10,7 @@ import {
   AshkenazContentGenerationParams,
   Prayer,
   BasePrayer,
+  WordMapping,
 } from './types';
 import { drawIntroductionInstruction } from './drawing-helpers';
 import siddurConfig from '../siddur-formatting-config.json';
@@ -21,11 +22,15 @@ import {
 import {
   drawTwoColumnColorMappedPrayer,
   drawThreeColumnColorMappedPrayer,
-} from './renderers/color-mapped';
+} from './renderers/permus-product/sentence-mapped-color/sentence-mapped-color';
 import {
   drawSentenceBasedMappingPrayer,
   drawSentenceBasedMappingPrayerThreeColumn,
-} from './renderers/sentence-mapped';
+} from './renderers/permus-product/sentence-mapped-color/sentence-mapped-color-renderer';
+import {
+  drawSentenceBasedMappingPrayerBW,
+  drawSentenceBasedMappingPrayerThreeColumnBW,
+} from './renderers/permus-product/sentence-mapped-bw/sentence-mapped-bw';
 import { drawSubPrayers } from './renderers/sub-prayers';
 import {
   getDetailedPrayerData,
@@ -90,29 +95,47 @@ const drawPrayerTitle = (
   return { ...context, page, y: y - siddurConfig.verticalSpacing.beforePrayerTitle };
       };
 
-const hasTransliteration = (mapping: any): boolean =>
+const hasTransliteration = (mapping: WordMapping[string]): boolean =>
   Boolean(mapping && (mapping.transliteration || mapping.Transliteration));
 
 const handleWordMappings = (
   context: PdfDrawingContext,
   prayer: Prayer,
-  wordMappings: Record<string, any>,
+  wordMappings: WordMapping,
   params: AshkenazContentGenerationParams,
   columnWidth: number,
-  styleSource?: any,
+  styleSource?: unknown,
 ): PdfDrawingContext => {
   const { style = 'Recommended' } = params;
-  const firstMapping = wordMappings['0'] as any;
+  const printBlackAndWhite = params.printBlackAndWhite ?? false;
+  const firstMapping = wordMappings['0'];
   const mappingHasTransliteration = hasTransliteration(firstMapping);
         
   if (style === 'sentence based mapping' || style === 'Recommended') {
     if (mappingHasTransliteration) {
+      if (printBlackAndWhite) {
+        return drawSentenceBasedMappingPrayerThreeColumnBW(
+          context,
+          prayer,
+          wordMappings,
+          params,
+        );
+      }
       return drawSentenceBasedMappingPrayerThreeColumn(
         context,
         prayer,
             wordMappings,
             params,
           );
+    }
+    if (printBlackAndWhite) {
+      return drawSentenceBasedMappingPrayerBW(
+        context,
+        prayer,
+        wordMappings,
+        params,
+        columnWidth,
+      );
     }
     return drawSentenceBasedMappingPrayer(
       context,
