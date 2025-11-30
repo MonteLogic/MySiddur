@@ -10,6 +10,13 @@ interface GuideElementPos {
   h?: number;
 }
 
+interface ParenthesisConfig {
+  size: number;
+  yOffset: number;
+  xOffsetLeft: number;
+  xOffsetRight: number;
+}
+
 interface GuideExampleData {
   highlight: string;
   explanation: string;
@@ -19,6 +26,7 @@ interface GuideExampleData {
     super: GuideElementPos;
     box: GuideElementPos;
   };
+  parenthesis: ParenthesisConfig;
 }
 
 export const drawReadingGuide = (
@@ -152,28 +160,34 @@ function drawGuideExample(
 
   // Draw Explanation
   const explanationX = x + guideConfig.layout.explanationOffset.x + (data.highlight === 'super' ? 15 : (data.highlight === 'sub' ? 10 : 0));
-  drawExplanation(page, explanationX, y + guideConfig.layout.explanationOffset.y, data.explanation, fonts);
+  drawExplanation(page, explanationX, y + guideConfig.layout.explanationOffset.y, data.explanation, fonts, data.parenthesis);
 }
 
-function drawExplanation(page: PDFPage, x: number, y: number, text: string, fonts: { english: PDFFont }) {
+function drawExplanation(
+  page: PDFPage, 
+  x: number, 
+  y: number, 
+  text: string, 
+  fonts: { english: PDFFont },
+  config: ParenthesisConfig
+) {
     const width = 90;
-    const parenSize = 60; // Large font size for parenthesis
-    const parenYOffset = -15; // Adjust vertical position
+    const { size, yOffset, xOffsetLeft, xOffsetRight } = config;
 
     // Left Parenthesis
     page.drawText('(', {
-        x: x - 15,
-        y: y + parenYOffset,
-        size: parenSize,
-        font: fonts.english, // Use a font that has a thin parenthesis or standard
+        x: x + xOffsetLeft,
+        y: y + yOffset,
+        size: size,
+        font: fonts.english,
         color: rgb(0,0,0)
     });
 
     // Right Parenthesis
     page.drawText(')', {
-        x: x + width,
-        y: y + parenYOffset,
-        size: parenSize,
+        x: x + width + xOffsetRight,
+        y: y + yOffset,
+        size: size,
         font: fonts.english,
         color: rgb(0,0,0)
     });
