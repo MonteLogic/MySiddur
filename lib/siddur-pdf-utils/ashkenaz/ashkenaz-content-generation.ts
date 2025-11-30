@@ -9,6 +9,7 @@ import {
 } from './drawing/types';
 import { drawPrayer } from './drawing/prayer-drawing';
 import { drawDividerLine } from './drawing/drawing-helpers';
+import { drawReadingGuide } from './drawing/reading-guide';
 import { loadGeneratedLayout } from '#/lib/custom-siddur-date-gen/layout-resolver';
 
 // Service display names mapping
@@ -20,6 +21,7 @@ const SERVICE_DISPLAY_NAMES: Record<string, string> = {
   retiringPrayers: 'Retiring Prayers'
 };
 
+// oxlint-disable-next-line max-lines-per-function
 export const generateAshkenazContent = (
   params: AshkenazContentGenerationParams & { selectedDate?: Date },
 ): { page: PDFPage; y: number; pageServiceMap: Map<number, string> } => {
@@ -110,6 +112,12 @@ export const generateAshkenazContent = (
 
       context.y -= siddurConfig.verticalSpacing.afterSiddurTitle;
 
+      // Draw Reading Guide if instructions are enabled
+      if (params.includeInstructions !== false) {
+         context = drawReadingGuide(context, params);
+         context = drawDividerLine(context); // Add a divider after the guide
+      }
+
       // Draw each prayer in this service
       for (const prayerEntry of service.prayers) {
         // Check if we're on a new page and update service mapping
@@ -172,6 +180,12 @@ export const generateAshkenazContent = (
       }
       
       context.y -= siddurConfig.verticalSpacing.afterSiddurTitle;
+
+      // Draw Reading Guide if instructions are enabled
+      if (params.includeInstructions !== false) {
+         context = drawReadingGuide(context, params);
+         context = drawDividerLine(context); // Add a divider after the guide
+      }
 
       for (const section of service.sections) {
         const estimatedSectionHeaderHeight = 100;
