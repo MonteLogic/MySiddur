@@ -13,8 +13,7 @@ interface GuideElementPos {
 interface ParenthesisConfig {
   size: number;
   yOffset: number;
-  xOffsetLeft: number;
-  xOffsetRight: number;
+  xOffset: number;
 }
 
 interface GuideExampleData {
@@ -26,7 +25,8 @@ interface GuideExampleData {
     super: GuideElementPos;
     box: GuideElementPos;
   };
-  parenthesis: ParenthesisConfig;
+  leftParenthesis: ParenthesisConfig;
+  rightParenthesis: ParenthesisConfig;
 }
 
 export const drawReadingGuide = (
@@ -160,7 +160,7 @@ function drawGuideExample(
 
   // Draw Explanation
   const explanationX = x + guideConfig.layout.explanationOffset.x + (data.highlight === 'super' ? 15 : (data.highlight === 'sub' ? 10 : 0));
-  drawExplanation(page, explanationX, y + guideConfig.layout.explanationOffset.y, data.explanation, fonts, data.parenthesis);
+  drawExplanation(page, explanationX, y + guideConfig.layout.explanationOffset.y, data.explanation, fonts, data.leftParenthesis, data.rightParenthesis);
 }
 
 function drawExplanation(
@@ -169,25 +169,25 @@ function drawExplanation(
   y: number, 
   text: string, 
   fonts: { english: PDFFont },
-  config: ParenthesisConfig
+  leftConfig: ParenthesisConfig,
+  rightConfig: ParenthesisConfig
 ) {
     const width = 90;
-    const { size, yOffset, xOffsetLeft, xOffsetRight } = config;
 
     // Left Parenthesis
     page.drawText('(', {
-        x: x + xOffsetLeft,
-        y: y + yOffset,
-        size: size,
+        x: x + leftConfig.xOffset,
+        y: y + leftConfig.yOffset,
+        size: leftConfig.size,
         font: fonts.english,
         color: rgb(0,0,0)
     });
 
     // Right Parenthesis
     page.drawText(')', {
-        x: x + width + xOffsetRight,
-        y: y + yOffset,
-        size: size,
+        x: x + width + rightConfig.xOffset,
+        y: y + rightConfig.yOffset,
+        size: rightConfig.size,
         font: fonts.english,
         color: rgb(0,0,0)
     });

@@ -34,11 +34,15 @@
                     "h": 35
                 }
             },
-            "parenthesis": {
+            "leftParenthesis": {
                 "size": 60,
-                "yOffset": -25,
-                "xOffsetLeft": -15,
-                "xOffsetRight": 0
+                "yOffset": -30,
+                "xOffset": -15
+            },
+            "rightParenthesis": {
+                "size": 60,
+                "yOffset": -30,
+                "xOffset": -18
             }
         },
         {
@@ -64,11 +68,15 @@
                     "h": 20
                 }
             },
-            "parenthesis": {
+            "leftParenthesis": {
                 "size": 60,
-                "yOffset": -15,
-                "xOffsetLeft": -15,
-                "xOffsetRight": 0
+                "yOffset": -25,
+                "xOffset": -15
+            },
+            "rightParenthesis": {
+                "size": 60,
+                "yOffset": -25,
+                "xOffset": 0
             }
         },
         {
@@ -94,11 +102,15 @@
                     "h": 30
                 }
             },
-            "parenthesis": {
+            "leftParenthesis": {
                 "size": 60,
                 "yOffset": -15,
-                "xOffsetLeft": -15,
-                "xOffsetRight": 0
+                "xOffset": -15
+            },
+            "rightParenthesis": {
+                "size": 60,
+                "yOffset": -15,
+                "xOffset": 0
             }
         }
     ]
