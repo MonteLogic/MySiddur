@@ -10,12 +10,6 @@ interface GuideElementPos {
   h?: number;
 }
 
-interface ParenthesisConfig {
-  size: number;
-  yOffset: number;
-  xOffset: number;
-}
-
 interface GuideExampleData {
   highlight: string;
   explanation: string;
@@ -25,8 +19,6 @@ interface GuideExampleData {
     super: GuideElementPos;
     box: GuideElementPos;
   };
-  leftParenthesis: ParenthesisConfig;
-  rightParenthesis: ParenthesisConfig;
 }
 
 export const drawReadingGuide = (
@@ -101,6 +93,21 @@ export const drawReadingGuide = (
 
   guideConfig.examples.forEach((data, index) => {
     drawGuideExample(page, startX + (spacingX * index), exampleY, data as GuideExampleData, fonts);
+
+    // Draw dashed line between examples (but not after the last one)
+    if (index < guideConfig.examples.length - 1) {
+      const lineX = startX + (spacingX * index) + (spacingX / 2) + 10; // Approximate midpoint
+      const lineTopY = exampleY + 40;
+      const lineBottomY = exampleY - 40;
+      
+      page.drawLine({
+        start: { x: lineX, y: lineTopY },
+        end: { x: lineX, y: lineBottomY },
+        thickness: 1,
+        color: rgb(0, 0, 0),
+        dashArray: [5, 5], // 5 units on, 5 units off
+      });
+    }
   });
 
   y -= exampleHeight + 20;
@@ -159,8 +166,12 @@ function drawGuideExample(
   }
 
   // Draw Explanation
-  const explanationX = x + guideConfig.layout.explanationOffset.x + (data.highlight === 'super' ? 15 : (data.highlight === 'sub' ? 10 : 0));
-  drawExplanation(page, explanationX, y + guideConfig.layout.explanationOffset.y, data.explanation, fonts, data.leftParenthesis, data.rightParenthesis);
+  // Center the explanation text below the node
+  // The node is roughly 50-60 units wide.
+  const explanationX = x; 
+  const explanationY = y - 25; // Move below the node
+  
+  drawExplanation(page, explanationX, explanationY, data.explanation, fonts);
 }
 
 function drawExplanation(
@@ -168,37 +179,15 @@ function drawExplanation(
   x: number, 
   y: number, 
   text: string, 
-  fonts: { english: PDFFont },
-  leftConfig: ParenthesisConfig,
-  rightConfig: ParenthesisConfig
+  fonts: { english: PDFFont }
 ) {
-    const width = 90;
-
-    // Left Parenthesis
-    page.drawText('(', {
-        x: x + leftConfig.xOffset,
-        y: y + leftConfig.yOffset,
-        size: leftConfig.size,
-        font: fonts.english,
-        color: rgb(0,0,0)
-    });
-
-    // Right Parenthesis
-    page.drawText(')', {
-        x: x + width + rightConfig.xOffset,
-        y: y + rightConfig.yOffset,
-        size: rightConfig.size,
-        font: fonts.english,
-        color: rgb(0,0,0)
-    });
-
     // Text inside
     page.drawText(text, {
-        x: x + 2,
-        y: y - 10,
+        x: x,
+        y: y,
         size: 8,
         font: fonts.english,
-        color: rgb(0,0,0),
+        color: rgb(0, 0, 0),
         lineHeight: 10,
     });
 }

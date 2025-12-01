@@ -1,117 +1,83 @@
 {
-    "title": "Reading Guide:",
-    "instruction": "Instruction: How the markings mark where the words are at. Find each one",
-    "layout": {
-        "exampleHeight": 60,
-        "baseYOffset": 40,
-        "spacingX": 180,
-        "explanationOffset": {
-            "x": 80,
-            "y": 25
+  "title": "Reading Guide:",
+  "instruction": "Instruction: How the markings mark where the words are at. Find each one. In this case the text segment represents the 2nd text segment of the First sentence.",
+  "layout": {
+    "exampleHeight": 60,
+    "baseYOffset": 40,
+    "spacingX": 180
+  },
+  "examples": [
+    {
+      "highlight": "main",
+      "explanation": "\"ts\", Stands for Text\nSegment, a group of\ncombined text like\n\"my soul\"",
+      "elements": {
+        "ts": {
+          "x": 2,
+          "y": 5
+        },
+        "sub": {
+          "x": 38,
+          "y": 0
+        },
+        "super": {
+          "x": 38,
+          "y": 20
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "w": 35,
+          "h": 35
         }
+      }
     },
-    "examples": [
-        {
-            "highlight": "main",
-            "explanation": "\"ts\", Stands for Text\nSegment, a group of\ncombined text like\n\"my soul\"",
-            "elements": {
-                "ts": {
-                    "x": 2,
-                    "y": 5
-                },
-                "sub": {
-                    "x": 38,
-                    "y": 0
-                },
-                "super": {
-                    "x": 38,
-                    "y": 20
-                },
-                "box": {
-                    "x": 0,
-                    "y": 0,
-                    "w": 35,
-                    "h": 35
-                }
-            },
-            "leftParenthesis": {
-                "size": 60,
-                "yOffset": -30,
-                "xOffset": -15
-            },
-            "rightParenthesis": {
-                "size": 60,
-                "yOffset": -30,
-                "xOffset": -18
-            }
+    {
+      "highlight": "sub",
+      "explanation": "\"2\", The word in the\norder of the\nsentence.",
+      "elements": {
+        "ts": {
+          "x": 0,
+          "y": 5
         },
-        {
-            "highlight": "sub",
-            "explanation": "\"2\", The word in the\norder of the\nsentence.",
-            "elements": {
-                "ts": {
-                    "x": 0,
-                    "y": 5
-                },
-                "sub": {
-                    "x": 32,
-                    "y": 0
-                },
-                "super": {
-                    "x": 45,
-                    "y": 20
-                },
-                "box": {
-                    "x": 30,
-                    "y": -5,
-                    "w": 15,
-                    "h": 20
-                }
-            },
-            "leftParenthesis": {
-                "size": 60,
-                "yOffset": -25,
-                "xOffset": -15
-            },
-            "rightParenthesis": {
-                "size": 60,
-                "yOffset": -25,
-                "xOffset": 0
-            }
+        "sub": {
+          "x": 32,
+          "y": 0
         },
-        {
-            "highlight": "super",
-            "explanation": "\"1\", How many\nsentences have\noccurred. So this is on\nthe first sentence.",
-            "elements": {
-                "ts": {
-                    "x": 0,
-                    "y": 5
-                },
-                "sub": {
-                    "x": 35,
-                    "y": 0
-                },
-                "super": {
-                    "x": 52,
-                    "y": 20
-                },
-                "box": {
-                    "x": 50,
-                    "y": 15,
-                    "w": 35,
-                    "h": 30
-                }
-            },
-            "leftParenthesis": {
-                "size": 60,
-                "yOffset": -15,
-                "xOffset": -15
-            },
-            "rightParenthesis": {
-                "size": 60,
-                "yOffset": -15,
-                "xOffset": 0
-            }
+        "super": {
+          "x": 45,
+          "y": 20
+        },
+        "box": {
+          "x": 30,
+          "y": -5,
+          "w": 15,
+          "h": 20
         }
-    ]
+      }
+    },
+    {
+      "highlight": "super",
+      "explanation": "\"1\", How many\nsentences have\noccurred. So this is on\nthe first sentence.",
+      "elements": {
+        "ts": {
+          "x": 0,
+          "y": 5
+        },
+        "sub": {
+          "x": 35,
+          "y": 0
+        },
+        "super": {
+          "x": 52,
+          "y": 20
+        },
+        "box": {
+          "x": 50,
+          "y": 15,
+          "w": 35,
+          "h": 30
+        }
+      }
+    }
+  ]
 }
