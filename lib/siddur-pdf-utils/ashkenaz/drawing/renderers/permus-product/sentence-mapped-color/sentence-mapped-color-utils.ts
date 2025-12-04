@@ -7,6 +7,7 @@
  */
 import { rgb, PDFPage, Color, PDFDocument, PDFFont, RGB } from 'pdf-lib';
 import siddurConfig from '../../../../siddur-formatting-config.json';
+import stampConfig from '../../../config/stamp-config.json';
 import { toSubscript, toSuperscript } from '../../../helpers/sentence-mapping';
 
 /**
@@ -298,6 +299,7 @@ export const renderNotation = (
   fontSize: number,
   lineHeight: number,
   checkPageBreak: () => void,
+  config: { xOffset: number; yOffset: number; spacingAfter: number; spacingBefore: number } = { xOffset: 0, yOffset: 0, spacingAfter: 0, spacingBefore: 0 },
 ) => {
   const { fonts } = context;
   const notationSize = fontSize * 0.6;
@@ -308,14 +310,20 @@ export const renderNotation = (
     colorLetter,
     notationSize,
   );
-  if (state.x + colorLetterWidth > state.columnEnd) {
+  
+  // Apply offsets
+  state.x += config.spacingBefore;
+  const startX = state.x + config.xOffset;
+
+  if (startX + colorLetterWidth > state.columnEnd) {
     state.x = state.columnStart;
     state.y -= lineHeight;
     checkPageBreak();
   }
+  
   state.page.drawText(colorLetter, {
-    x: state.x,
-    y: state.y - (fontSize - notationSize) * 0.5,
+    x: state.x + config.xOffset,
+    y: state.y - (fontSize - notationSize) * 0.5 + config.yOffset,
     font: fonts.english,
     size: notationSize,
     color: rgb(0, 0, 0),
@@ -332,13 +340,13 @@ export const renderNotation = (
     checkPageBreak();
   }
   state.page.drawText(restOfNotation, {
-    x: state.x,
-    y: state.y - (fontSize - notationSize) * 0.5,
+    x: state.x + config.xOffset,
+    y: state.y - (fontSize - notationSize) * 0.5 + config.yOffset,
     font: fonts.english,
     size: notationSize,
     color: rgb(0, 0, 0),
   });
-  state.x += restWidth;
+  state.x += restWidth + config.spacingAfter;
 };
 
 /**
@@ -468,6 +476,7 @@ export const processEnglishColumn = (
       fontSize,
       lineHeight,
       checkPageBreak,
+      stampConfig.english
     );
   }
 
@@ -553,6 +562,9 @@ export const processHebrewColumn = (
   drawBracketUnderlines(state.page, segments, color);
 
   if (notationValue) {
+    // Apply spacing before for Hebrew (subtracted since Hebrew goes right-to-left)
+    state.x -= stampConfig.hebrew.spacingBefore;
+
     const notationSize = fontSize * 0.6;
     const notationWidth = fonts.english.widthOfTextAtSize(
       notationValue,
@@ -565,12 +577,14 @@ export const processHebrewColumn = (
     }
     state.x -= notationWidth;
     state.page.drawText(notationValue, {
-      x: state.x,
-      y: state.y - (fontSize - notationSize) * 0.5,
+      x: state.x + stampConfig.hebrew.xOffset,
+      y: state.y - (fontSize - notationSize) * 0.5 + stampConfig.hebrew.yOffset,
       font: fonts.english,
       size: notationSize,
       color: rgb(0, 0, 0),
     });
+    // Apply spacing after for Hebrew (subtracted since Hebrew goes right-to-left)
+    state.x -= stampConfig.hebrew.spacingAfter;
   }
 
   const heSpaceWidth = fonts.hebrew.widthOfTextAtSize(' ', fontSize);
@@ -691,6 +705,7 @@ export const processTransliterationColumn = (
       fontSize,
       lineHeight,
       checkPageBreak,
+      stampConfig.transliteration
     );
   }
 

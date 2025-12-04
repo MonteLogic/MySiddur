@@ -137,6 +137,7 @@ const ensureSpaceAndDraw = (
 
 // lib/siddur-pdf-utils/ashkenaz/siddurMainFile.ts
 
+// oxlint-disable-next-line max-lines-per-function
 export const generateSiddurPDF = async ({
   selectedDate,
   siddurFormat,
