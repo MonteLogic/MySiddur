@@ -2,16 +2,19 @@
     "transliteration": {
         "xOffset": 0,
         "yOffset": 0,
+        "spacingBefore": 1.1,
         "spacingAfter": 6
     },
     "english": {
         "xOffset": 0,
         "yOffset": 0,
+        "spacingBefore": 0,
         "spacingAfter": 0
     },
     "hebrew": {
         "xOffset": 0,
         "yOffset": 0,
+        "spacingBefore": 0,
         "spacingAfter": 0
     }
 }

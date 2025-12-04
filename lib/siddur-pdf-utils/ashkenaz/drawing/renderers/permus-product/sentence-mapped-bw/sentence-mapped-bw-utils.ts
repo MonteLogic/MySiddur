@@ -298,7 +298,7 @@ export const renderNotation = (
   fontSize: number,
   lineHeight: number,
   checkPageBreak: () => void,
-  config: { xOffset: number; yOffset: number; spacingAfter: number } = { xOffset: 0, yOffset: 0, spacingAfter: 0 },
+  config: { xOffset: number; yOffset: number; spacingAfter: number; spacingBefore: number } = { xOffset: 0, yOffset: 0, spacingAfter: 0, spacingBefore: 0 },
 ) => {
   const { fonts } = context;
   const notationSize = fontSize * 0.6;
@@ -311,6 +311,7 @@ export const renderNotation = (
   );
   
   // Apply offsets
+  state.x += config.spacingBefore;
   const startX = state.x + config.xOffset;
   // startY removed as it was unused
 
@@ -557,6 +558,9 @@ export const processHebrewColumn = (
   drawBracketUnderlines(state.page, segments, color);
 
   if (notationValue) {
+    // Apply spacing before for Hebrew (subtracted since Hebrew goes right-to-left)
+    state.x -= stampConfig.hebrew.spacingBefore;
+
     const notationSize = fontSize * 0.6;
     const notationWidth = fonts.english.widthOfTextAtSize(
       notationValue,
