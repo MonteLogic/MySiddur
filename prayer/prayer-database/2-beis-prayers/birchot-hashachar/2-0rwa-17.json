@@ -1,0 +1,61 @@
+{
+  "prayer-title": "Who removes sleep from my eyes",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "הַמַּעֲבִיר",
+      "english": "Who removes",
+      "transliteration": "hama'avir"
+    },
+    "7": {
+      "hebrew": "שֵׁנָה",
+      "english": "sleep",
+      "transliteration": "shenah"
+    },
+    "8": {
+      "hebrew": "מֵעֵינָי",
+      "english": "from my eyes",
+      "transliteration": "me'einai"
+    },
+    "9": {
+      "hebrew": "וּתְנוּמָה",
+      "english": "and slumber",
+      "transliteration": "ut'numah"
+    },
+    "10": {
+      "hebrew": "מֵעַפְעַפָּי.",
+      "english": "from my eyelids.",
+      "transliteration": "me'af'apai."
+    }
+  },
+  "prayer-id": "2-0rwa-17"
+}

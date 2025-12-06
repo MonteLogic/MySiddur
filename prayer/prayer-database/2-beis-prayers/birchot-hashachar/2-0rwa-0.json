@@ -1,0 +1,76 @@
+{
+  "prayer-title": "Who gives the rooster understanding",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "הַנּוֹתֵן",
+      "english": "Who gives",
+      "transliteration": "hanoten"
+    },
+    "7": {
+      "hebrew": "לַשֶּֽׂכְוִי",
+      "english": "to the rooster",
+      "transliteration": "lasechvi"
+    },
+    "8": {
+      "hebrew": "בִינָה",
+      "english": "understanding",
+      "transliteration": "vinah"
+    },
+    "9": {
+      "hebrew": "לְהַבְחִין",
+      "english": "to distinguish",
+      "transliteration": "l'havchin"
+    },
+    "10": {
+      "hebrew": "בֵּין",
+      "english": "between",
+      "transliteration": "bein"
+    },
+    "11": {
+      "hebrew": "יוֹם",
+      "english": "day",
+      "transliteration": "yom"
+    },
+    "12": {
+      "hebrew": "וּבֵין",
+      "english": "and between",
+      "transliteration": "uvein"
+    },
+    "13": {
+      "hebrew": "לָֽיְלָה.",
+      "english": "night.",
+      "transliteration": "laylah."
+    }
+  },
+  "prayer-id": "2-0rwa-0"
+}

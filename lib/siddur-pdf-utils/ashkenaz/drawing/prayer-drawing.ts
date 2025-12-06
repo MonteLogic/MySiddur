@@ -31,7 +31,7 @@ import {
   drawSentenceBasedMappingPrayerBW,
   drawSentenceBasedMappingPrayerThreeColumnBW,
 } from './renderers/permus-product/sentence-mapped-bw/sentence-mapped-bw';
-import { drawSubPrayers } from './renderers/sub-prayers';
+
 import {
   getDetailedPrayerData,
   hasPrayerIndexEntry,
@@ -188,9 +188,7 @@ export const drawPrayer = (
     if (prayerData) {
       currentContext = drawIntroductionInstruction(currentContext, prayerData, params);
 
-      if (prayerData['sub-prayers']) {
-        return drawSubPrayers(currentContext, prayerData, params);
-      }
+
 
         const wordMappings = prayerData['Word Mappings'];
       if (wordMappings) {

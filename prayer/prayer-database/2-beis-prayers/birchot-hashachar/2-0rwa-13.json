@@ -1,0 +1,56 @@
+{
+  "prayer-title": "Who has provided me with all my needs",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "שֶׁעָֽשָׂה",
+      "english": "Who has provided",
+      "transliteration": "she'asah"
+    },
+    "7": {
+      "hebrew": "לִי",
+      "english": "me with",
+      "transliteration": "li"
+    },
+    "8": {
+      "hebrew": "כָּל",
+      "english": "all",
+      "transliteration": "kol"
+    },
+    "9": {
+      "hebrew": "צָרְכִּי.",
+      "english": "my needs.",
+      "transliteration": "tzorki."
+    }
+  },
+  "prayer-id": "2-0rwa-13"
+}
