@@ -11,6 +11,56 @@ export async function GET(request: NextRequest) {
   const dateParam = searchParams.get('date') || new Date().toISOString();
   const styleParam = searchParams.get('style') || 'Recommended'; // Add style parameter
 
+  // Check for local dev PDF in development mode
+  if (process.env.NODE_ENV === 'development') {
+      try {
+          const fs = await import('fs');
+          const path = await import('path');
+          const localPdfPath = path.join(process.cwd(), 'dev-siddur.pdf');
+          
+          if (fs.existsSync(localPdfPath)) {
+              console.log('Serving local dev-siddur.pdf');
+              const fileBuffer = fs.readFileSync(localPdfPath);
+              const blob = new Blob([fileBuffer as unknown as ArrayBuffer], { type: 'application/pdf' });
+              
+              return new NextResponse(blob, {
+                  status: 200,
+                  headers: {
+                      'Content-Type': 'application/pdf',
+                      'Content-Disposition': 'attachment; filename="dev-siddur.pdf"',
+                  },
+              });
+          }
+      } catch (error) {
+          console.warn('Failed to serve local dev PDF:', error);
+      }
+  }
+
+  // Check for static blob first
+  try {
+      const { list } = await import('@vercel/blob');
+      const dateObj = new Date(dateParam);
+      const dateStr = dateObj.toISOString().split('T')[0];
+      const filename = `siddur-${dateStr}.pdf`;
+
+      // Only check for blob if we have a token (prod environment)
+      if (process.env.BLOB_READ_WRITE_TOKEN || process.env.my_siddur_1_READ_WRITE_TOKEN) {
+          const { blobs } = await list({
+              prefix: filename,
+              token: process.env.BLOB_READ_WRITE_TOKEN || process.env.my_siddur_1_READ_WRITE_TOKEN
+          });
+
+          const match = blobs.find(b => b.pathname === filename);
+          if (match) {
+              console.log(`Redirecting to static blob: ${match.url}`);
+              return NextResponse.redirect(match.url);
+          }
+      }
+  } catch (error) {
+      console.warn('Failed to check for static blob:', error);
+      // Continue to dynamic generation
+  }
+
   // Get user settings from profile if user is authenticated
   let userSettings = {};
   try {
