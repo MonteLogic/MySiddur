@@ -11,6 +11,25 @@ export default function LandingPage() {
   const [printBlackAndWhite, setPrintBlackAndWhite] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [latestSiddurUrl, setLatestSiddurUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch latest generated Siddur
+    const fetchLatestSiddur = async () => {
+      try {
+        const res = await fetch('/api/siddur/latest');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.url) {
+            setLatestSiddurUrl(data.url);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch latest Siddur:', error);
+      }
+    };
+    fetchLatestSiddur();
+  }, []);
 
   useEffect(() => {
     if (isLoaded && user) {
@@ -94,7 +113,13 @@ export default function LandingPage() {
 
       <div className="bg-gray-800 rounded-lg p-5 border border-gray-700 mb-6">
         <button
-          onClick={handleGenerateSiddur}
+          onClick={() => {
+            if (latestSiddurUrl) {
+              window.open(latestSiddurUrl, '_blank');
+            } else {
+              handleGenerateSiddur();
+            }
+          }}
           disabled={isGenerating}
           className="flex items-center justify-center w-full rounded-lg border border-blue-700 bg-blue-800/30 px-6 py-4 text-lg font-semibold text-blue-400 transition-all duration-150 hover:border-blue-600 hover:bg-blue-700/40 active:scale-95 active:bg-blue-600/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
         >
@@ -121,6 +146,11 @@ export default function LandingPage() {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
+            </>
+          ) : latestSiddurUrl ? (
+            <>
+              Download Daily Siddur
+              <span className="ml-2" aria-hidden="true">↓</span>
             </>
           ) : (
             <>
@@ -251,7 +281,13 @@ export default function LandingPage() {
 
       <div className="bg-gray-800 rounded-lg p-5 border border-gray-700 mb-6">
         <button
-          onClick={handleGenerateSiddur}
+          onClick={() => {
+            if (latestSiddurUrl) {
+              window.open(latestSiddurUrl, '_blank');
+            } else {
+              handleGenerateSiddur();
+            }
+          }}
           disabled={isGenerating}
           className="flex items-center justify-center w-full rounded-lg border border-blue-700 bg-blue-800/30 px-6 py-4 text-lg font-semibold text-blue-400 transition-all duration-150 hover:border-blue-600 hover:bg-blue-700/40 active:scale-95 active:bg-blue-600/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
         >
@@ -278,6 +314,11 @@ export default function LandingPage() {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
+            </>
+          ) : latestSiddurUrl ? (
+            <>
+              Download Daily Siddur
+              <span className="ml-2" aria-hidden="true">↓</span>
             </>
           ) : (
             <>

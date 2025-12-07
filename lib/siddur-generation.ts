@@ -17,11 +17,16 @@ export interface SiddurHistoryItem {
     timestamp: string;
     status: 'success' | 'failed';
     error?: string;
+    layout?: string;
+    colorScheme?: string;
 }
 
 const HISTORY_FILENAME = 'siddur-history.json';
 
-export async function generateAndUploadSiddurLogic(token?: string): Promise<GenerationResult> {
+export async function generateAndUploadSiddurLogic(
+    token?: string, 
+    options?: { style?: string; printBlackAndWhite?: boolean }
+): Promise<GenerationResult> {
     const tempPdfPath = path.join('/tmp', `temp-siddur-${Date.now()}.pdf`);
     
     try {
@@ -31,12 +36,12 @@ export async function generateAndUploadSiddurLogic(token?: string): Promise<Gene
             selectedDate: new Date().toISOString(),
             siddurFormat: SiddurFormat.NusachAshkenaz,
             userName: 'Production User',
-            style: 'Recommended',
+            style: options?.style || 'Recommended',
             pageMargins: 'normal' as const,
-            printBlackAndWhite: false,
+            printBlackAndWhite: options?.printBlackAndWhite ?? false,
         };
 
-        console.log('Generating PDF...');
+        console.log('Generating PDF with params:', JSON.stringify(params, null, 2));
         const pdfBytes = await generateSiddurPDF(params);
         console.log('PDF Generated. Size:', pdfBytes.length, 'bytes');
 
@@ -81,7 +86,7 @@ export async function generateAndUploadSiddurLogic(token?: string): Promise<Gene
         console.log('✅ Upload successful!', blob.url);
 
         // Update History
-        await updateHistory(blob.url, blobToken);
+        await updateHistory(blob.url, blobToken, params.style, params.printBlackAndWhite ? 'Black & White' : 'Color');
 
         return {
             success: true,
@@ -101,7 +106,7 @@ export async function generateAndUploadSiddurLogic(token?: string): Promise<Gene
     }
 }
 
-async function updateHistory(newUrl: string, token: string) {
+async function updateHistory(newUrl: string, token: string, layout: string, colorScheme: string) {
     try {
         console.log('Updating History...');
         // 1. Fetch existing history
@@ -128,7 +133,9 @@ async function updateHistory(newUrl: string, token: string) {
             date: new Date().toISOString().split('T')[0],
             url: newUrl,
             timestamp: new Date().toISOString(),
-            status: 'success'
+            status: 'success',
+            layout: layout,
+            colorScheme: colorScheme
         };
         
         // Prepend to keep newest first

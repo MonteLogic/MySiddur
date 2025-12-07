@@ -14,8 +14,9 @@ export async function validatePdfWhitespace(pdfPath: string): Promise<Validation
     console.log(`Analyzing PDF for blank spaces: ${pdfPath}`);
     const errors: string[] = [];
     
-    // Dynamic import for ESM module
-    // Note: This assumes pdfjs-dist is installed and available
+    // Use dynamic import for ESM module
+    // Using legacy build for Node.js environment
+    // @ts-ignore
     const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
     
     const data = new Uint8Array(fs.readFileSync(pdfPath));
