@@ -31,6 +31,11 @@ export const getSecondMenu = (
         description: 'Edit and upload prayer JSONs',
       },
       {
+        name: 'Prayer Admin (Admin)',
+        slug: 'admin',
+        description: 'Manage system and automated functions',
+      },
+      {
         name: 'Nusach',
         slug: 'nusach-viz',
         description: 'Prayer Order (Nusach) Information',
