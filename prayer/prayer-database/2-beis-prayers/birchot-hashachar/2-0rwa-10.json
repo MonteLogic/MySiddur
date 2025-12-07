@@ -1,0 +1,46 @@
+{
+  "prayer-title": "Who straightens the bent",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "זוֹקֵף",
+      "english": "Who straightens",
+      "transliteration": "zokef"
+    },
+    "7": {
+      "hebrew": "כְּפוּפִים.",
+      "english": "the bent.",
+      "transliteration": "k'fufim."
+    }
+  },
+  "prayer-id": "2-0rwa-10"
+}

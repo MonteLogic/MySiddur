@@ -1,0 +1,51 @@
+{
+  "prayer-title": "Who has not made me a woman (Men)",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "שֶׁלֹּא",
+      "english": "Who has not",
+      "transliteration": "shelo"
+    },
+    "7": {
+      "hebrew": "עָשַֽׂנִי",
+      "english": "made me",
+      "transliteration": "asani"
+    },
+    "8": {
+      "hebrew": "אִשָּׁה.",
+      "english": "a woman.",
+      "transliteration": "ishah."
+    }
+  },
+  "prayer-id": "2-0rwa-5"
+}

@@ -1,0 +1,46 @@
+{
+  "prayer-title": "Who clothes the naked",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "מַלְבִּישׁ",
+      "english": "Who clothes",
+      "transliteration": "malbish"
+    },
+    "7": {
+      "hebrew": "עֲרֻמִּים.",
+      "english": "the naked.",
+      "transliteration": "arumim."
+    }
+  },
+  "prayer-id": "2-0rwa-8"
+}

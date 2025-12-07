@@ -1,0 +1,56 @@
+{
+  "prayer-title": "Who spreads out the earth upon the waters",
+  "Word Mappings": {
+    "0": {
+      "hebrew": "בָּרוּךְ",
+      "english": "Blessed",
+      "transliteration": "Baruch"
+    },
+    "1": {
+      "hebrew": "אַתָּה",
+      "english": "are You,",
+      "transliteration": "atah"
+    },
+    "2": {
+      "hebrew": "יְיָ",
+      "english": "ETERNAL",
+      "transliteration": "Ad-nai"
+    },
+    "3": {
+      "hebrew": "אֱלֹהֵֽינוּ",
+      "english": "our G-d,",
+      "transliteration": "Eloheinu"
+    },
+    "4": {
+      "hebrew": "מֶֽלֶךְ",
+      "english": "King",
+      "transliteration": "melekh"
+    },
+    "5": {
+      "hebrew": "הָעוֹלָם,",
+      "english": "of the universe,",
+      "transliteration": "ha'olam,"
+    },
+    "6": {
+      "hebrew": "רוֹקַע",
+      "english": "Who spreads out",
+      "transliteration": "roka"
+    },
+    "7": {
+      "hebrew": "הָאָֽרֶץ",
+      "english": "the earth",
+      "transliteration": "ha'aretz"
+    },
+    "8": {
+      "hebrew": "עַל",
+      "english": "upon",
+      "transliteration": "al"
+    },
+    "9": {
+      "hebrew": "הַמָּֽיִם.",
+      "english": "the waters.",
+      "transliteration": "hamayim."
+    }
+  },
+  "prayer-id": "2-0rwa-11"
+}
