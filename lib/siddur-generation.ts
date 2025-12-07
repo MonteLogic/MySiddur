@@ -78,9 +78,7 @@ export async function generateAndUploadSiddurLogic(
         const blob = await put(filename, Buffer.from(pdfBytes), {
             access: 'public',
             token: blobToken,
-            addRandomSuffix: false // We want a predictable name? Or maybe true to avoid caching issues? 
-            // Let's keep it simple. If we run multiple times a day, maybe we want timestamps.
-            // But the filename has the date.
+            addRandomSuffix: true // Ensure unique filename for every generation
         });
 
         console.log('✅ Upload successful!', blob.url);
@@ -150,7 +148,8 @@ async function updateHistory(newUrl: string, token: string, layout: string, colo
         await put(HISTORY_FILENAME, JSON.stringify(history, null, 2), {
             access: 'public',
             token: token,
-            addRandomSuffix: false // Overwrite
+            addRandomSuffix: false, // Keep filename constant
+            allowOverwrite: true // Explicitly allow overwriting the history file
         });
         
         console.log('History updated.');

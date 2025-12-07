@@ -62,6 +62,9 @@ const nextConfig = {
 
     return config;
   },
+  experimental: {
+    serverComponentsExternalPackages: ['pdfjs-dist'],
+  },
 };
 
 module.exports = nextConfig;
