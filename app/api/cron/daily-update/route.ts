@@ -15,18 +15,36 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const result = await generateAndUploadSiddurLogic();
+        // 1. Generate Color Version
+        console.log('Starting Daily Update: Color Version');
+        const colorResult = await generateAndUploadSiddurLogic(undefined, { printBlackAndWhite: false });
+        
+        // 2. Generate Black & White Version
+        console.log('Starting Daily Update: Black & White Version');
+        const bwResult = await generateAndUploadSiddurLogic(undefined, { printBlackAndWhite: true });
 
-        if (result.success) {
+        const results = {
+            color: {
+                success: colorResult.success,
+                url: colorResult.url,
+                error: colorResult.error
+            },
+            bw: {
+                success: bwResult.success,
+                url: bwResult.url,
+                error: bwResult.error
+            }
+        };
+
+        if (colorResult.success && bwResult.success) {
             return NextResponse.json({ 
-                message: 'Siddur generated and uploaded successfully', 
-                url: result.url 
+                message: 'Both Siddur versions generated and uploaded successfully', 
+                results
             });
         } else {
             return NextResponse.json({ 
-                error: 'Generation failed', 
-                details: result.error,
-                validationErrors: result.validationErrors 
+                error: 'One or more generations failed', 
+                results
             }, { status: 500 });
         }
     } catch (error: any) {
