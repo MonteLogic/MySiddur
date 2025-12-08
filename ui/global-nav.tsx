@@ -330,7 +330,12 @@ export function GlobalNav({ userData, subscriptionData }: GlobalNavProps): JSX.E
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
    
-  const secondMenu = getSecondMenu(userData?.userID || '');
+  // Use admin status from server-side userData
+  const isAdmin = userData?.isAdmin ?? false;
+  
+  console.log('[GlobalNav] userData:', userData, 'isAdmin:', isAdmin);
+  
+  const secondMenu = getSecondMenu(userData?.userID || '', isAdmin);
   const resolveSlug = useResolveSlug();
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);

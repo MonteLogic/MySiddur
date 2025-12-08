@@ -3,7 +3,7 @@ import Byline from '#/ui/byline';
 import { GlobalNav } from '#/ui/global-nav';
 import { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import { cache } from 'react';
 import { Analytics } from '@vercel/analytics/next';
 import titles from '#/strings.json';
@@ -36,15 +36,39 @@ const getUserData = cache(async () => {
         description: 'This description comes from the server',
         userID: '',
         dbUserId: null,
+        isAdmin: false,
       };
     }
+
+    // Fetch the user directly from Clerk API to get guaranteed access to privateMetadata
+    const user = await clerkClient.users.getUser(clerkUserId);
+    
+    // Check admin status from private metadata
+    const privateMetadata = user.privateMetadata;
+    const isAdmin = privateMetadata?.auth === 'admin';
+
+    console.log('[getUserData] Admin check:', {
+      userId: clerkUserId,
+      auth: privateMetadata?.auth,
+      isAdmin
+    });
+
+    return {
+      title: 'User logged in',
+      description: 'This description comes from the server',
+      userID: clerkUserId,
+      dbUserId: clerkUserId,
+      isAdmin,
+    };
   } catch (error) {
     // Clerk not configured or failed to load
+    console.error('[getUserData] Error:', error);
     return {
       title: 'No user logged in',
       description: 'This description comes from the server',
       userID: '',
       dbUserId: null,
+      isAdmin: false,
     };
   }
 });
