@@ -5,6 +5,7 @@ export type UserData = {
   title: string;
   description: string;
   userID: string;
+  isAdmin?: boolean;
 };
 
 export const getUserID = cache(async () => {

@@ -44,7 +44,7 @@ function checkUserRole(session: { user: { organizationMemberships: string | any[
         console.log('User role found:', role);
         return role;
       } else {
-        console.log('User role not found in the organization memberships.');
+        console.log('User role not found in the organization memberships.')
         return null;
       }
     }
@@ -55,5 +55,18 @@ function checkUserRole(session: { user: { organizationMemberships: string | any[
     // Return null if the session, user data, or organizationMemberships is not available
     return null;
   }
+
+  /**
+   * Check if a user has admin privileges based on Clerk private metadata
+   * @param session - The Clerk session object
+   * @returns true if user is an admin, false otherwise
+   */
+  function isUserAdmin(session: any): boolean {
+    if (!session?.user?.privateMetadata) {
+      return false;
+    }
+    
+    return session.user.privateMetadata.auth === 'admin';
+  }
   
-  export { checkUserRole, getUserRole };
+  export { checkUserRole, getUserRole, isUserAdmin };

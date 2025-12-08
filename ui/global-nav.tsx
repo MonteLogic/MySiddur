@@ -1,4 +1,6 @@
+
 'use client';
+
 import { getSecondMenu, useResolveSlug, type Item } from '#/lib/second-menu';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
@@ -9,36 +11,61 @@ import Byline from './byline';
 import { UserData } from '#/app/utils/getUserID';
 import { CBudLogo } from './cbud-logo';
 import titles from '#/strings.json';
-import { ClerkLoading, UserButton } from '@clerk/nextjs';
+import { ClerkLoading, useClerk } from '@clerk/nextjs';
 import { useSession, useUser } from '@clerk/nextjs';
 import { Search, Grid3x3, Bell, ChevronDown } from 'lucide-react';
 import TaskBar from './task-bar';
 import Image from 'next/image';
 
+/**
+ * Props for the GlobalNav component.
+ */
 interface GlobalNavProps {
+  /** The current user's data */
   userData?: UserData;
+  /** Subscription details passed down to the TaskBar */
   subscriptionData?: any;
 }
 
+/**
+ * Props for the ProfileMenu component.
+ */
 interface ProfileMenuProps {
+  /** Indicates if the menu is currently open */
   isOpen: boolean;
+  /** Callback to toggle the open/closed state */
   onToggle: () => void;
+  /** Callback to explicitly close the menu */
   onClose: () => void;
+  /** Subscription data passed from the parent for the TaskBar */
   subscriptionData?: any;
 }
 
+/**
+ * Props for the SearchBar component.
+ */
 interface SearchBarProps {
+  /** Optional custom class names */
   className?: string;
 }
 
+/**
+ * Props for the reusable IconButton component.
+ */
 interface IconButtonProps {
+  /** Function to handle button clicks */
   onClick?: () => void;
+  /** Accessible label for screen readers */
   'aria-label': string;
+  /** The icon element to display */
   icon: React.ReactNode;
+  /** Optional custom class names */
   className?: string;
 }
 
-// Reusable Icon Button Component
+/**
+ * A reusable, rounded icon button component used in the top navigation bar.
+ */
 function IconButton({ onClick, 'aria-label': ariaLabel, icon, className = '' }: IconButtonProps) {
   return (
     <button
@@ -54,7 +81,9 @@ function IconButton({ onClick, 'aria-label': ariaLabel, icon, className = '' }: 
   );
 }
 
-// Search Bar Component
+/**
+ * A search input component with an integrated search icon.
+ */
 function SearchBar({ className = '' }: SearchBarProps) {
   return (
     <div className={clsx('relative w-full', className)}>
@@ -68,10 +97,14 @@ function SearchBar({ className = '' }: SearchBarProps) {
   );
 }
 
-// Profile Avatar Component
+/**
+ * Renders the user's profile image or initials.
+ * Handles loading states and missing user data gracefully.
+ * * @param props - Component props
+ * @param props.size - The width/height of the avatar in pixels (default: 36)
+ */
 function ProfileAvatar({ size = 36 }: { size?: number }) {
   const { user, isLoaded: isUserLoaded } = useUser();
-
 
   if (!isUserLoaded) {
     return <div className="h-full w-full bg-gray-600 animate-pulse" />;
@@ -97,23 +130,35 @@ function ProfileAvatar({ size = 36 }: { size?: number }) {
     );
   }
 
-    const initial = user?.firstName?.[0] || 
-                   user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 
-                   'U';
-    return (
-      <div className="h-full w-full bg-gray-600 flex items-center justify-center text-white text-sm font-medium">
-        {initial}
-      </div>
-    );
+  const initial = user?.firstName?.[0] || 
+                 user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || 
+                 'U';
+  return (
+    <div className="h-full w-full bg-gray-600 flex items-center justify-center text-white text-sm font-medium">
+      {initial}
+    </div>
+  );
 }
 
-// Profile Menu Dropdown Content
-function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
+/**
+ * The internal content of the Profile Menu.
+ * Displays user details, the TaskBar, and the Sign Out button.
+ */
+function ProfileMenuContent({ subscriptionData, onClose }: { subscriptionData?: any; onClose: () => void }) {
   const { user, isLoaded: isUserLoaded } = useUser();
+  const { signOut } = useClerk();
 
+  /**
+   * Handles the sign-out process.
+   * Closes the menu immediately to prevent UI flicker, then triggers Clerk sign-out.
+   */
+  const handleSignOut = async () => {
+    onClose();
+    await signOut();
+  };
 
   return (
-    <div className="p-4">
+    <div className="p-4 pointer-events-auto">
       {isUserLoaded && user && (
         <div className="mb-4 pb-4 border-b border-gray-700 flex items-center gap-x-3">
           {user?.imageUrl ? (
@@ -137,16 +182,6 @@ function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
               {user?.emailAddresses[0]?.emailAddress}
             </p>
           </div>
-
-          <UserButton 
-            afterSignOutUrl="/" 
-            appearance={{
-              elements: {
-                avatarBox: "h-8 w-8"
-              }
-            }} 
-          />
-
         </div>
       )}
       <ClerkLoading>Loading ...</ClerkLoading>
@@ -162,30 +197,28 @@ function ProfileMenuContent({ subscriptionData }: { subscriptionData?: any }) {
           },
         } : undefined}
       />
+      
+      <div className="mt-4 pt-4 border-t border-gray-700">
+        <button
+          onClick={handleSignOut}
+          className="w-full px-4 py-2 text-sm font-medium text-gray-200 bg-gray-800 hover:bg-gray-700 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+        >
+          Sign Out
+        </button>
+      </div>
     </div>
   );
 }
 
-// Profile Menu Component
+/**
+ * The main Profile Menu trigger and dropdown container.
+ * Uses an invisible backdrop to handle 'click outside' logic reliably.
+ */
 function ProfileMenu({ isOpen, onToggle, onClose, subscriptionData }: ProfileMenuProps) {
-  const menuRef = useRef<HTMLDivElement>(null);
   const { session, isLoaded } = useSession();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen, onClose]);
+  // We no longer need the useEffect document listener!
+  // The Backdrop div handles the closing logic now.
 
   if (!isLoaded) {
     return <div className="h-9 w-9 rounded-full bg-gray-800 animate-pulse" />;
@@ -203,14 +236,13 @@ function ProfileMenu({ isOpen, onToggle, onClose, subscriptionData }: ProfileMen
   }
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative">
       <button
         onClick={(e) => {
           e.preventDefault();
-          e.stopPropagation();
           onToggle();
         }}
-        className="flex items-center gap-x-1 h-9 px-1 rounded-lg hover:bg-gray-800 transition-colors"
+        className="flex items-center gap-x-1 h-9 px-1 rounded-lg hover:bg-gray-800 transition-colors z-[101] relative"
         aria-expanded={isOpen}
         aria-haspopup="dialog"
         type="button"
@@ -227,22 +259,44 @@ function ProfileMenu({ isOpen, onToggle, onClose, subscriptionData }: ProfileMen
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 rounded-lg border border-gray-700 bg-gray-900 shadow-lg z-50 max-h-[80vh] overflow-y-auto">
-          <ProfileMenuContent subscriptionData={subscriptionData} />
-        </div>
+        <>
+          {/* INVISIBLE BACKDROP 
+            This fixed div covers the entire screen behind the modal.
+            Clicking it triggers onClose. 
+          */}
+          <div 
+            className="fixed inset-0 z-[90] cursor-default" 
+            onClick={onClose}
+          />
+
+          {/* MODAL CONTENT
+            Z-Index [100] ensures it sits ON TOP of the backdrop [90].
+            We stop propagation just in case, but the backdrop naturally isolates it.
+          */}
+          <div 
+            className="absolute right-0 mt-2 w-80 rounded-lg border border-gray-700 bg-gray-900 shadow-lg z-[100] max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ProfileMenuContent subscriptionData={subscriptionData} onClose={onClose} />
+          </div>
+        </>
       )}
     </div>
   );
 }
-
-// Navigation Menu Component
+/**
+ * Renders the side navigation menu containing categories and links.
+ */
 function NavigationMenu({ 
   menu, 
   onClose, 
   resolveSlug 
 }: { 
+  /** The menu structure to render */
   menu: ReturnType<typeof getSecondMenu>;
+  /** Callback to close the mobile menu on selection */
   onClose: () => void;
+  /** Helper to resolve item slugs to URLs */
   resolveSlug: ReturnType<typeof useResolveSlug>;
 }) {
   return (
@@ -268,11 +322,20 @@ function NavigationMenu({
   );
 }
 
+/**
+ * The main Global Navigation component.
+ * Manages the top bar, sidebar (on desktop), and mobile drawer.
+ */
 export function GlobalNav({ userData, subscriptionData }: GlobalNavProps): JSX.Element {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+   
+  // Use admin status from server-side userData
+  const isAdmin = userData?.isAdmin ?? false;
   
-  const secondMenu = getSecondMenu(userData?.userID || '');
+  console.log('[GlobalNav] userData:', userData, 'isAdmin:', isAdmin);
+  
+  const secondMenu = getSecondMenu(userData?.userID || '', isAdmin);
   const resolveSlug = useResolveSlug();
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -379,13 +442,20 @@ export function GlobalNav({ userData, subscriptionData }: GlobalNavProps): JSX.E
   );
 }
 
+/**
+ * A single navigation item link.
+ * Handles active state styling based on the current URL segment.
+ */
 function GlobalNavItem({
   item,
   close,
   resolveSlug,
 }: {
+  /** The navigation item data */
   item: Item;
+  /** Callback to close the menu (used for mobile) */
   close: () => false | void;
+  /** Helper function to generate the item's HREF */
   resolveSlug: (item: Item) => string;
 }) {
   const segment = useSelectedLayoutSegment();
