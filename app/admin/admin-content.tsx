@@ -85,7 +85,7 @@ export default function AdminPageContent({ history }: { history: any[] }) {
                                                     rel="noopener noreferrer"
                                                     className="text-blue-400 hover:text-blue-300 hover:underline"
                                                 >
-                                                    Download PDF
+                                                    View PDF
                                                 </a>
                                             )}
                                         </td>

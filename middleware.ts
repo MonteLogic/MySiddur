@@ -12,6 +12,7 @@ const clerkMiddleware = authMiddleware({
     '/',
     '/api/webhooks(.*)',
     '/api/generate-basic-siddur',
+    '/api/siddur/latest',
   ],
 });
 
