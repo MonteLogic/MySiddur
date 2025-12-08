@@ -75,7 +75,7 @@ function GenerateButton({ isGenerating, onGenerate }: { isGenerating: boolean; o
 function PreparingMessage() {
   return (
     <div className="text-center py-4">
-      <p className="text-gray-400">Today's Siddur is being prepared.</p>
+      <p className="text-gray-400">Today&#39;s Siddur is being prepared.</p>
       <p className="text-sm text-gray-500 mt-2">Please check back later.</p>
     </div>
   );
