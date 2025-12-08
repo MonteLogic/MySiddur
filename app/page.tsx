@@ -17,11 +17,13 @@ export default function LandingPage() {
     // Fetch latest generated Siddur
     const fetchLatestSiddur = async () => {
       try {
-        const res = await fetch('/api/siddur/latest');
+        const res = await fetch(`/api/siddur/latest?printBlackAndWhite=${printBlackAndWhite}`);
         if (res.ok) {
           const data = await res.json();
           if (data.success && data.url) {
             setLatestSiddurUrl(data.url);
+          } else {
+            setLatestSiddurUrl(null); // Reset if not found
           }
         }
       } catch (error) {
@@ -29,7 +31,7 @@ export default function LandingPage() {
       }
     };
     fetchLatestSiddur();
-  }, []);
+  }, [printBlackAndWhite]);
 
   useEffect(() => {
     if (isLoaded && user) {

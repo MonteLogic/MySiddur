@@ -3,18 +3,27 @@ import { getHistory } from '@/lib/siddur-generation';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const printBlackAndWhite = searchParams.get('printBlackAndWhite') === 'true';
+        const targetColorScheme = printBlackAndWhite ? 'Black & White' : 'Color';
+
         const history = await getHistory();
-        // Find the first successful entry
-        const latest = history.find(item => item.status === 'success' && item.url);
+        // Find the first successful entry matching the color scheme
+        const latest = history.find(item => 
+            item.status === 'success' && 
+            item.url && 
+            (item.colorScheme === targetColorScheme || (!item.colorScheme && !printBlackAndWhite)) // Fallback for old entries
+        );
 
         if (latest) {
             return NextResponse.json({
                 success: true,
                 url: latest.url,
                 date: latest.date,
-                timestamp: latest.timestamp
+                timestamp: latest.timestamp,
+                colorScheme: latest.colorScheme
             });
         } else {
             return NextResponse.json({
