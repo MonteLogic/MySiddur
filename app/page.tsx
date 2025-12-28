@@ -48,7 +48,7 @@ function DownloadButton({ url }: { url: string }) {
       onClick={() => window.open(url, '_blank')}
       className="flex items-center justify-center w-full rounded-lg border border-blue-700 bg-blue-800/30 px-6 py-4 text-lg font-semibold text-blue-400 transition-all duration-150 hover:border-blue-600 hover:bg-blue-700/40 active:scale-95 active:bg-blue-600/50"
     >
-      Download Daily Siddur
+      Get Your Bespoke Siddur
       <span className="ml-2" aria-hidden="true">↓</span>
     </button>
   );
