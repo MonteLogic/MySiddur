@@ -6,25 +6,31 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { cache } from 'react';
 import { Analytics } from '@vercel/analytics/next';
+import * as Sentry from '@sentry/nextjs';
 import titles from '#/strings.json';
 
-export const metadata: Metadata = {
-  title: {
-    default: titles.title,
-    template: '%s | MonteLogic',
-  },
-  description:
-    titles.title +
-    ' is an online system for managing contractors concerns. These concerns include scheduling, timecards, route management and time management. This easy to use app will make truck drivers and route managers working lives much easier.',
-  openGraph: {
-    title: titles.title,
-    description: titles.description,
-    images: [`/api/og?title=Next.js App Router`],
-  },
-  twitter: {
-    card: 'summary_large_image',
-  },
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: {
+      default: titles.title,
+      template: '%s | MonteLogic',
+    },
+    description:
+      titles.title +
+      ' is an online system for managing contractors concerns. These concerns include scheduling, timecards, route management and time management. This easy to use app will make truck drivers and route managers working lives much easier.',
+    openGraph: {
+      title: titles.title,
+      description: titles.description,
+      images: [`/api/og?title=Next.js App Router`],
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+    other: {
+      ...Sentry.getTraceData(),
+    },
+  };
+}
 
 const getUserData = cache(async () => {
   try {
