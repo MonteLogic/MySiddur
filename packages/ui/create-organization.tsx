@@ -3,7 +3,7 @@
 import { useOrganizationList } from '@clerk/nextjs';
 import { FormEventHandler, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { uuid } from '#/utils/dbUtils';
+import { uuid } from '#/packages/@mysiddur/core/core/utils/dbUtils';
 
 /**
  * Generates a random alphanumeric ID for organization name

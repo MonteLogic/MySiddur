@@ -1,7 +1,7 @@
 // app/blog/layout.tsx
 import { TabGroupBlog } from '#/ui/tab-group-blog';
 import React from 'react';
-import { getBlogCategoryTabs } from '#/utils/blog'; // Adjust the import path
+import { getBlogCategoryTabs } from '#/packages/@mysiddur/core/core/utils/blog'; // Adjust the import path
 
 const title = 'MonteLogic Blog';
 

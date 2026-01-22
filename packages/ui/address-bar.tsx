@@ -2,7 +2,7 @@
 'use client';
 import { ClerkLoading, UserButton } from '@clerk/nextjs';
 import { useSession } from '@clerk/nextjs';
-import { checkUserRole } from '#/utils/UserUtils';
+import { checkUserRole } from '#/packages/@mysiddur/core/core/utils/UserUtils';
 import TaskBar from './task-bar';
 import Link from 'next/link';
 

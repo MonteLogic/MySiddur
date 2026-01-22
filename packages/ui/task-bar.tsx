@@ -4,7 +4,7 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { ChevronDown, CreditCard, CheckCircle } from 'lucide-react';
 import { useSession } from '@clerk/nextjs';
-import { checkUserRole } from '#/utils/UserUtils';
+import { checkUserRole } from '#/packages/@mysiddur/core/core/utils/UserUtils';
 import { useRouter } from 'next/navigation';
 import { useTimecardsMetadata } from '#/ui/clerk/clerk-metadata';
 import Link from 'next/link';
