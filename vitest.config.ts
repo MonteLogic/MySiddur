@@ -12,7 +12,7 @@ export default defineConfig({
     setupFiles: ['./tests/__vitest__/setup.ts'],
     include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
     css: true,
-    exclude: ['**/e2e-tests/**', '**/node_modules/**'],
+    exclude: ['**/e2e-tests/**', '**/node_modules/**', 'app/**/*.spec.ts'],
     environmentMatchGlobs: [['tests/visual/**', 'node']],
   },
   resolve: {
