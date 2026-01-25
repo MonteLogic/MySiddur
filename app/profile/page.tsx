@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useUser, UserButton } from '@clerk/nextjs';
 import { Nusach } from '#/lib/siddur/types/siddurTypes';
-import { JewishLearningProfile } from '#/types/UserTypes';
+import { JewishLearningProfile } from '#/packages/types/UserTypes';
 import { Download, ExternalLink } from 'lucide-react';
 
 interface UserProfile {

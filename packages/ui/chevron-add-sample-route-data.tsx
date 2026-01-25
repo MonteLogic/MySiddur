@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import sampleRouteData from '#/example-data/example-route-data-1.json';
-import { Route } from '#/types/RouteTypes';
-import { ShiftSlot } from '#/types/UserTypes';
+import { Route } from '#/packages/types/RouteTypes';
+import { ShiftSlot } from '#/packages/types/UserTypes';
 import { uuid } from '#/packages/@mysiddur/core/core/utils/dbUtils';
 
 interface ChevronAddSampleRouteDataProps {

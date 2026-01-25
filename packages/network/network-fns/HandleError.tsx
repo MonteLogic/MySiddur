@@ -1,4 +1,4 @@
-import { SummaryObject } from '#/types/SummaryTypes';
+import { SummaryObject } from '#/packages/types/SummaryTypes';
 
 export const handleError = (
   error: string,

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ImageModalProps } from '#/types/ImageGalleryTypes';
+import { ImageModalProps } from '#/packages/types/ImageGalleryTypes';
 // import required modules
 import { Pagination } from 'swiper/modules';
 import Image from 'next/image';

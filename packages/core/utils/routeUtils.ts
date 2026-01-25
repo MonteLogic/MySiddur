@@ -1,5 +1,5 @@
-import { RouteShiftInfoType } from '#/types/RouteShiftInfoTypes';
-import { Route } from '#/types/RouteTypes';
+import { RouteShiftInfoType } from '#/packages/types/RouteShiftInfoTypes';
+import { Route } from '#/packages/types/RouteTypes';
 
 export const findSelectedRouteInfo = (
   shiftTimes: RouteShiftInfoType[],

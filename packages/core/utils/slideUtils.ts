@@ -1,4 +1,4 @@
-import { WorkTimeShiftType } from '#/types/WorkTimeShiftTypes';
+import { WorkTimeShiftType } from '#/packages/types/WorkTimeShiftTypes';
 import { checkShiftStatus } from './shiftUtils';
 
 const SLIDER_ITERATOR = 20;

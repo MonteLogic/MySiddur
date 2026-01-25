@@ -1,5 +1,5 @@
-import { AllocatedShifts, ShiftSlotsData } from '#/types/ScheduleTypes';
-import { ShiftSlot } from '#/types/UserTypes';
+import { AllocatedShifts, ShiftSlotsData } from '#/packages/types/ScheduleTypes';
+import { ShiftSlot } from '#/packages/types/UserTypes';
 
 export const getActiveShifts = (shiftsSlots: any) => {
   const activeShifts: AllocatedShifts = {};

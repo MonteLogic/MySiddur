@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { clerkClient } from '@clerk/nextjs/server';
 import { auth } from '@clerk/nextjs';
-import { Nusach } from '#/lib/siddur/types/siddurTypes';
+// import { Nusach } from '#/lib/siddur/types/siddurTypes';
+import { Nusach } from '@mysiddur/core';
+
 
 interface ProfileUpdateData {
   firstName?: string;

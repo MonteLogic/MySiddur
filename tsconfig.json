@@ -58,6 +58,12 @@
       ],
       "@mysiddur/scripts/*": [
         "./packages/scripts/*"
+      ],
+      "@mysiddur/types": [
+        "./packages/types/index.ts"
+      ],
+      "@mysiddur/types/*": [
+        "./packages/types/*"
       ]
     },
     "plugins": [

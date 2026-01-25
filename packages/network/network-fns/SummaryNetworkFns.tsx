@@ -1,4 +1,4 @@
-import { SummaryObject } from '#/types/SummaryTypes';
+import { SummaryObject } from '#/packages/types/SummaryTypes';
 import { handleError } from './HandleError';
 import { API_ENDPOINTS } from './constants';
 

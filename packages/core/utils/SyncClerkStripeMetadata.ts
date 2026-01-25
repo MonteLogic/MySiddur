@@ -1,32 +1,39 @@
-import { clerkClient } from '@clerk/nextjs';
-import { SubscriptionMetadata } from '#/types/StripeClerkTypes';
 
+// packages/core/src/server/subscription.ts
+import 'server-only'; 
+import { clerkClient } from '@clerk/nextjs/server'; // Explicit server import
+import type { SubscriptionMetadata } from '@mysiddur/types'; // Use workspace protocol
+
+/**
+ * Updates subscription metadata in Clerk.
+ * Note: This must only be called from Server Actions or API Routes.
+ */
 export async function updateUserSubscriptionMetadata(
   userId: string,
   subscriptionData: Partial<SubscriptionMetadata>,
 ): Promise<void> {
   try {
-    const user = await clerkClient.users.getUser(userId);
+    const client = clerkClient; // clerkClient is an object in v4/v5 nextjs SDK
+    const user = await client.users.getUser(userId);
 
-    // Get existing metadata to merge with new data
-    const existingMetadata = user.privateMetadata?.subscription || {};
-
-    // Merge existing metadata with new subscription data
-    const updatedMetadata = {
-      ...existingMetadata,
+    // Deep merge the specific 'subscription' key
+    const existingSubscription = (user.privateMetadata?.subscription as SubscriptionMetadata) || {};
+    
+    const updatedSubscription = {
+      ...existingSubscription,
       ...subscriptionData,
       updatedAt: new Date().toISOString(),
     };
 
-    // Update user's private metadata
-    await clerkClient.users.updateUser(userId, {
+    await client.users.updateUser(userId, {
       privateMetadata: {
-        ...user.privateMetadata,
-        subscription: updatedMetadata,
+        ...user.privateMetadata, // Preserve other keys (e.g., 'role', 'onboarding')
+        subscription: updatedSubscription,
       },
     });
   } catch (error) {
-    console.error('Error updating user subscription metadata:', error);
-    throw new Error('Failed to update subscription metadata');
+    // Log the actual error for debugging, but throw a clean message for the UI
+    console.error(`[Clerk/Stripe Sync Error] for user ${userId}:`, error);
+    throw new Error('Failed to synchronize subscription data.');
   }
 }

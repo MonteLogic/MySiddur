@@ -14,7 +14,7 @@ import {
   CreditCard,
   Package,
 } from 'lucide-react';
-import type { ProductPlan, PlanId, ProductConfig } from '#/types/ProductTypes';
+import type { ProductPlan, PlanId, ProductConfig } from '#/packages/types/ProductTypes';
 import products from '#/example-data/products.json' assert { type: 'json' };
 
 const typedProducts = products as ProductConfig;

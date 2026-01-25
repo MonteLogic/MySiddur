@@ -1,4 +1,4 @@
-import { WorkTimeShiftType } from '#/types/WorkTimeShiftTypes';
+import { WorkTimeShiftType } from '#/packages/types/WorkTimeShiftTypes';
 import { isSameDay } from './dateUtils';
 
 export const checkShiftStatus = (

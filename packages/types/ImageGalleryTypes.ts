@@ -1,3 +1,4 @@
+import React from 'react';
 export interface ImageModalProps {
     imgKey: number;
     imgStringArray: string[];

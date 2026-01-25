@@ -1,3 +1,5 @@
+import React from 'react';
+
 // Updated types for Clerk metadata-based storage
 
 export interface AllocatedShifts {
