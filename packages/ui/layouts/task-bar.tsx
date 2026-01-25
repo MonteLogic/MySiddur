@@ -1,6 +1,8 @@
 /**
  * @file PaymentStatusSwitcher.tsx
  */
+'use client';
+
 import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { ChevronDown, CreditCard, CheckCircle } from 'lucide-react';
 import { useSession } from '@clerk/nextjs';
