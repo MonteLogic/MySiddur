@@ -1,5 +1,5 @@
 {
-  "name": "@siddur/core",
+  "name": "@mysiddur/core",
   "version": "1.0.0",
   "description": "Core Siddur generation, PDF utilities, and business logic",
   "private": true,

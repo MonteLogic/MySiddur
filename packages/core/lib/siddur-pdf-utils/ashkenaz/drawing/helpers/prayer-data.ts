@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { loadPrayerIndexForDate } from '#/lib/custom-siddur-date-gen/layout-resolver';
+import { loadPrayerIndexForDate } from '@mysiddur/core/custom-siddur-date-gen/layout-resolver';
+
+
 
 // This file needs to be TSDoc compliant.
 
@@ -24,8 +26,8 @@ export function initializePrayerIndex(date?: Date): void {
   try {
     prayerIndex = loadPrayerIndexForDate(targetDate);
     console.log(`[INFO] Prayer index initialized for ${targetDate.toDateString()}`);
-  } catch (error) {
-    console.error('[ERROR] Failed to initialize prayer index:', error);
+  } catch (_error) {
+    console.error('[ERROR] Failed to initialize prayer index:', _error);
     prayerIndex = {};
   }
 }
@@ -36,7 +38,7 @@ initializePrayerIndex();
 export const hasPrayerIndexEntry = (prayerId: string | undefined): prayerId is string =>
   Boolean(prayerId && prayerIndex[prayerId]);
 
-export const getDetailedPrayerData = (prayerId: string): any | null => {
+export const getDetailedPrayerData = (prayerId: string): unknown | null => {
   try {
     const filePath = path.join(
       process.cwd(),
@@ -48,14 +50,16 @@ export const getDetailedPrayerData = (prayerId: string): any | null => {
   } catch (error) {
     console.warn(
       `[WARNING] Could not load detailed data for prayer ID: ${prayerId}. Falling back to simple text.`,
+      error instanceof Error ? error.message : String(error)
     );
     return null;
   }
 };
 
-export const resolveDisplayStyle = (prayerData: any, selectedStyle: string): string => {
-  if (prayerData?.styles) {
-    if (prayerData.styles[selectedStyle]) {
+export const resolveDisplayStyle = (prayerData: unknown, selectedStyle: string): string => {
+  if (prayerData && typeof prayerData === 'object' && 'styles' in prayerData) {
+    const styles = (prayerData as Record<string, unknown>).styles;
+    if (styles && typeof styles === 'object' && selectedStyle in styles) {
       return selectedStyle;
     }
     return 'Recommended';

@@ -29,34 +29,34 @@
       "@/*": [
         "./*"
       ],
-      "@MySiddur/core": [
+      "@mysiddur/core": [
         "./packages/core/lib/index.ts"
       ],
-      "@MySiddur/core/*": [
+      "@mysiddur/core/*": [
         "./packages/core/lib/*"
       ],
-      "@MySiddur/prayer": [
+      "@mysiddur/prayer": [
         "./packages/prayer/index.ts"
       ],
-      "@MySiddur/prayer/*": [
+      "@mysiddur/prayer/*": [
         "./packages/prayer/*"
       ],
-      "@MySiddur/network": [
+      "@mysiddur/network": [
         "./packages/network/index.ts"
       ],
-      "@MySiddur/network/*": [
+      "@mysiddur/network/*": [
         "./packages/network/*"
       ],
-      "@MySiddur/ui": [
+      "@mysiddur/ui": [
         "./packages/ui/index.ts"
       ],
-      "@MySiddur/ui/*": [
+      "@mysiddur/ui/*": [
         "./packages/ui/*"
       ],
-      "@MySiddur/scripts": [
+      "@mysiddur/scripts": [
         "./packages/scripts/index.ts"
       ],
-      "@MySiddur/scripts/*": [
+      "@mysiddur/scripts/*": [
         "./packages/scripts/*"
       ]
     },

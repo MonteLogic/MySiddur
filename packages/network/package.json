@@ -1,5 +1,5 @@
 {
-  "name": "@siddur/network",
+  "name": "@mysiddur/network",
   "version": "1.0.0",
   "description": "Network and API utilities",
   "private": true,

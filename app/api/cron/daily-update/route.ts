@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAndUploadSiddurLogic } from '@MySiddur/core/generation';
+import { generateAndUploadSiddurLogic } from '@mysiddur/core/generation';
 
 export const maxDuration = 300; // 5 minutes timeout for generation
 export const dynamic = 'force-dynamic';
@@ -47,10 +47,10 @@ export async function GET(request: NextRequest) {
                 results
             }, { status: 500 });
         }
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({ 
             error: 'Internal Server Error', 
-            details: error.message 
+            details: error instanceof Error ? error.message : String(error)
         }, { status: 500 });
     }
 }

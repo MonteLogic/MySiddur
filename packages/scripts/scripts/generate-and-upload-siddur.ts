@@ -1,4 +1,4 @@
-import { generateAndUploadSiddurLogic } from '@MySiddur/core/generation';
+import { generateAndUploadSiddurLogic } from '@mysiddur/core/generation';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 

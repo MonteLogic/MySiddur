@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getHistory } from '@MySiddur/core/generation';
+import { getHistory } from '@mysiddur/core/generation';
 
 export const dynamic = 'force-dynamic';
 

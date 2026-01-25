@@ -1,8 +1,7 @@
 
 'use client';
-import { ClerkLoading, UserButton } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
 import { useSession } from '@clerk/nextjs';
-import { checkUserRole } from '#/packages/core/utils/UserUtils';
 import TaskBar from './task-bar';
 import Link from 'next/link';
 
@@ -18,7 +17,7 @@ interface SubscriptionData {
 export function AddressBar({ subscriptionData }: { subscriptionData?: SubscriptionData }) {
   const { session, isLoaded } = useSession();
 
-  const userRole = session ? checkUserRole(session) : null;
+  // const userRole = session ? checkUserRole(session) : null;
   
   // Show loading state that maintains layout
   if (!isLoaded) {

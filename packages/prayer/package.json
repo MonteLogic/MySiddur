@@ -1,5 +1,5 @@
 {
-  "name": "@siddur/prayer",
+  "name": "@mysiddur/prayer",
   "version": "1.0.0",
   "description": "Prayer data structures and utilities",
   "private": true,
