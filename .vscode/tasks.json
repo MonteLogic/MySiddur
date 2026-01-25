@@ -1,0 +1,28 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "type-check",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"label": "npm: type-check",
+			"detail": "tsc --noEmit"
+		},
+		{
+			"type": "npm",
+			"script": "type-check:watch",
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"isBackground": true,
+			"label": "npm: type-check:watch",
+			"detail": "tsc --noEmit --watch",
+			"presentation": {
+				"group": "build",
+				"reveal": "never"
+			}
+		}
+	]
+}

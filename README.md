@@ -23,3 +23,16 @@ git submodule init
 git submodule update
 
 ```
+
+## Development
+
+### TypeScript Checking
+
+To view all TypeScript errors in the Problems pane, run the watching task:
+1. Open Command Palette (`Ctrl+Shift+P`)
+2. Run **Tasks: Run Task** -> **npm: type-check:watch**
+
+Alternatively, run in terminal:
+```bash
+npm run type-check:watch
+```
