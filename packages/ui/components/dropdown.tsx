@@ -1,7 +1,7 @@
 'use client';
 
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, SVGProps, useEffect, useState } from 'react';
+import { Fragment, JSX, SVGProps, useEffect, useState } from 'react';
 
 export default function Dropdown() {
   return (

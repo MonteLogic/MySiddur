@@ -1,4 +1,5 @@
-import { PrayerIndexBySections, DateInfo } from './generation-logic';
+import { DateInfo } from './generation-logic';
+import { PrayerIndexBySections } from './types';
 
 export interface ValidationResult {
   isValid: boolean;

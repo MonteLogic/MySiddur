@@ -1,19 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { HDate, HebrewCalendar } from '@hebcal/core';
+import { PrayerIndexEntry, PrayerIndexBySections } from './types';
 
-export interface PrayerIndexEntry {
-  id: string;
-  title: string;
-}
 
-export interface PrayerIndexBySections {
-  wakingPrayers: PrayerIndexEntry[];
-  shacharis: PrayerIndexEntry[];
-  mincha: PrayerIndexEntry[];
-  maariv: PrayerIndexEntry[];
-  retiringPrayers: PrayerIndexEntry[];
-}
 
 /**
  * Convert a Date to the expected generated layout file path

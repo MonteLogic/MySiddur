@@ -13,7 +13,7 @@ import { useSession, useUser } from '@clerk/nextjs';
 import { Search, Grid3x3, Bell, ChevronDown } from 'lucide-react';
 import TaskBar from './task-bar';
 import Image from 'next/image';
-import { getSecondMenu } from '#/packages/core/lib/second-menu';
+import { getSecondMenu, Item } from '#/packages/core/lib/second-menu';
 
 /**
  * Props for the GlobalNav component.

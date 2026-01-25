@@ -1,11 +1,10 @@
 import { HebrewCalendar, HDate, flags } from '@hebcal/core';
 import * as fs from 'fs';
 import * as path from 'path';
+import { PrayerIndexEntry, PrayerIndexBySections } from './types';
+export type { PrayerIndexEntry, PrayerIndexBySections };
 
-export interface PrayerIndexEntry {
-  id: string;
-  title: string;
-}
+
 
 export interface PrayerIndex {
   [key: string]: PrayerIndexEntry;
@@ -94,13 +93,7 @@ function loadBlobs(): PrayerBlob[] {
     return blobs;
 }
 
-export interface PrayerIndexBySections {
-  wakingPrayers: PrayerIndexEntry[];
-  shacharis: PrayerIndexEntry[];
-  mincha: PrayerIndexEntry[];
-  maariv: PrayerIndexEntry[];
-  retiringPrayers: PrayerIndexEntry[];
-}
+
 
 export function generatePrayerIndex(date: Date): PrayerIndexBySections {
   const dateInfo = getDateInfo(date);
