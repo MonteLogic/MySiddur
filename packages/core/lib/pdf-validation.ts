@@ -5,12 +5,12 @@ import * as path from 'path';
 // 72 points = 1 inch. Let's say 3 inches (216 points) is a major gap.
 const BLANK_SPACE_THRESHOLD = 200; 
 
-export interface ValidationResult {
+export interface PdfValidationResult {
     success: boolean;
     errors: string[];
 }
 
-export async function validatePdfWhitespace(pdfPath: string): Promise<ValidationResult> {
+export async function validatePdfWhitespace(pdfPath: string): Promise<PdfValidationResult> {
     console.log(`Analyzing PDF for blank spaces: ${pdfPath}`);
     const errors: string[] = [];
     
@@ -38,12 +38,12 @@ export async function validatePdfWhitespace(pdfPath: string): Promise<Validation
         const items = textContent.items.map((item: any) => {
             const tx = item.transform;
             const y = tx[5]; 
-            const height = item.height || 0; 
+            const height = (item as any).height || 0; 
             // If height is 0, try to estimate from font size (transform[0] or transform[3])
             const estimatedHeight = height > 0 ? height : (tx[3] || 10);
             
             return {
-                text: item.str,
+                text: (item as any).str,
                 y: y,
                 height: estimatedHeight,
                 bottom: y, 

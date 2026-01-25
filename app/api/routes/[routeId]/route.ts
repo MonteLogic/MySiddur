@@ -1,5 +1,6 @@
+import { ClerkMetadataService } from '@mysiddur/core';
 import { NextRequest, NextResponse } from 'next/server';
-import { ClerkMetadataService } from '#/lib/clerk-metadata-service';
+// import { ClerkMetadataService } from '#/lib/clerk-metadata-service';
 
 export async function DELETE(
   request: NextRequest,

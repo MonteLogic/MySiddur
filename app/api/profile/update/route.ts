@@ -58,7 +58,7 @@ export async function PATCH(request: NextRequest) {
     });
 
     // Also update basic user info if provided
-    const basicUserUpdate: any = {};
+    const basicUserUpdate: Pick<ProfileUpdateData, 'firstName' | 'lastName'> = {};
     if (updateData.firstName !== undefined) {
       basicUserUpdate.firstName = updateData.firstName;
     }

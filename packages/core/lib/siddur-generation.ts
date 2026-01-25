@@ -1,6 +1,6 @@
 import { generateSiddurPDF, SiddurFormat } from './siddur-pdf-utils/ashkenaz/siddurMainFile';
 import { put, list } from '@vercel/blob';
-import { validatePdfWhitespace } from './pdf-validation';
+import { validatePdfWhitespace, PdfValidationResult } from './pdf-validation';
 import * as path from 'path';
 import * as fs from 'fs';
 
