@@ -18,7 +18,7 @@ interface PrayerBlob {
 
 // Load all blob files
 function loadBlobs(): PrayerBlob[] {
-    const blobsDir = path.join(__dirname, '../lib/custom-siddur-date-gen/blobs');
+    const blobsDir = path.join(__dirname, '../../../core/lib/custom-siddur-date-gen/blobs');
     const files = fs.readdirSync(blobsDir).filter(f => f.endsWith('.json'));
     const blobs: PrayerBlob[] = [];
     
@@ -46,7 +46,7 @@ function getAllPrayerIds(): Set<string> {
 
 // Check if prayer exists in database
 function prayerExistsInDatabase(prayerId: string): boolean {
-    const prayerDbDir = path.join(__dirname, '../prayer/prayer-database');
+    const prayerDbDir = path.join(__dirname, '../../../prayer/prayer/prayer-database');
     
     // Search recursively for JSON files containing this ID
     function searchDirectory(dir: string): boolean {

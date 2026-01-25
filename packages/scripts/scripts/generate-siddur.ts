@@ -1,5 +1,5 @@
-import { generatePrayerIndex, getOutputPath, getDateInfo } from '../lib/custom-siddur-date-gen/generation-logic';
-import { validateSiddur } from '../lib/custom-siddur-date-gen/validation';
+import { generatePrayerIndex, getOutputPath, getDateInfo } from '@mysiddur/core/custom-siddur-date-gen/generation-logic';
+import { validateSiddur } from '@mysiddur/core/custom-siddur-date-gen/validation';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -30,7 +30,7 @@ if (validation.warnings.length > 0) {
 }
 
 // Get output path with date-organized directory structure
-const baseDir = path.join(__dirname, '..');
+const baseDir = path.join(__dirname, '../../core');
 const outputPath = getOutputPath(date, baseDir);
 
 // Ensure directory exists

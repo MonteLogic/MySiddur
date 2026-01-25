@@ -1,0 +1,12 @@
+{
+  "test-products": {
+    "pro": {
+      "id": "prod_RRpMROFi5ZgEEF",
+      "name": "Pro Plan"
+    },
+    "max": {
+      "id": "prod_OulXzqwjGpkYQc",
+      "name": "Max Plan"
+    }
+  }
+}

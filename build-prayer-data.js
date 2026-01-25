@@ -12,7 +12,7 @@ const {
 } = require('./prayer-validation-utils');
 
 // --- Define Paths ---
-const prayersDir = path.join(__dirname, 'prayer/prayer-database');
+const prayersDir = path.join(__dirname, 'packages/prayer/prayer/prayer-database');
 
 // --- MODIFIED --- Output paths are now cleaner
 const outputDataDir = path.join(__dirname, 'prayer-data-private');
@@ -218,7 +218,7 @@ const getRequiredPrayerIds = () => {
   const prayerIds = new Set();
 
   // The generated layouts are the ONLY source of truth
-  const generatedDir = path.join(__dirname, 'lib/custom-siddur-date-gen/generated');
+  const generatedDir = path.join(__dirname, 'packages/core/lib/custom-siddur-date-gen/generated');
 
   if (!fs.existsSync(generatedDir)) {
     console.warn('⚠️  No generated layouts found. Please run: pnpm run generate-siddur-layouts N-days');

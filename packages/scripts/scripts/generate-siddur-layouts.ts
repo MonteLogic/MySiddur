@@ -1,5 +1,5 @@
-import { generatePrayerIndex, getOutputPath, getDateInfo } from '../lib/custom-siddur-date-gen/generation-logic';
-import { validateSiddur } from '../lib/custom-siddur-date-gen/validation';
+import { generatePrayerIndex, getOutputPath, getDateInfo } from '@mysiddur/core/custom-siddur-date-gen/generation-logic';
+import { validateSiddur } from '@mysiddur/core/custom-siddur-date-gen/validation';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -10,7 +10,7 @@ const numDays = parseInt(daysArg.split('-')[0]) || 1;
 
 console.log(`Generating Siddur layouts for the next ${numDays} days...\n`);
 
-const baseDir = path.join(__dirname, '..');
+const baseDir = path.join(__dirname, '../../core');
 const startDate = new Date();
 let successCount = 0;
 let failCount = 0;
