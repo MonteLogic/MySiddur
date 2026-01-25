@@ -38,6 +38,8 @@ export function getGeneratedLayoutPath(date: Date): string | null {
     // Build path: [hebrew-year]/[hebrew-month]-[month-name]/[hebrew-day]-[greg-year]-[greg-month]-[greg-day]
     const layoutPath = path.join(
       process.cwd(),
+      'packages',
+      'core',
       'lib',
       'custom-siddur-date-gen',
       'generated',
@@ -136,7 +138,7 @@ export function loadPrayerIndexForDate(date: Date): Record<string, PrayerIndexEn
   
   try {
     // Try to load from the old generated/prayer-index.ts location
-    const fallbackPath = path.join(process.cwd(), 'lib', 'custom-siddur-date-gen', 'generated', 'prayer-index.ts');
+    const fallbackPath = path.join(process.cwd(), 'packages', 'core', 'lib', 'custom-siddur-date-gen', 'generated', 'prayer-index.ts');
     
     if (fs.existsSync(fallbackPath)) {
       const fileContent = fs.readFileSync(fallbackPath, 'utf-8');

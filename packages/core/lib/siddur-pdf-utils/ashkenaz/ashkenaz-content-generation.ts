@@ -1,6 +1,6 @@
 // lib/siddur-pdf-utils/ashkenaz/ashkenaz-content-generation.ts
 import { PDFPage, rgb } from 'pdf-lib';
-import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
+import ashPrayerInfo from '@mysiddur/prayer/content/ashkenazi-prayer-info.json';
 import siddurConfig from './siddur-formatting-config.json';
 import {
   AshkenazContentGenerationParams,
@@ -10,7 +10,7 @@ import {
 import { drawPrayer } from './drawing/prayer-drawing';
 import { drawDividerLine } from './drawing/drawing-helpers';
 import { drawReadingGuide } from './drawing/reading-guide';
-import { loadGeneratedLayout } from '#/lib/custom-siddur-date-gen/layout-resolver';
+import { loadGeneratedLayout } from '@mysiddur/core/custom-siddur-date-gen/layout-resolver';
 
 // Service display names mapping
 const SERVICE_DISPLAY_NAMES: Record<string, string> = {

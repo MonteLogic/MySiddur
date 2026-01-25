@@ -1,5 +1,5 @@
 import { ExternalLink } from '#/ui/shared/external-link';
-import { getCustomerDetails, ClerkMetadata } from '#/packages/@mysiddur/core/core/utils/StripeUtils';
+import { getCustomerDetails, ClerkMetadata } from '@mysiddur/core/utils/StripeUtils';
 import { currentUser } from '@clerk/nextjs';
 import { ErrorDisplay } from './components/ErrorDisplay';
 import { ActiveSubscriptions } from './components/ActiveSubscription';
@@ -80,7 +80,6 @@ export default function Page() {
         </div>
       </div>
       <Suspense fallback={<div className="text-white">Loading...</div>}>
-        {/* @ts-expect-error Async Server Component */}
         <StripeSettings />
       </Suspense>
     </div>

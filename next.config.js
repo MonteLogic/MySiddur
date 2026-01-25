@@ -23,6 +23,12 @@ const nextConfig = {
       alias: {
         ...config.resolve.alias,
         '#': path.resolve(__dirname),
+        '@mysiddur/core': path.resolve(__dirname, 'packages/core/lib'),
+        '@mysiddur/prayer': path.resolve(__dirname, 'packages/prayer'),
+        '@mysiddur/prayer-data': path.resolve(__dirname, 'packages/prayer-data'),
+        '@mysiddur/ui': path.resolve(__dirname, 'packages/ui'),
+        '@mysiddur/network': path.resolve(__dirname, 'packages/network'),
+        '@mysiddur/types': path.resolve(__dirname, 'packages/types'),
       },
     }),
       // Ignore LICENSE files

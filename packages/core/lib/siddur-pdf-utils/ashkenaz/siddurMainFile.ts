@@ -10,7 +10,7 @@ import {
 import fontkit from '@pdf-lib/fontkit';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
+import ashPrayerInfo from '@mysiddur/prayer/content/ashkenazi-prayer-info.json';
 import siddurConfig from './siddur-formatting-config.json';
 import { generateAshkenazContent } from './ashkenaz-content-generation';
 

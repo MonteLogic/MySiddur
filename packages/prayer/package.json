@@ -6,10 +6,14 @@
   "type": "module",
   "main": "./index.ts",
   "exports": {
-    ".": "./index.ts"
+    ".": "./index.ts",
+    "./content/*": "./content/*",
+    "./database/*": "./database/*"
   },
   "files": [
-    "prayer"
+    "content",
+    "database",
+    "scaffold"
   ],
   "scripts": {
     "build": "tsc --noEmit",

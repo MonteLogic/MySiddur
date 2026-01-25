@@ -13,3 +13,6 @@ export * from './calendar/hebrewCalendar';
 
 // Custom date generation exports
 export * from './custom-siddur-date-gen/index';
+
+// Utils exports
+export * from './utils/UserUtils';

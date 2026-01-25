@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { TabGroupBlog } from '@mysiddur/ui';
-import { getBlogCategoryTabs } from '#/packages/core/utils/blog';
+import { getBlogCategoryTabs } from '@mysiddur/core/utils/blog';
 
 const title = 'MonteLogic Blog';
 

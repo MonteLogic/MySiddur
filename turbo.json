@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "@mysiddur/prayer-data#build": {
+      "inputs": ["src/**/*.json"],
+      "outputs": ["dist/**/*.json"]
+    },
+    "web#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"]
+    }
+  }
+}

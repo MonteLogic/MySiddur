@@ -2,7 +2,7 @@
 // app/api/webhooks/subscription/route.ts
 import { NextResponse } from 'next/server';
 import { SubscriptionMetadata } from '#/packages/types/StripeClerkTypes';
-import { updateUserSubscriptionMetadata } from '#/packages/core/utils/SyncClerkStripeMetadata';
+import { updateUserSubscriptionMetadata } from '@mysiddur/core/lib/utils/SyncClerkStripeMetadata';
 
 export async function POST(req: Request) {
   try {

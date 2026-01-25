@@ -41,6 +41,12 @@
       "@mysiddur/core/*": [
         "./packages/core/lib/*"
       ],
+      "@mysiddur/prayer-data": [
+        "./packages/prayer-data/index.ts"
+      ],
+      "@mysiddur/prayer-data/*": [
+        "./packages/prayer-data/*"
+      ],
       "@mysiddur/prayer": [
         "./packages/prayer/index.ts"
       ],
