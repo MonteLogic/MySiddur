@@ -1,7 +1,6 @@
-
+import { validatePdfWhitespace } from '#/packages/core/lib';
 import * as fs from 'fs';
 import * as path from 'path';
-import { validatePdfWhitespace } from '../lib/pdf-validation';
 
 // Only run if called directly
 if (require.main === module) {

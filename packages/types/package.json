@@ -5,10 +5,14 @@
     "main": "index.ts",
     "types": "index.ts",
     "scripts": {
+        "build": "tsc",
         "type-check": "tsc --noEmit"
     },
     "devDependencies": {
         "typescript": "^5.0.0",
         "@types/react": "^19.0.0"
+    },
+    "dependencies": {
+        "pdf-lib": "^1.17.1"
     }
 }

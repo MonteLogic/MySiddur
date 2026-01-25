@@ -1,5 +1,4 @@
-import { getGeneratedLayoutPath, loadGeneratedLayout, loadPrayerIndexForDate } from '../lib/custom-siddur-date-gen/layout-resolver';
-
+import { getGeneratedLayoutPath, loadGeneratedLayout, loadPrayerIndexForDate } from "#/packages/core/lib";
 console.log('='.repeat(60));
 console.log('Testing Layout Resolver - Timezone Aware');
 console.log('='.repeat(60));

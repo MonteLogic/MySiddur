@@ -3,6 +3,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, JSX, SVGProps, useEffect, useState } from 'react';
 
+// oxlint-disable-next-line max-lines-per-function
 export default function Dropdown() {
   return (
     <div className="top-16 w-56 text-right">

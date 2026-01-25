@@ -10,6 +10,7 @@ export * from './ProductTypes';
 export * from './SiddurTypes';
 export * from './StripeClerkTypes';
 export * from './SummaryTypes';
+export * from './PdfTypes';
 
 // Selective exports to avoid duplicates
 // From UserTypes.ts

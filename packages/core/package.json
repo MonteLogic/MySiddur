@@ -12,7 +12,8 @@
     "./calendar": "./lib/calendar/index.ts",
     "./utils": "./lib/utils.ts",
     "./custom-date-gen": "./lib/custom-siddur-date-gen/index.ts",
-    "./validation": "./lib/pdf-validation.ts"
+    "./validation": "./lib/pdf-validation.ts",
+    "./siddur-config": "./lib/siddur-pdf-utils/ashkenaz/siddur-formatting-config.json"
   },
   "files": [
     "lib"

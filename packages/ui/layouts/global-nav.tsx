@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, JSX } from 'react';
 import Byline from '../shared/byline';
 import { UserData } from '#/app/utils/getUserID';
 import { CBudLogo } from '../shared/cbud-logo';
@@ -13,7 +13,7 @@ import { useSession, useUser } from '@clerk/nextjs';
 import { Search, Grid3x3, Bell, ChevronDown } from 'lucide-react';
 import TaskBar from './task-bar';
 import Image from 'next/image';
-import { getSecondMenu, Item } from '#/packages/core/lib/second-menu';
+import { getSecondMenu, Item, useResolveSlug } from '#/packages/core/lib/second-menu';
 
 /**
  * Props for the GlobalNav component.

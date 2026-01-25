@@ -1,5 +1,5 @@
 
-import { generateSiddurPDF, SiddurFormat } from '../lib/siddur-pdf-utils/ashkenaz/siddurMainFile';
+import { generateSiddurPDF, SiddurFormat } from '#/packages/core/lib';
 import * as fs from 'fs';
 import * as path from 'path';
 

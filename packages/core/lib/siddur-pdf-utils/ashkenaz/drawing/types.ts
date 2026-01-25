@@ -1,149 +1,24 @@
-import { PDFDocument, PDFFont, PDFPage } from 'pdf-lib';
-
 /**
- * @file This file contains the core type definitions used for generating the Siddur PDF.
+ * @file This file re-exports the core type definitions used for generating the Siddur PDF.
+ * These types have been moved to @mysiddur/types.
  * @packageDocumentation
  */
 
-/**
- * Represents the core drawing state passed between functions.
- */
-export interface PdfDrawingContext {
-  /** The main PDF document object from pdf-lib. */
-  pdfDoc: PDFDocument /** The current page being drawn on. */;
-  page: PDFPage /** The current vertical position (y-coordinate) on the page. */;
-  y: number /** The total width of the page. */;
-  width: number /** The total height of the page. */;
-  height: number /** The page margin. */;
-  margin: number /** An object containing the loaded fonts. */;
-  fonts: {
-    english: PDFFont;
-    englishBold: PDFFont;
-    hebrew: PDFFont;
-  };
-}
+export type {
+  PdfDrawingContext,
+  LineInfo,
+  AshkenazContentGenerationParams,
+  WordMapping,
+  BasePrayer,
+  SimplePrayer,
+  BlessingsPrayer,
+  PartsPrayer,
+} from '@mysiddur/types';
 
-/**
- * Contains information about a single line of text to be drawn.
- */
-export interface LineInfo {
-  /** The text content of the line. */
-  text: string /** The vertical offset for this line from the starting y-position. */;
-  yOffset: number /** The font to be used for this line. */;
-  font: PDFFont /** The font size for this line. */;
-  size: number /** The line height for this line. */;
-  lineHeight: number;
-}
-
-/**
- * A set of parameters and helper functions for content generation.
- */
-export interface AshkenazContentGenerationParams {
-  /** The main PDF document object from pdf-lib. */
-  pdfDoc: PDFDocument /** The current page being drawn on. */;
-  page: PDFPage /** The current vertical position (y-coordinate) on the page. */;
-  y: number /** The total width of the page. */;
-  width: number /** The total height of the page. */;
-  height: number /** The page margin. */;
-  margin: number;
-  /** The regular English font. */
-  englishFont: PDFFont;
-  /** The bold English font. */
-  englishBoldFont: PDFFont;
-  /** The Hebrew font. */
-  hebrewFont: PDFFont;
-  /** The selected style for prayer display (Recommended or all-transliterated). */
-  style?: string;
-  /** Word mapping interval - map every N words (e.g., 1 = every word, 5 = every 5th word). */
-  wordMappingInterval?: number;
-  /** Word mapping start index - start mapping from which word index (0 = first word). */
-  wordMappingStartIndex?: number;
-  /** Whether to show word mapping subscripts. */
-  showWordMappingSubscripts?: boolean;
-  /** Whether to include introduction text. */
-  includeIntroduction?: boolean;
-  /** Whether to include instruction text. */
-  includeInstructions?: boolean;
-  /** Font size multiplier (e.g., 1.0 = normal, 1.2 = 20% larger). */
-  fontSizeMultiplier?: number;
-  /** Page margins setting. */
-  pageMargins?: 'tight' | 'normal' | 'wide';
-  /** Whether to print in black and white (no colors). */
-  printBlackAndWhite?: boolean;
-  /** Calculates how to break a string into multiple lines based on width. */
-
-  calculateTextLines: (
-    text: string,
-    font: PDFFont,
-    fontSize: number,
-    maxWidth: number,
-    lineHeight: number,
-  ) => Omit<
-    LineInfo,
-    'font' | 'size' | 'lineHeight'
-  >[] /** Ensures there is enough vertical space on the page before drawing. */;
-  ensureSpaceAndDraw: (
-    context: PdfDrawingContext,
-    lines: LineInfo[],
-    debugId: string,
-  ) => { page: PDFPage; y: number };
-}
-
-/**
- * A mapping of corresponding words or phrases. The key is typically a numeric string index.
- */
-export type WordMapping = {
-  [key: string]: {
-    /** The English translation. */ english: string /** The Hebrew text. */;
-    hebrew: string /** The transliteration of the Hebrew text. May also appear as "Transliteration". */;
-    transliteration?: string;
-    Transliteration?: string;
-  };
-};
-
-/**
- * The base structure for all prayer types.
- */
-export interface BasePrayer {
-  /** The title of the prayer. */
-  title: string /** A unique identifier for fetching detailed prayer data. */;
-  'prayer-id'?: string /** Optional citation for the prayer's source. */;
-  source?: string;
-}
-
-/**
- * A simple prayer with a block of English and Hebrew text.
- */
-export interface SimplePrayer extends BasePrayer {
-  /** The full English text of the prayer. */
-  english: string /** The full Hebrew text of the prayer. */;
-  hebrew: string;
-}
-
-/**
- * A prayer composed of multiple blessings.
- */
-export interface BlessingsPrayer extends BasePrayer {
-  /** An array of blessing objects. */
-  blessings: {
-    english: string;
-    hebrew: string;
-  }[];
-}
-
-/**
- * A prayer composed of multiple distinct parts.
- */
-export interface PartsPrayer extends BasePrayer {
-  /** An array of part objects. */
-  parts: {
-    english: string;
-    hebrew: string;
-    source?: string;
-  }[];
-}
+import { PdfPrayer } from '@mysiddur/types';
 
 /**
  * A union type representing any possible prayer structure that can be drawn.
+ * @deprecated Use PdfPrayer from @mysiddur/types instead to avoid naming conflict with data model Prayer.
  */
-export type Prayer = SimplePrayer | BlessingsPrayer | PartsPrayer;
+export type Prayer = PdfPrayer;

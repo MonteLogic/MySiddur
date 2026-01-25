@@ -3,14 +3,15 @@ import fontkit from '@pdf-lib/fontkit';
 import fs from 'fs/promises';
 import path from 'path';
 
-import siddurConfig from '#/lib/siddur-pdf-utils/ashkenaz/siddur-formatting-config.json';
-import { drawPrayer } from '#/lib/siddur-pdf-utils/ashkenaz/drawing/prayer-drawing';
+
+import siddurConfig from '@mysiddur/core';
+import { drawPrayer } from '@mysiddur/core/pdf'; // Assuming pdf export path has it, otherwise need to find where it is exported
 import {
   AshkenazContentGenerationParams,
   LineInfo,
   PdfDrawingContext,
   SimplePrayer,
-} from '#/lib/siddur-pdf-utils/ashkenaz/drawing/types';
+} from '@mysiddur/types';
 
 const SAMPLE_PRAYER: SimplePrayer = {
   title: 'Modeh Ani (Visual Regression)',

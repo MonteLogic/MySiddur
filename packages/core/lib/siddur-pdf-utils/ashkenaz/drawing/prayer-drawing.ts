@@ -190,7 +190,7 @@ export const drawPrayer = (
 
 
 
-        const wordMappings = prayerData['Word Mappings'];
+        const wordMappings = (prayerData as any)['Word Mappings'];
       if (wordMappings) {
         return handleWordMappings(
               currentContext,
