@@ -2,11 +2,20 @@
 'use client';
 import { ClerkLoading, UserButton } from '@clerk/nextjs';
 import { useSession } from '@clerk/nextjs';
-import { checkUserRole } from '#/packages/@mysiddur/core/core/utils/UserUtils';
+import { checkUserRole } from '#/packages/core/utils/UserUtils';
 import TaskBar from './task-bar';
 import Link from 'next/link';
 
-export function AddressBar({ subscriptionData }: { subscriptionData?: any }) {
+interface SubscriptionData {
+  status: {
+    isActive: boolean;
+    planId: string;
+    expiresAt: string;
+    planName: string;
+  };
+}
+
+export function AddressBar({ subscriptionData }: { subscriptionData?: SubscriptionData }) {
   const { session, isLoaded } = useSession();
 
   const userRole = session ? checkUserRole(session) : null;
@@ -41,31 +50,20 @@ export function AddressBar({ subscriptionData }: { subscriptionData?: any }) {
   }
   
   // Render full component for logged-in users (or when Clerk is disabled, show nothing)
-
-  
   return (
     <div className="flex items-center gap-x-2 p-3.5 lg:px-5 lg:py-3">
-      <div className="flex gap-x-1 text-sm font-medium">
-        <div>
-          <UserButton afterSignOutUrl="/" />
-        </div>
-        <div>
-          <ClerkLoading>Loading ...</ClerkLoading>
-          <div className="bg-white">
-            <TaskBar
-              paymentInfo={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
-                status: {
-                  isActive: subscriptionData.status.isActive,
-                  planId: subscriptionData.status.planId,
-                  expiresAt: subscriptionData.status.expiresAt,
-                  planName: subscriptionData.status.planName,
-                  recentTransactions: [],
-                },
-              } : undefined}
-            />
-          </div>
-        </div>
-      </div>
+      <TaskBar
+        paymentInfo={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && subscriptionData ? {
+          status: {
+            isActive: subscriptionData.status.isActive,
+            planId: subscriptionData.status.planId,
+            expiresAt: subscriptionData.status.expiresAt,
+            planName: subscriptionData.status.planName,
+            recentTransactions: [],
+          },
+        } : undefined}
+      />
+      <UserButton />
     </div>
   );
 }
