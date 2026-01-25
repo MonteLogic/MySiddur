@@ -1,7 +1,7 @@
 // app/api/generate-basic-siddur/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { generateSiddurPDF, SiddurFormat } from '#/lib/siddur-pdf-utils/ashkenaz/siddurMainFile'; // Adjust path as needed
+import { generateSiddurPDF, SiddurFormat } from '@mysiddur/core';
 
 export async function GET(request: NextRequest) {
   // For GET requests, parameters are typically in the search params (URL query)

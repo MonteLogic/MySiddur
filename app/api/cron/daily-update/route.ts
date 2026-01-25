@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAndUploadSiddurLogic } from '@mysiddur/core/generation';
+import { generateAndUploadSiddurLogic } from '@mysiddur/core';
 
 export const maxDuration = 300; // 5 minutes timeout for generation
 export const dynamic = 'force-dynamic';

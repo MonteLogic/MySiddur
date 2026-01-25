@@ -1,6 +1,6 @@
 // Example usage in an API route:
 // app/api/webhooks/subscription/route.ts
-import { updateUserSubscriptionMetadata } from '#/packages/@mysiddur/core/core/utils/SyncClerkStripeMetadata';
+import { updateUserSubscriptionMetadata } from '@mysiddur/core/core/utils/SyncClerkStripeMetadata';
 import { NextResponse } from 'next/server';
 // import { updateUserSubscriptionMetadata } from '@/utils/clerk-metadata';
 import { SubscriptionMetadata } from '#/types/StripeClerkTypes';
