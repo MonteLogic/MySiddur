@@ -1,5 +1,5 @@
 // app/blog/layout.tsx
-import { TabGroupBlog } from '#/ui/tab-group-blog';
+import { TabGroupBlog } from '#/packages/ui/tab-group-blog';
 import React from 'react';
 import { getBlogCategoryTabs } from '#/packages/@mysiddur/core/core/utils/blog'; // Adjust the import path
 

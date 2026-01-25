@@ -1,5 +1,5 @@
 'use client';
-import type { Item } from '#/ui/tab-group';
+import type { Item } from '#/ui/components/tab-group';
 import clsx from 'clsx';
 import Link from 'next/link';
 

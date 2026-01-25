@@ -26,6 +26,12 @@
       "#/*": [
         "./*"
       ],
+      "#/ui/*": [
+        "./packages/ui/*"
+      ],
+      "#/blog-components/*": [
+        "./packages/ui/features/blog/*"
+      ],
       "@/*": [
         "./*"
       ],

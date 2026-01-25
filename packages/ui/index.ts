@@ -1,41 +1,77 @@
 // UI Components Exports
 
-// Layout & Navigation
-export { default as GlobalNav } from './global-nav';
-export { default as Header } from './header';
-export { default as Footer } from './footer';
-export { default as MobileNavToggle } from './mobile-nav-toggle';
+// Shared Primitives
+export { default as Button } from './shared/button';
+export { Boundary } from './shared/boundary';
+export { Ping } from './shared/ping';
+export { default as Modal } from './shared/modal';
+export { ClickCounter } from './shared/click-counter';
+export { default as CountUp } from './shared/count-up';
+export { RenderedTimeAgo } from './shared/rendered-time-ago';
+export { ExternalLink } from './shared/external-link';
+export { InternalLink } from './shared/internal-link';
+export { SectionLink } from './shared/section-link';
+export { CBudLogo } from './shared/cbud-logo';
+export { VercelLogo } from './shared/vercel-logo';
+export { default as Byline } from './shared/byline';
+export { default as ChevronAddSampleRouteData } from './shared/chevron-add-sample-route-data';
 
 // Common Components
-export { default as Button } from './button';
-export { default as Boundary } from './boundary';
-export { default as DropDown } from './dropdown';
-export { default as TabGroup } from './tab-group';
-export { default as Modal } from './modal';
+export { default as DropDown } from './components/dropdown';
+export { TabGroup } from './components/tab-group';
+export { Tab } from './components/tab';
+export { TabNavItem } from './components/tab-nav-item';
+export { FAQAccordion } from './components/faq-accordion';
+export { ImageString as ImageSlider } from './components/image-slider';
+export { default as ImageModal } from './components/image-modal';
+export { default as ConfirmingButton } from './components/confirming-button';
+export { default as BuggyButton } from './components/buggy-button';
+export { ComponentTree } from './components/component-tree';
+export { echoCurrentURL as ReadURLAndSearch } from './components/ReadURLAndSearch';
+export { default as MarkdownClientRender } from './components/markdown-client-render';
 
-// Product & E-commerce
-export { default as ProductRating } from './product-rating';
-export { default as ProductLowStockWarning } from './product-low-stock-warning';
-export { default as PaymentStatus } from './payment-status';
-export { default as UpgradePrompt } from './upgrade-prompt';
+// Layout & Navigation
+export { GlobalNav } from './layouts/global-nav';
+export { default as Header } from './layouts/header';
+export { default as Footer } from './layouts/footer';
+export { AddressBar } from './layouts/address-bar';
+export { MobileNavToggle } from './layouts/mobile-nav-toggle';
+export { default as TaskBar } from './layouts/task-bar';
 
-// Interactive Components
-export { default as ImageSlider } from './image-slider';
-export { default as ConfirmingButton } from './confirming-button';
-export { default as StripeSubscriptionSection } from './stripe-subscription-section';
-export { default as FAQAccordion } from './faq-accordion';
+// Feedback & Loading
+export { SkeletonCard } from './feedback/skeleton-card';
+export { RenderingPageSkeleton } from './feedback/rendering-page-skeleton';
+export { RenderingInfo } from './feedback/rendering-info';
 
-// Skeleton & Loading
-export { default as RenderingPageSkeleton } from './rendering-page-skeleton';
-export { default as SkeletonCard } from './skeleton-card';
+// Features
+// - Commerce
+export { ProductBestSeller } from './features/commerce/product-best-seller';
+export { ProductCurrencySymbol } from './features/commerce/product-currency-symbol';
+export { ProductDeal } from './features/commerce/product-deal';
+export { ProductEstimatedArrival } from './features/commerce/product-estimated-arrival';
+export { ProductLighteningDeal } from './features/commerce/product-lightening-deal';
+export { ProductLowStockWarning } from './features/commerce/product-low-stock-warning';
+export { ProductRating } from './features/commerce/product-rating';
+export { ProductSplitPayments } from './features/commerce/product-split-payments';
 
-// Blog Components
-export * from './blog-components/index';
+// - Blog
+export { TabGroupBlog } from './features/blog/tab-group-blog';
+export { TabGroupDynamic } from './features/blog/tab-group-dynamic';
+export { InfoBox } from './features/blog/info-box';
+export { TipBox } from './features/blog/tip-box';
+export { WarningBox } from './features/blog/warning-box';
 
-// Clerk Integration
-export * from './clerk/index';
+// - Billing
+export { default as StripeSubscriptionSection } from './features/billing/stripe-subscription-section';
+export { default as PaymentStatus } from './features/billing/payment-status';
 
-// Utility Components
-export { default as Ping } from './ping';
-export { default as CBudLogo } from './cbud-logo';
-export { default as VercelLogo } from './vercel-logo';
+// - Auth
+export { default as OrganizationPrompt } from './features/auth/organization-prompt';
+export { default as CreateOrganization } from './features/auth/create-organization';
+export { default as UpgradePrompt } from './features/auth/upgrade-prompt';
+export { default as ClerkMetadata } from './features/auth/clerk-metadata';
+
+// - Scheduling
+export { default as ScheduleSummaryPage } from './features/scheduling/schedule-summary-page';
+export { default as SummaryModalSchedule } from './features/scheduling/summary-modal-schedule';
+export { default as Calendar } from './features/scheduling/calendar';

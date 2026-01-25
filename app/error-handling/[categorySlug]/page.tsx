@@ -1,6 +1,6 @@
 import { getCategory } from '#/app/api/categories/getCategories';
-import BuggyButton from '#/ui/buggy-button';
-import { SkeletonCard } from '#/ui/skeleton-card';
+import BuggyButton from '#/ui/components/buggy-button';
+import { SkeletonCard } from '#/ui/feedback/skeleton-card';
 import { notFound } from 'next/navigation';
 
 export default async function Page({

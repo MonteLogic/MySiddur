@@ -1,4 +1,4 @@
-import { ExternalLink } from '#/ui/external-link';
+import { ExternalLink } from '#/ui/shared/external-link';
 
 export default function Page() {
   return (

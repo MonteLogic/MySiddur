@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import ashPrayerInfo from 'prayer/prayer-content/ashkenazi-prayer-info.json';
-import { FAQAccordion } from '#/ui/faq-accordion';
+import { FAQAccordion } from '#/ui/components/faq-accordion';
 
 export default async function Page() {
   const otherNusachs = [

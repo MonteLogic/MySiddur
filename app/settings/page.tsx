@@ -1,4 +1,4 @@
-import { ExternalLink } from '#/ui/external-link';
+import { ExternalLink } from '#/ui/shared/external-link';
 import { getCustomerDetails, ClerkMetadata } from '#/packages/@mysiddur/core/core/utils/StripeUtils';
 import { currentUser } from '@clerk/nextjs';
 import { ErrorDisplay } from './components/ErrorDisplay';
@@ -9,7 +9,7 @@ import { NoSubscriptionInfo } from './components/NoSubInfo';
 import { OrganizationSection } from './components/OrganizationSection';
 import { SectionHeader } from './components/SectionHeader';
 import { Suspense } from 'react';
-import { InternalLink } from '#/ui/internal-link';
+import { InternalLink } from '#/ui/shared/internal-link';
 
 // Separate component for the Stripe settings content
 const StripeSettings = async () => {

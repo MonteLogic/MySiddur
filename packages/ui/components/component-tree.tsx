@@ -1,5 +1,5 @@
-import { Boundary } from '#/ui/boundary';
-import CountUp from '#/ui/count-up';
+import { Boundary } from '#/ui/shared/boundary';
+import CountUp from '#/ui/shared/count-up';
 import clsx from 'clsx';
 
 type Item = {

@@ -6,7 +6,7 @@ import { ChevronDown, CreditCard, CheckCircle } from 'lucide-react';
 import { useSession } from '@clerk/nextjs';
 import { checkUserRole } from '@mysiddur/core/utils';
 import { useRouter } from 'next/navigation';
-import { useTimecardsMetadata } from '#/ui/clerk/clerk-metadata';
+import { useTimecardsMetadata } from '#/ui/features/auth/clerk-metadata';
 import Link from 'next/link';
 
 // Helper for status icons

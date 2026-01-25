@@ -1,4 +1,4 @@
-import { Tab } from '#/ui/vercel-tab';
+import { Tab } from '#/ui/components/vercel-tab';
 import React from 'react';
 
 const title = 'Settings';

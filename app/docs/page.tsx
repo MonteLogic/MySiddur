@@ -1,5 +1,5 @@
-import { ExternalLink } from '#/ui/external-link';
-import { InternalLink } from '#/ui/internal-link';
+import { ExternalLink } from '#/ui/shared/external-link';
+import { InternalLink } from '#/ui/shared/internal-link';
 
 export default function Page() {
   return (

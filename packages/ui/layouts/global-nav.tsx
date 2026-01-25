@@ -1,21 +1,19 @@
-
 'use client';
-
-import { getSecondMenu, useResolveSlug, type Item } from '#/lib/second-menu';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import { useState, useRef, useEffect } from 'react';
-import Byline from './byline';
+import Byline from '../shared/byline';
 import { UserData } from '#/app/utils/getUserID';
-import { CBudLogo } from './cbud-logo';
+import { CBudLogo } from '../shared/cbud-logo';
 import titles from '#/strings.json';
 import { ClerkLoading, useClerk } from '@clerk/nextjs';
 import { useSession, useUser } from '@clerk/nextjs';
 import { Search, Grid3x3, Bell, ChevronDown } from 'lucide-react';
 import TaskBar from './task-bar';
 import Image from 'next/image';
+import { getSecondMenu } from '#/packages/core/lib/second-menu';
 
 /**
  * Props for the GlobalNav component.

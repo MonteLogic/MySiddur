@@ -1,6 +1,6 @@
 import '#/styles/globals.css';
-import Byline from '#/ui/byline';
-import { GlobalNav } from '#/ui/global-nav';
+import Byline from '#/ui/shared/byline';
+import { GlobalNav } from '#/ui/layouts/global-nav';
 import { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { auth, clerkClient } from '@clerk/nextjs/server';

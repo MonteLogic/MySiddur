@@ -1,5 +1,5 @@
 'use client';
-import { Tab } from '#/ui/tab';
+import { Tab } from '#/ui/components/tab';
 import { useState } from 'react';
 
 export type Item = {

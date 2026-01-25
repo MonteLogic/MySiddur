@@ -1,5 +1,5 @@
 import { getCategory } from '#/app/api/categories/getCategories';
-import { SkeletonCard } from '#/ui/skeleton-card';
+import { SkeletonCard } from '#/ui/feedback/skeleton-card';
 
 export default async function Page({
   params,

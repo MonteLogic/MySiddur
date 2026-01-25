@@ -1,7 +1,7 @@
 // components/ui/Button.test.tsx
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Button from '../button';
+import Button from '../shared/button';
 
 
 describe('Button', () => {
