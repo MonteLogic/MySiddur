@@ -18,27 +18,56 @@ export interface SimpleBlessing {
   english: string;
 }
 
-/**
- * Represents a complete prayer unit. It's a flexible interface
- * to accommodate different prayer structures in the JSON.
- */
-export interface Prayer {
-  title: string;
-  instructions?: string;
-  hebrew?: string;
-  english?: string;
-  source?: string;
-  blessings?: SimpleBlessing[];
-  parts?: PrayerPart[];
+export enum Nusach {
+  Ashkenaz = "Ashkenaz",
+  Sefard = "Sefard",
+  EdotHaMizrach = "EdotHaMizrach",
+  // Add more as needed
 }
 
-/**
- * Represents a major section of the Siddur, like "Birchot HaShachar".
- */
+// This replaces your original SiddurFormat enum for clarity and extensibility
+export { Nusach as SiddurFormat };
+
+export enum PrayerType {
+  Bracha = "Bracha",
+  Tefillah = "Tefillah",
+  Psalm = "Psalm",
+  Kaddish = "Kaddish",
+  Reading = "Reading", // Torah, Haftarah
+  Instruction = "Instruction", // e.g., "Stand", "Bow"
+  Custom = "Custom",   // For miscellaneous texts
+}
+
+export interface PrayerLine {
+  hebrew?: string;                // The Hebrew text
+  englishTranslation?: string;    // Optional English translation
+  transliteration?: string;       // Optional transliteration
+  instructions?: string;          // Liturgical instructions (e.g., "Congregation responds")
+  isBold?: boolean;
+  isItalic?: boolean;
+  isCentered?: boolean;
+  indentationLevel?: number;      // For formatting poetry or nested responses
+  isQuiet?: boolean;              // For parts said quietly (e.g., Baruch Shem Kevod)
+  fontSize?: number;              // Specific font size for this line
+  fontKey?: 'hebrew' | 'english'; // To specify different fonts for different languages
+}
+
+export interface Prayer {
+  id: string;                     // Unique identifier (e.g., "ashrei_weekday")
+  title?: PrayerLine[];           // Title of the prayer (can be styled)
+  type: PrayerType;
+  nusachApplicability: Nusach[] | 'all'; // Specifies which Nusachim this prayer is for
+  lines: PrayerLine[];            // The actual content of the prayer
+  rules?: string[];               // Optional: Array of rule IDs that govern its inclusion
+  metadata?: Record<string, unknown>; // For any other specific prayer data
+}
+
 export interface PrayerSection {
-  sectionTitle: string;
-  description: string;
+  sectionTitle?: PrayerLine[];
+  description?: string;           // Optional description
   prayers: Prayer[];
+  // Conditional logic for including this section can be handled by the orchestrator
+  // or through rules associated with the prayers within it.
 }
 
 /**
@@ -49,4 +78,33 @@ export interface PrayerContent {
   service: string;
   siddurNote: string;
   sections: PrayerSection[];
+}
+
+// This is the structured data that will be passed to the PDF generator
+export interface SiddurContent {
+  title: string;                  // e.g., "Siddur for Shabbos Shacharis"
+  dateInfo: {
+    gregorian: string;
+    hebrew: string;
+    parsha?: string;
+    holiday?: string;
+  };
+  nusach: Nusach;
+  userName?: string;
+  sections: PrayerSection[];      // The ordered list of all sections and prayers
+}
+
+export interface CalendarInfo {
+  gregorianDate: Date;
+  hebrewDateStr: string;
+  dayOfWeek: number; // 0 (Sun) to 6 (Sat)
+  isShabbos: boolean;
+  isYomTov: boolean;
+  isRoshChodesh: boolean;
+  isCholHaMoed: boolean;
+  fastDay?: string;
+  holiday?: string;
+  parsha?: string;
+  omerDay?: number;
+  // etc.
 }
