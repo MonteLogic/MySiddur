@@ -1,4 +1,4 @@
-import { demos } from '#/lib/demos';
+import demos from '#/packages/core/lib';
 import Link from 'next/link';
 
 export default function Page() {

@@ -8,7 +8,7 @@ import {
     CalendarInfo, // Defined in siddurTypes.ts
     PrayerLine,
     PrayerType
-  } from '../../../../types/siddurTypes';
+  } from '@mysiddur/types';
   import { getCalendarInfo } from '../../calendar/hebrewCalendar'; // You'll need to implement this
   
   // --- Import Prayer Content ---

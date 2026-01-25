@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useUser, UserButton } from '@clerk/nextjs';
-import { Nusach } from '#/lib/siddur/types/siddurTypes';
+import { Nusach } from '@mysiddur/types';
 import { JewishLearningProfile } from '#/packages/types/UserTypes';
 import { Download, ExternalLink } from 'lucide-react';
 
@@ -26,6 +26,7 @@ interface UploadedPrayer {
   user_id?: string;
 }
 
+// oxlint-disable-next-line max-lines-per-function
 export default function MyProfilePage() {
   const { user, isLoaded } = useUser();
   const [profile, setProfile] = useState<UserProfile | null>(null);
