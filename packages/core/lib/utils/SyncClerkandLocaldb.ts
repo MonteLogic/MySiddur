@@ -1,6 +1,4 @@
-// Updated to use Clerk metadata instead of database
-import { ClerkMetadataService } from '#/lib/clerk-metadata-service';
-import { UserData } from '#/lib/clerk-metadata-service';
+import { ClerkMetadataService } from '../clerk-metadata-service';
 
 export async function syncClerkAndLocalDb(clerkUserId: string, orgId: string) {
   try {

@@ -14,7 +14,7 @@ export { SectionLink } from './shared/section-link';
 export { CBudLogo } from './shared/cbud-logo';
 export { VercelLogo } from './shared/vercel-logo';
 export { default as Byline } from './shared/byline';
-export { default as ChevronAddSampleRouteData } from './shared/chevron-add-sample-route-data';
+
 
 // Common Components
 export { default as DropDown } from './components/dropdown';
@@ -67,7 +67,6 @@ export { default as PaymentStatus } from './features/billing/payment-status';
 
 // - Auth
 export { default as OrganizationPrompt } from './features/auth/organization-prompt';
-export { default as CreateOrganization } from './features/auth/create-organization';
 export { default as UpgradePrompt } from './features/auth/upgrade-prompt';
 export { default as ClerkMetadata } from './features/auth/clerk-metadata';
 

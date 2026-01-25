@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import {
   XCircle,
@@ -15,7 +15,7 @@ import {
   Package,
 } from 'lucide-react';
 import type { ProductPlan, PlanId, ProductConfig } from '#/packages/types/ProductTypes';
-import products from '#/example-data/products.json' assert { type: 'json' };
+import products from './products.json';
 
 const typedProducts = products as ProductConfig;
 

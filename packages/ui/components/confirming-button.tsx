@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import React from 'react';
 import clsx from 'clsx';
 
 export default function ConfirmingButton({

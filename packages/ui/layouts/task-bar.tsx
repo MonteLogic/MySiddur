@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useTimecardsMetadata } from '#/ui/features/auth/clerk-metadata';
 import Link from 'next/link';
 // import { checkUserRole } from '#/packages/core/lib/utils/UserUtils';
-import { checkUserRole } from '@mysiddur/core';
+import { checkUserRole } from '@mysiddur/core/utils/UserUtils';
 
 // Helper for status icons
 const StatusIcon = ({ active }: { active?: boolean }) => 

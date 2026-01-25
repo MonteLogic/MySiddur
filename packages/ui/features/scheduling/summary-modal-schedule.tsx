@@ -1,9 +1,9 @@
 'use client';
 
 import {
-  searchForSummaryNoURL,
+
   handleSubmitSummaryModalSchedule,
-} from '#/network-fns/SummaryNetworkFns';
+} from '@mysiddur/network';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import TextareaAutosize from 'react-textarea-autosize';

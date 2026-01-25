@@ -1,4 +1,10 @@
 // Modal.tsx
+// Modal.tsx
+'use client';
+
+// Modal.tsx
+'use client';
+
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 

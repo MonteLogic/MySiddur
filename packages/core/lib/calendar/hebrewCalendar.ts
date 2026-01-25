@@ -1,6 +1,6 @@
 // lib/calendar/hebrewCalendar.ts
 import * as HebcalCore from '@hebcal/core'; // Try importing everything as a namespace
-import { CalendarInfo } from '../../../types/siddurTypes'; // Keep your defined type
+import { CalendarInfo } from '#/packages/types';
 
 // --- Attempt to access Hebcal components safely ---
 // These will try to use named exports if available, or fallback to properties on the namespace.
