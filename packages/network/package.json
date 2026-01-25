@@ -1,0 +1,21 @@
+{
+  "name": "@siddur/network",
+  "version": "1.0.0",
+  "description": "Network and API utilities",
+  "private": true,
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "files": [
+    "network-fns"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

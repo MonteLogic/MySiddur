@@ -28,6 +28,36 @@
       ],
       "@/*": [
         "./*"
+      ],
+      "@MySiddur/core": [
+        "./packages/core/lib/index.ts"
+      ],
+      "@MySiddur/core/*": [
+        "./packages/core/lib/*"
+      ],
+      "@MySiddur/prayer": [
+        "./packages/prayer/index.ts"
+      ],
+      "@MySiddur/prayer/*": [
+        "./packages/prayer/*"
+      ],
+      "@MySiddur/network": [
+        "./packages/network/index.ts"
+      ],
+      "@MySiddur/network/*": [
+        "./packages/network/*"
+      ],
+      "@MySiddur/ui": [
+        "./packages/ui/index.ts"
+      ],
+      "@MySiddur/ui/*": [
+        "./packages/ui/*"
+      ],
+      "@MySiddur/scripts": [
+        "./packages/scripts/index.ts"
+      ],
+      "@MySiddur/scripts/*": [
+        "./packages/scripts/*"
       ]
     },
     "plugins": [

@@ -1,4 +1,4 @@
-import { getHistory } from '@/lib/siddur-generation';
+import { getHistory } from '@MySiddur/core/generation';
 import AdminPageContent from './admin-content';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';

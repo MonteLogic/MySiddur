@@ -1,0 +1,21 @@
+{
+  "name": "@siddur/prayer",
+  "version": "1.0.0",
+  "description": "Prayer data structures and utilities",
+  "private": true,
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "files": [
+    "prayer"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

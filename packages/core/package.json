@@ -1,0 +1,36 @@
+{
+  "name": "@siddur/core",
+  "version": "1.0.0",
+  "description": "Core Siddur generation, PDF utilities, and business logic",
+  "private": true,
+  "type": "module",
+  "main": "./lib/index.ts",
+  "exports": {
+    ".": "./lib/index.ts",
+    "./generation": "./lib/siddur-generation.ts",
+    "./pdf": "./lib/siddur-pdf-utils/index.ts",
+    "./calendar": "./lib/calendar/index.ts",
+    "./utils": "./lib/utils.ts",
+    "./custom-date-gen": "./lib/custom-siddur-date-gen/index.ts",
+    "./validation": "./lib/pdf-validation.ts"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pdf-lib/fontkit": "1.1.1",
+    "pdf-lib": "^1.17.1",
+    "@vercel/blob": "2.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
+}

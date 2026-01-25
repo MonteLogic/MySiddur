@@ -1,6 +1,6 @@
 'use server';
 
-import { generateAndUploadSiddurLogic } from '@/packages/core/lib/siddur-generation';
+import { generateAndUploadSiddurLogic } from '@MySiddur/core/generation';
 import { revalidatePath } from 'next/cache';
 
 export async function triggerGenerationAction(

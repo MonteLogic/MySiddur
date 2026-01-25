@@ -1,0 +1,38 @@
+{
+  "name": "@siddur/ui",
+  "version": "1.0.0",
+  "description": "Reusable React UI components",
+  "private": true,
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./components": "./index.ts"
+  },
+  "files": [
+    "*.tsx",
+    "blog-components",
+    "clerk",
+    "data"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "clsx": "^2.1.0",
+    "@headlessui/react": "1.7.17",
+    "@heroicons/react": "1.0.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
