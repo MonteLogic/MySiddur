@@ -67,17 +67,18 @@ export async function GET(request: NextRequest) {
     const { userId } = auth();
     if (userId) {
       const user = await clerkClient.users.getUser(userId);
-      const metadata = user.publicMetadata as any;
-      if (metadata) {
+      const metadata = user.publicMetadata as unknown;
+      if (metadata && typeof metadata === 'object') {
+        const metadataObj = metadata as Record<string, unknown>;
         userSettings = {
-          wordMappingInterval: metadata.wordMappingInterval ?? 1,
-          wordMappingStartIndex: metadata.wordMappingStartIndex ?? 0,
-          showWordMappingSubscripts: metadata.showWordMappingSubscripts ?? true,
-          includeIntroduction: metadata.includeIntroduction ?? true,
-          includeInstructions: metadata.includeInstructions ?? true,
-          fontSizeMultiplier: metadata.fontSizeMultiplier ?? 1.0,
-          pageMargins: metadata.pageMargins || 'normal',
-          printBlackAndWhite: metadata.printBlackAndWhite ?? false,
+          wordMappingInterval: (metadataObj.wordMappingInterval as number) ?? 1,
+          wordMappingStartIndex: (metadataObj.wordMappingStartIndex as number) ?? 0,
+          showWordMappingSubscripts: (metadataObj.showWordMappingSubscripts as boolean) ?? true,
+          includeIntroduction: (metadataObj.includeIntroduction as boolean) ?? true,
+          includeInstructions: (metadataObj.includeInstructions as boolean) ?? true,
+          fontSizeMultiplier: (metadataObj.fontSizeMultiplier as number) ?? 1.0,
+          pageMargins: (metadataObj.pageMargins as string) || 'normal',
+          printBlackAndWhite: (metadataObj.printBlackAndWhite as boolean) ?? false,
         };
       }
     }

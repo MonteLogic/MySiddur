@@ -17,7 +17,7 @@ interface BlogPost {
     author?: string;
     status?: string;
     categories?: string[]; // Add categories to frontmatter
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 

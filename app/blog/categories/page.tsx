@@ -16,7 +16,7 @@ interface BlogPost {
     author?: string;
     status?: string;
     componentSets?: string[];
-    [key: string]: any; // For additional frontmatter fields
+    [key: string]: unknown; // For additional frontmatter fields
   };
 }
 
