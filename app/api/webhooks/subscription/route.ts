@@ -1,9 +1,8 @@
 // Example usage in an API route:
 // app/api/webhooks/subscription/route.ts
-import { updateUserSubscriptionMetadata } from '#/utils/SyncClerkStripeMetadata';
 import { NextResponse } from 'next/server';
-// import { updateUserSubscriptionMetadata } from '@/utils/clerk-metadata';
-import { SubscriptionMetadata } from '#/types/StripeClerkTypes';
+import { SubscriptionMetadata } from '#/packages/types/StripeClerkTypes';
+import { updateUserSubscriptionMetadata } from '#/packages/core/lib/utils/SyncClerkStripeMetadata';
 
 export async function POST(req: Request) {
   try {

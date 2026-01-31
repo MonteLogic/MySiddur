@@ -1,7 +1,7 @@
 // app/api/generate-basic-siddur/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { generateSiddurPDF, SiddurFormat } from '#/lib/siddur-pdf-utils/ashkenaz/siddurMainFile'; // Adjust path as needed
+import { generateSiddurPDF, SiddurFormat } from '@mysiddur/core';
 
 export async function GET(request: NextRequest) {
   // For GET requests, parameters are typically in the search params (URL query)
@@ -64,20 +64,22 @@ export async function GET(request: NextRequest) {
   // Get user settings from profile if user is authenticated
   let userSettings = {};
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     if (userId) {
-      const user = await clerkClient.users.getUser(userId);
-      const metadata = user.publicMetadata as any;
-      if (metadata) {
+      const client = await clerkClient();
+      const user = await client.users.getUser(userId);
+      const metadata = user.publicMetadata as unknown;
+      if (metadata && typeof metadata === 'object') {
+        const metadataObj = metadata as Record<string, unknown>;
         userSettings = {
-          wordMappingInterval: metadata.wordMappingInterval ?? 1,
-          wordMappingStartIndex: metadata.wordMappingStartIndex ?? 0,
-          showWordMappingSubscripts: metadata.showWordMappingSubscripts ?? true,
-          includeIntroduction: metadata.includeIntroduction ?? true,
-          includeInstructions: metadata.includeInstructions ?? true,
-          fontSizeMultiplier: metadata.fontSizeMultiplier ?? 1.0,
-          pageMargins: metadata.pageMargins || 'normal',
-          printBlackAndWhite: metadata.printBlackAndWhite ?? false,
+          wordMappingInterval: (metadataObj.wordMappingInterval as number) ?? 1,
+          wordMappingStartIndex: (metadataObj.wordMappingStartIndex as number) ?? 0,
+          showWordMappingSubscripts: (metadataObj.showWordMappingSubscripts as boolean) ?? true,
+          includeIntroduction: (metadataObj.includeIntroduction as boolean) ?? true,
+          includeInstructions: (metadataObj.includeInstructions as boolean) ?? true,
+          fontSizeMultiplier: (metadataObj.fontSizeMultiplier as number) ?? 1.0,
+          pageMargins: (metadataObj.pageMargins as string) || 'normal',
+          printBlackAndWhite: (metadataObj.printBlackAndWhite as boolean) ?? false,
         };
       }
     }

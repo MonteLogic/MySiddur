@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Button from '#/ui/button';
-import Modal from '#/ui/modal';
+import Button from '#/ui/shared/button';
+import Modal from '#/ui/shared/modal';
 import { ChevronDown } from 'lucide-react';
 import { getPrayersList, getPrayerData, savePrayerData, type Prayer, type PrayerData, type WordMapping } from './actions';
 import { useUser } from '@clerk/nextjs';

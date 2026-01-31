@@ -1,5 +1,5 @@
 'use server';
-import { InternalLink } from '#/ui/internal-link';
+import { InternalLink } from '#/ui/shared/internal-link';
 
 export default async function Page() {
   return (

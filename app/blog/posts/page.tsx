@@ -3,8 +3,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { auth, currentUser } from '@clerk/nextjs';
-import strings from '#/strings.json'
+import { auth, currentUser } from '@clerk/nextjs/server';
 
 
 interface BlogPost {
@@ -17,7 +16,7 @@ interface BlogPost {
     author?: string;
     status?: string[];
     componentSets?: string[];
-    [key: string]: any; // For additional frontmatter fields
+    [key: string]: unknown; // For additional frontmatter fields
   };
 }
 
@@ -41,7 +40,7 @@ const getAllMarkdownFiles = (dirPath: string, arrayOfFiles: string[] = []): stri
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     // Path to your submodule posts directory
-    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
+    const postsDirectory = path.join(process.cwd(), 'content/posts/');
 
     // Get all index.md and index.mdx files within the posts directory and its subdirectories
     const allMarkdownFiles = getAllMarkdownFiles(postsDirectory);
@@ -116,7 +115,7 @@ function canViewPost(userRole: string | undefined, postStatus: string | undefine
 }
 
 export default async function BlogPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   let userRole: string | undefined;
 
   // Get user role directly from Clerk metadata

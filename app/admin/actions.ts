@@ -1,6 +1,8 @@
 'use server';
 
-import { generateAndUploadSiddurLogic } from '@/lib/siddur-generation';
+// import { generateAndUploadSiddurLogic } from '@mysiddur/core/generation';
+
+import { generateAndUploadSiddurLogic } from '@mysiddur/core';
 import { revalidatePath } from 'next/cache';
 
 export async function triggerGenerationAction(
@@ -21,7 +23,8 @@ export async function triggerGenerationAction(
         } else {
             return { success: false, message: `Generation failed: ${result.error}` };
         }
-    } catch (error: any) {
-        return { success: false, message: `Unexpected error: ${error.message}` };
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return { success: false, message: `Unexpected error: ${errorMessage}` };
     }
 }

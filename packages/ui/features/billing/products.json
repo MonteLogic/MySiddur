@@ -1,0 +1,29 @@
+{
+    "production": {
+        "base": {
+            "id": "prod_base",
+            "name": "Base Plan",
+            "description": "Base plan",
+            "env": "production",
+            "interval": "month"
+        }
+    },
+    "development": {
+        "base": {
+            "id": "dev_base",
+            "name": "Base Plan Dev",
+            "description": "Base plan dev",
+            "env": "test",
+            "interval": "month"
+        }
+    },
+    "test": {
+        "base": {
+            "id": "test_base",
+            "name": "Base Plan Test",
+            "description": "Base plan test",
+            "env": "test",
+            "interval": "month"
+        }
+    }
+}

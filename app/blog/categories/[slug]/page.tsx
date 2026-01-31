@@ -3,9 +3,8 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
-import strings from '#/strings.json'
 
 interface BlogPost {
   slug: string;
@@ -17,7 +16,7 @@ interface BlogPost {
     author?: string;
     status?: string;
     categories?: string[]; // Add categories to frontmatter
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -53,7 +52,7 @@ async function getCategoryDetails(slug: string): Promise<{ name: string } | unde
 // Function to safely get blog posts
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
+    const postsDirectory = path.join(process.cwd(), 'content/posts/');
     const postFolders = fs.readdirSync(postsDirectory, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name);
@@ -131,7 +130,7 @@ interface Props {
 }
 
 export default async function CategoryPage({ params: { slug } }: Props) {
-  const { userId } = auth();
+  const { userId } = await auth();
   let userRole: string | undefined;
 
   if (userId) {

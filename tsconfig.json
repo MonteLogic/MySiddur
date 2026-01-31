@@ -16,7 +16,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
     "paths": {
@@ -26,8 +26,56 @@
       "#/*": [
         "./*"
       ],
+      "#/ui/*": [
+        "./packages/ui/*"
+      ],
+      "#/blog-components/*": [
+        "./packages/ui/features/blog/*"
+      ],
       "@/*": [
         "./*"
+      ],
+      "@mysiddur/core": [
+        "./packages/core/lib/index.ts"
+      ],
+      "@mysiddur/core/*": [
+        "./packages/core/lib/*"
+      ],
+      "@mysiddur/prayer-data": [
+        "./packages/prayer-data/index.ts"
+      ],
+      "@mysiddur/prayer-data/*": [
+        "./packages/prayer-data/*"
+      ],
+      "@mysiddur/prayer": [
+        "./packages/prayer/index.ts"
+      ],
+      "@mysiddur/prayer/*": [
+        "./packages/prayer/*"
+      ],
+      "@mysiddur/network": [
+        "./packages/network/index.ts"
+      ],
+      "@mysiddur/network/*": [
+        "./packages/network/*"
+      ],
+      "@mysiddur/ui": [
+        "./packages/ui/index.ts"
+      ],
+      "@mysiddur/ui/*": [
+        "./packages/ui/*"
+      ],
+      "@mysiddur/scripts": [
+        "./packages/scripts/index.ts"
+      ],
+      "@mysiddur/scripts/*": [
+        "./packages/scripts/*"
+      ],
+      "@mysiddur/types": [
+        "./packages/types/index.ts"
+      ],
+      "@mysiddur/types/*": [
+        "./packages/types/*"
       ]
     },
     "plugins": [
@@ -50,6 +98,7 @@
     "**/*.tsx",
     "**/*.test.ts",
     "**/*.test.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ]
 }

@@ -1,6 +1,6 @@
-import { ExternalLink } from '#/ui/external-link';
-import { getCustomerDetails, ClerkMetadata } from '#/utils/StripeUtils';
-import { currentUser } from '@clerk/nextjs';
+import { ExternalLink } from '#/ui/shared/external-link';
+import { getCustomerDetails, ClerkMetadata } from '@mysiddur/core/utils/StripeUtils';
+import { currentUser } from '@clerk/nextjs/server';
 import { ErrorDisplay } from './components/ErrorDisplay';
 import { ActiveSubscriptions } from './components/ActiveSubscription';
 import { CustomerInformation } from './components/CustomerInformation';
@@ -9,7 +9,7 @@ import { NoSubscriptionInfo } from './components/NoSubInfo';
 import { OrganizationSection } from './components/OrganizationSection';
 import { SectionHeader } from './components/SectionHeader';
 import { Suspense } from 'react';
-import { InternalLink } from '#/ui/internal-link';
+import { InternalLink } from '#/ui/shared/internal-link';
 
 // Separate component for the Stripe settings content
 const StripeSettings = async () => {
@@ -80,7 +80,6 @@ export default function Page() {
         </div>
       </div>
       <Suspense fallback={<div className="text-white">Loading...</div>}>
-        {/* @ts-expect-error Async Server Component */}
         <StripeSettings />
       </Suspense>
     </div>

@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { clerkClient } from '@clerk/nextjs';
+import { clerkClient } from '@clerk/nextjs/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
 
@@ -27,10 +27,11 @@ async function getBody(req: Request) {
  */
 async function updateUserMetadata(userId: string, stripeCustomerId: string) {
   try {
-    const user = await clerkClient.users.getUser(userId);
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
     const currentMetadata = user.privateMetadata;
 
-    await clerkClient.users.updateUser(userId, {
+    await client.users.updateUser(userId, {
       privateMetadata: {
         ...currentMetadata,
         stripeCustomerId,

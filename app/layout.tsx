@@ -1,34 +1,40 @@
 import '#/styles/globals.css';
-import Byline from '#/ui/byline';
-import { GlobalNav } from '#/ui/global-nav';
+import Byline from '#/ui/shared/byline';
+import { GlobalNav } from '#/ui/layouts/global-nav';
 import { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { cache } from 'react';
 import { Analytics } from '@vercel/analytics/next';
+import * as Sentry from '@sentry/nextjs';
 import titles from '#/strings.json';
 
-export const metadata: Metadata = {
-  title: {
-    default: titles.title,
-    template: '%s | MonteLogic',
-  },
-  description:
-    titles.title +
-    ' is an online system for managing contractors concerns. These concerns include scheduling, timecards, route management and time management. This easy to use app will make truck drivers and route managers working lives much easier.',
-  openGraph: {
-    title: titles.title,
-    description: titles.description,
-    images: [`/api/og?title=Next.js App Router`],
-  },
-  twitter: {
-    card: 'summary_large_image',
-  },
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: {
+      default: titles.title,
+      template: '%s | MonteLogic',
+    },
+    description:
+      titles.title +
+      ' is an online system for managing contractors concerns. These concerns include scheduling, timecards, route management and time management. This easy to use app will make truck drivers and route managers working lives much easier.',
+    openGraph: {
+      title: titles.title,
+      description: titles.description,
+      images: [`/api/og?title=Next.js App Router`],
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+    other: {
+      ...Sentry.getTraceData(),
+    },
+  };
+}
 
 const getUserData = cache(async () => {
   try {
-    const { userId: clerkUserId } = auth();
+    const { userId: clerkUserId } = await auth();
 
     if (!clerkUserId) {
       return {
@@ -41,7 +47,7 @@ const getUserData = cache(async () => {
     }
 
     // Fetch the user directly from Clerk API to get guaranteed access to privateMetadata
-    const user = await clerkClient.users.getUser(clerkUserId);
+    const user = await (await clerkClient()).users.getUser(clerkUserId);
     
     // Check admin status from private metadata
     const privateMetadata = user.privateMetadata;

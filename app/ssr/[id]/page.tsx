@@ -1,4 +1,4 @@
-import { RenderingInfo } from '#/ui/rendering-info';
+import { RenderingInfo } from '#/ui/feedback/rendering-info';
 
 export default async function Page({ params }: Readonly<{ params: { id: string } }>) {
   const res = await fetch(

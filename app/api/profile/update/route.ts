@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { clerkClient } from '@clerk/nextjs/server';
-import { auth } from '@clerk/nextjs';
-import { Nusach } from '#/lib/siddur/types/siddurTypes';
+import { clerkClient, auth } from '@clerk/nextjs/server';
+import { Nusach } from '@mysiddur/types';
+
+
 
 interface ProfileUpdateData {
   firstName?: string;
@@ -27,7 +28,7 @@ interface ProfileUpdateData {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -36,7 +37,8 @@ export async function PATCH(request: NextRequest) {
     const updateData: ProfileUpdateData = await request.json();
 
     // Get current user to access existing metadata
-    const user = await clerkClient.users.getUser(userId);
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
     const currentMetadata = user.publicMetadata || {};
 
     // Prepare the updated metadata
@@ -47,12 +49,12 @@ export async function PATCH(request: NextRequest) {
     };
 
     // Update user with new metadata
-    await clerkClient.users.updateUser(userId, {
+    await clerk.users.updateUser(userId, {
       publicMetadata: updatedMetadata,
     });
 
     // Also update basic user info if provided
-    const basicUserUpdate: any = {};
+    const basicUserUpdate: Pick<ProfileUpdateData, 'firstName' | 'lastName'> = {};
     if (updateData.firstName !== undefined) {
       basicUserUpdate.firstName = updateData.firstName;
     }
@@ -61,7 +63,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (Object.keys(basicUserUpdate).length > 0) {
-      await clerkClient.users.updateUser(userId, basicUserUpdate);
+      await clerk.users.updateUser(userId, basicUserUpdate);
     }
 
     return NextResponse.json({

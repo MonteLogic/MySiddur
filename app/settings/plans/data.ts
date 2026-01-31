@@ -1,5 +1,5 @@
-import * as prodProducts from '#/products/prod-products.json';
-import * as testProducts from '#/products/test-products.json';
+import * as prodProducts from '#/public/products/prod-products.json';
+import * as testProducts from '#/public/products/test-products.json';
 
 export const features = {
   basic: ["Basic timecard management", "Simple scheduling", "Single route management", "Basic reporting", "Mobile app access"],
