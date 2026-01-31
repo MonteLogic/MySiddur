@@ -1,12 +1,41 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypePrettyCode from 'rehype-pretty-code';
 
 interface MarkdownContentProps {
   content: string;
+}
+
+interface CodeProps {
+  node?: unknown;
+  className?: string;
+  children?: ReactNode;
+}
+
+function CodeRenderer({ className, children }: CodeProps) {
+  const match = /language-(\w+)/.exec(className || '');
+  const isInline = !match;
+  
+  if (!isInline && match) {
+    return (
+      <div className="code-block-wrapper">
+        <div className="code-language">{match[1]}</div>
+        <pre className={className}>
+          <code className={className}>
+            {children}
+          </code>
+        </pre>
+      </div>
+    );
+  }
+  
+  return (
+    <code className={className}>
+      {children}
+    </code>
+  );
 }
 
 export default function MarkdownContent({ content }: MarkdownContentProps) {
@@ -15,25 +44,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       remarkPlugins={[remarkGfm]}
       className="markdown-content"
       components={{
-        // Custom code block rendering
-        code({ node, className, children, ...props }: any) {
-          const match = /language-(\w+)/.exec(className || '');
-          const isInline = !match;
-          return !isInline && match ? (
-            <div className="code-block-wrapper">
-              <div className="code-language">{match[1]}</div>
-              <pre className={className} {...props}>
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              </pre>
-            </div>
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          );
-        },
+        code: CodeRenderer,
       }}
     >
       {content}
