@@ -15,14 +15,13 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       remarkPlugins={[remarkGfm]}
       className="markdown-content"
       components={{
-        // You can customize how different elements are rendered
-        // @ts-ignore
-        code: ({ node, inline, className, children, ...props }) => {
+        // Custom code block rendering
+        code({ node, className, children, ...props }: any) {
           const match = /language-(\w+)/.exec(className || '');
-          return !inline && match ? (
+          const isInline = !match;
+          return !isInline && match ? (
             <div className="code-block-wrapper">
               <div className="code-language">{match[1]}</div>
-              {/* @ts-ignore */}
               <pre className={className} {...props}>
                 <code className={className} {...props}>
                   {children}

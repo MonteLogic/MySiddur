@@ -3,7 +3,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
 
 
 interface BlogPost {
@@ -115,7 +115,7 @@ function canViewPost(userRole: string | undefined, postStatus: string | undefine
 }
 
 export default async function BlogPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   let userRole: string | undefined;
 
   // Get user role directly from Clerk metadata

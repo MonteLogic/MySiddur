@@ -1,5 +1,5 @@
-// Clerk Metadata Service exports
-export * from './clerk-metadata-service';
+// Clerk Metadata Service exports (commented out - module not implemented yet)
+// export * from './clerk-metadata-service';
 
 // Core Siddur Library Exports
 export * from './siddur-generation';

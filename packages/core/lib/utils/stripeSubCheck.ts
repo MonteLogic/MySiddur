@@ -3,7 +3,7 @@
 * @module SubscriptionCheck
 */
 
-import { auth, clerkClient } from '@clerk/nextjs';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import Stripe from 'stripe';
 
 /** Initialize Stripe client */
@@ -23,10 +23,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 async function getSubscriptionStatus() {
  try {
-   const { userId } = auth();
+   const { userId } = await auth();
    if (!userId) return { isActive: false };
    
-   const user = await clerkClient.users.getUser(userId);
+   const user = await (await clerkClient()).users.getUser(userId);
    const stripeCustomerId = user.privateMetadata.stripeCustomerId as string;
    if (!stripeCustomerId) return { isActive: false };
 

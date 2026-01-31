@@ -1,7 +1,13 @@
 'use client';
 
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, JSX, SVGProps, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+
+// Simple props type for SVG icons - only includes props actually used
+interface IconProps {
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}
 
 // oxlint-disable-next-line max-lines-per-function
 export default function Dropdown() {
@@ -147,14 +153,13 @@ export default function Dropdown() {
 }
 
 function EditInactiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M4 13V16H7L16 7L13 4L4 13Z"
@@ -167,14 +172,13 @@ function EditInactiveIcon(
 }
 
 function EditActiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M4 13V16H7L16 7L13 4L4 13Z"
@@ -187,14 +191,13 @@ function EditActiveIcon(
 }
 
 function DuplicateInactiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M4 4H12V12H4V4Z"
@@ -213,14 +216,13 @@ function DuplicateInactiveIcon(
 }
 
 function DuplicateActiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M4 4H12V12H4V4Z"
@@ -239,14 +241,13 @@ function DuplicateActiveIcon(
 }
 
 function ArchiveInactiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <rect
         x="5"
@@ -272,14 +273,13 @@ function ArchiveInactiveIcon(
 }
 
 function ArchiveActiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <rect
         x="5"
@@ -305,14 +305,13 @@ function ArchiveActiveIcon(
 }
 
 function MoveInactiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <path d="M10 4H16V10" stroke="#A78BFA" strokeWidth="2" />
       <path d="M16 4L8 12" stroke="#A78BFA" strokeWidth="2" />
@@ -322,14 +321,13 @@ function MoveInactiveIcon(
 }
 
 function MoveActiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <path d="M10 4H16V10" stroke="#C4B5FD" strokeWidth="2" />
       <path d="M16 4L8 12" stroke="#C4B5FD" strokeWidth="2" />
@@ -339,14 +337,13 @@ function MoveActiveIcon(
 }
 
 function DeleteInactiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <rect
         x="5"
@@ -364,14 +361,13 @@ function DeleteInactiveIcon(
 }
 
 function DeleteActiveIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: IconProps,
 ) {
   return (
     <svg
       {...props}
       viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <rect
         x="5"

@@ -47,7 +47,7 @@ const getUserData = cache(async () => {
     }
 
     // Fetch the user directly from Clerk API to get guaranteed access to privateMetadata
-    const user = await clerkClient.users.getUser(clerkUserId);
+    const user = await (await clerkClient()).users.getUser(clerkUserId);
     
     // Check admin status from private metadata
     const privateMetadata = user.privateMetadata;

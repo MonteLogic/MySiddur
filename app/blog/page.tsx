@@ -3,7 +3,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path'; // Ensure path is imported
 import matter from 'gray-matter';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
 
 interface BlogPost {
   slug: string; // This will be the final, unique slug
@@ -208,7 +208,7 @@ function canViewPost(
 // --- BlogPage Component (Main Page Structure) ---
 // (This is largely the same as your provided code, with updated Link href)
 export default async function BlogPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   let userRole: string | undefined;
 
   if (userId) {
