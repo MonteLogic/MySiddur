@@ -1,6 +1,6 @@
 import { ExternalLink } from '#/ui/shared/external-link';
 import { getCustomerDetails, ClerkMetadata } from '@mysiddur/core/utils/StripeUtils';
-import { currentUser } from '@clerk/nextjs';
+import { currentUser } from '@clerk/nextjs/server';
 import { ErrorDisplay } from './components/ErrorDisplay';
 import { ActiveSubscriptions } from './components/ActiveSubscription';
 import { CustomerInformation } from './components/CustomerInformation';
