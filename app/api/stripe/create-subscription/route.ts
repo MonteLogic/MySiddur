@@ -4,9 +4,8 @@
  */
 
 import { NextResponse } from 'next/server';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import Stripe from 'stripe';
-import { headers } from 'next/headers';
 
 /** Initialize Stripe with the secret key */
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -45,7 +44,7 @@ function getBaseUrl(): string {
  */
 export async function POST(request: Request): Promise<NextResponse> {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const user = await currentUser();
 
     if (!userId || !user) {

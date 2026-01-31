@@ -3,7 +3,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
 
 interface BlogPost {
@@ -130,7 +130,7 @@ interface Props {
 }
 
 export default async function CategoryPage({ params: { slug } }: Props) {
-  const { userId } = auth();
+  const { userId } = await auth();
   let userRole: string | undefined;
 
   if (userId) {

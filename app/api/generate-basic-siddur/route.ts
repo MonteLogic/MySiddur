@@ -64,9 +64,10 @@ export async function GET(request: NextRequest) {
   // Get user settings from profile if user is authenticated
   let userSettings = {};
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     if (userId) {
-      const user = await clerkClient.users.getUser(userId);
+      const client = await clerkClient();
+      const user = await client.users.getUser(userId);
       const metadata = user.publicMetadata as unknown;
       if (metadata && typeof metadata === 'object') {
         const metadataObj = metadata as Record<string, unknown>;

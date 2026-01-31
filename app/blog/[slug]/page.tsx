@@ -6,7 +6,7 @@ import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc'; // For Server Components
 import rehypePrettyCode from 'rehype-pretty-code';
 import remarkGfm from 'remark-gfm';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 // --- Type Definitions ---
@@ -374,7 +374,7 @@ export default async function BlogPostPage({
   params: BlogPostParams;
 }) {
   const { slug: urlSlug } = params;
-  const { userId } = auth();
+  const { userId } = await auth();
   let userRole: string | undefined;
 
   if (userId) {
