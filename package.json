@@ -32,8 +32,8 @@
     "*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@clerk/backend": "^0.38.2",
-    "@clerk/nextjs": "^4.29.5",
+    "@clerk/backend": "^2.29.7",
+    "@clerk/nextjs": "^6.37.1",
     "@clerk/themes": "1.7.11",
     "@clerk/types": "4.17.0",
     "@google-cloud/vertexai": "1.10.0",

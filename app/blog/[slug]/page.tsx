@@ -22,7 +22,7 @@ interface Frontmatter {
   author?: string;
   status?: string;
   componentSets?: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // --- Helper Functions (Ideally, move to a shared 'utils/blog.ts' file) ---
@@ -252,6 +252,121 @@ export async function generateStaticParams(): Promise<BlogPostParams[]> {
   return params;
 }
 
+// --- Helper Components ---
+function renderArticleContent(
+  isMdx: boolean,
+  content: string,
+  frontmatter: Frontmatter,
+  userRole: string | undefined,
+) {
+  return (
+    <div className="mx-auto max-w-4xl p-6">
+      <div className="mb-8">
+        <Link
+          href="/blog"
+          className="text-blue-400 transition-colors hover:text-blue-300"
+        >
+          ← Back to all posts
+        </Link>
+      </div>
+
+      <article className="prose prose-slate dark:prose-invert max-w-none">
+        {' '}
+        {/* Apply prose classes here */}
+        <header className="mb-10 border-b border-gray-700 pb-8">
+          {/* ... (article header and content rendering, same as your last provided version) ... */}
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+              {frontmatter.title}
+            </h1>
+            {(userRole === 'Admin' || userRole === 'Contributor') &&
+              frontmatter.status && (
+                <span
+                  className={`mt-1 self-start whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium sm:mt-0 ${
+                    frontmatter.status === 'public'
+                      ? 'border border-green-700 bg-green-900/50 text-green-300'
+                      : 'border border-yellow-700 bg-yellow-900/50 text-yellow-300'
+                  }`}
+                >
+                  {frontmatter.status}
+                </span>
+              )}
+          </div>
+          {frontmatter.description && (
+            <p className="mt-4 text-xl text-gray-400">
+              {frontmatter.description}
+            </p>
+          )}
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500">
+            {frontmatter.date && (
+              <span>
+                {new Date(frontmatter.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+            )}
+            {frontmatter.author && <span>By {frontmatter.author}</span>}
+          </div>
+          {frontmatter.tags && frontmatter.tags.length > 0 && (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {frontmatter.tags.map((tag: string) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-gray-800 px-3 py-1 text-xs font-semibold text-gray-300"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </header>
+        <div className="mdx-content">
+          {isMdx ? (
+            // @ts-ignore
+            <MDXRemote
+              source={content}
+              components={mdxComponents}
+              // @ts-ignore
+              options={{ mdxOptions: mdxProcessingOptions }}
+            />
+          ) : (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {content}
+            </ReactMarkdown>
+          )}
+        </div>
+      </article>
+    </div>
+  );
+}
+
+function renderErrorPage(urlSlug: string, error: unknown) {
+  const errorMessage =
+    error instanceof Error ? error.message : 'Unknown error occurred';
+  return (
+    <div className="mx-auto max-w-4xl p-6 text-center">
+      <div className="mb-6">
+        <Link href="/blog" className="text-blue-400 hover:text-blue-300">
+          ← Back to all posts
+        </Link>
+      </div>
+      <div className="rounded-lg border border-red-700 bg-red-900/30 p-8">
+        <h1 className="mb-4 text-2xl font-bold text-red-400">Post Error</h1>
+        <p className="text-gray-300">
+          The post you were looking for ({urlSlug}) could not be loaded.
+        </p>
+        {process.env.NODE_ENV === 'development' && (
+          <p className="mt-4 text-xs text-gray-500">
+            Details: {errorMessage}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // --- Blog Post Page Component ---
 export default async function BlogPostPage({
   params,
@@ -276,8 +391,6 @@ export default async function BlogPostPage({
 
     if (!postData) {
       console.error(`Post data not found for slug: "${urlSlug}".`);
-      // For a standard 404, you might import and call notFound() from 'next/navigation';
-      // notFound();
       throw new Error(
         `Blog post "${urlSlug}" not found or could not be processed.`,
       );
@@ -296,111 +409,12 @@ export default async function BlogPostPage({
       redirect('/blog');
     }
 
-    return (
-      <div className="mx-auto max-w-4xl p-6">
-        <div className="mb-8">
-          <Link
-            href="/blog"
-            className="text-blue-400 transition-colors hover:text-blue-300"
-          >
-            ← Back to all posts
-          </Link>
-        </div>
-
-        <article className="prose prose-slate dark:prose-invert max-w-none">
-          {' '}
-          {/* Apply prose classes here */}
-          <header className="mb-10 border-b border-gray-700 pb-8">
-            {/* ... (article header and content rendering, same as your last provided version) ... */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
-                {frontmatter.title}
-              </h1>
-              {(userRole === 'Admin' || userRole === 'Contributor') &&
-                frontmatter.status && (
-                  <span
-                    className={`mt-1 self-start whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium sm:mt-0 ${
-                      frontmatter.status === 'public'
-                        ? 'border border-green-700 bg-green-900/50 text-green-300'
-                        : 'border border-yellow-700 bg-yellow-900/50 text-yellow-300'
-                    }`}
-                  >
-                    {frontmatter.status}
-                  </span>
-                )}
-            </div>
-            {frontmatter.description && (
-              <p className="mt-4 text-xl text-gray-400">
-                {frontmatter.description}
-              </p>
-            )}
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500">
-              {frontmatter.date && (
-                <span>
-                  {new Date(frontmatter.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </span>
-              )}
-              {frontmatter.author && <span>By {frontmatter.author}</span>}
-            </div>
-            {frontmatter.tags && frontmatter.tags.length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-2">
-                {frontmatter.tags.map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-gray-800 px-3 py-1 text-xs font-semibold text-gray-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </header>
-          <div className="mdx-content">
-            {isMdx ? (
-              // @ts-ignore
-              <MDXRemote
-                source={content}
-                components={mdxComponents}
-                // @ts-ignore
-                options={{ mdxOptions: mdxProcessingOptions }}
-              />
-            ) : (
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {content}
-              </ReactMarkdown>
-            )}
-          </div>
-        </article>
-      </div>
-    );
-  } catch (error: any) {
+    return renderArticleContent(isMdx, content, frontmatter, userRole);
+  } catch (error: unknown) {
     console.error(
       `Error rendering blog post for slug "${urlSlug}":`,
-      error.message,
+      error instanceof Error ? error.message : 'Unknown error',
     );
-    return (
-      <div className="mx-auto max-w-4xl p-6 text-center">
-        <div className="mb-6">
-          <Link href="/blog" className="text-blue-400 hover:text-blue-300">
-            ← Back to all posts
-          </Link>
-        </div>
-        <div className="rounded-lg border border-red-700 bg-red-900/30 p-8">
-          <h1 className="mb-4 text-2xl font-bold text-red-400">Post Error</h1>
-          <p className="text-gray-300">
-            The post you were looking for ({urlSlug}) could not be loaded.
-          </p>
-          {process.env.NODE_ENV === 'development' && (
-            <p className="mt-4 text-xs text-gray-500">
-              Details: {error.message}
-            </p>
-          )}
-        </div>
-      </div>
-    );
+    return renderErrorPage(urlSlug, error);
   }
 }

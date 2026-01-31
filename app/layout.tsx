@@ -34,7 +34,7 @@ export function generateMetadata(): Metadata {
 
 const getUserData = cache(async () => {
   try {
-    const { userId: clerkUserId } = auth();
+    const { userId: clerkUserId } = await auth();
 
     if (!clerkUserId) {
       return {
