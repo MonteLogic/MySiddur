@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { auth, currentUser } from '@clerk/nextjs';
-import strings from '#/strings.json'
 
 
 interface BlogPost {
@@ -41,7 +40,7 @@ const getAllMarkdownFiles = (dirPath: string, arrayOfFiles: string[] = []): stri
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     // Path to your submodule posts directory
-    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
+    const postsDirectory = path.join(process.cwd(), 'content/posts/');
 
     // Get all index.md and index.mdx files within the posts directory and its subdirectories
     const allMarkdownFiles = getAllMarkdownFiles(postsDirectory);

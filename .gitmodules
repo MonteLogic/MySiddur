@@ -1,3 +1,1 @@
-[submodule "MySiddur-blog-content"]
-	path = MySiddur-blog-content
-	url = https://github.com/MonteLogic/MySiddur-blog-content.git
+# Remove the submodule entry related to the submodule you want to replace.

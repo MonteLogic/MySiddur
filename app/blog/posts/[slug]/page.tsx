@@ -9,7 +9,6 @@ import remarkGfm from 'remark-gfm';
 import { auth, currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-import strings from '#/strings.json'
 
 // Define types
 interface BlogPostParams {
@@ -83,7 +82,7 @@ export default async function BlogPost({ params }: Readonly<{ params: BlogPostPa
 
   try {
     // Get the markdown content for this blog post
-    const postsDirectory = path.join(process.cwd(), strings['content-submodule'] + '/posts/');
+    const postsDirectory = path.join(process.cwd(), 'content/posts/');
     // Construct the path to look within the 'uncategorized' folder
     const postDirectory = path.join(postsDirectory, 'uncategorized', slug);
 

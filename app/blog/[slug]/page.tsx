@@ -9,10 +9,6 @@ import remarkGfm from 'remark-gfm';
 import { auth, currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-import strings from '#/strings.json'
-
-
-
 // --- Type Definitions ---
 interface BlogPostParams {
   slug: string;
@@ -38,7 +34,7 @@ interface Frontmatter {
  * Collision handling (e.g., appending -1, -2) is done by the calling functions.
  */
 function generateBaseSlug(filePathFromJson: string): string {
-  const postsBaseDirString = strings['content-submodule'] + '/posts/';
+  const postsBaseDirString = 'content/posts/';
   let normalizedFilePath = filePathFromJson.replace(/\\/g, '/').trim();
 
   let relativePathToPostsDir: string;
@@ -206,7 +202,7 @@ async function getPostDataBySlug(urlSlug: string): Promise<{
 
     // Default title if not present, using original filename/dirname
     if (!frontmatter.title) {
-      const postsBaseDirString = strings['content-submodule'] + '/posts/';
+      const postsBaseDirString = 'content/posts/';
       let originalNormalizedPath = filePath.replace(/\\/g, '/');
       let originalRelativePath = originalNormalizedPath.startsWith(
         postsBaseDirString,
